@@ -12,8 +12,12 @@ import SwiftUI
 extension AllPokemonQuery.Data: View {
     public var body: some View {
         ScrollView {
-            ForEach(getAllPokemon.indices, id: \.self) {
-                Text(getAllPokemon[$0].key.rawValue)
+            ForEach(getAllPokemon.indices, id: \.self) { index in
+                VStack {
+                    Text(getAllPokemon[index].key.rawValue)
+                    Text("\(getAllPokemon[index].num)")
+                }
+                .padding()
             }
         }
         .padding()

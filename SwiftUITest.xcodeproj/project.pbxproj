@@ -91,7 +91,7 @@
 		D57333F32A57CDA3004FB8DA /* QueryHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHolder.swift; sourceTree = "<group>"; };
 		D57333FA2A57CF29004FB8DA /* PokemonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListView.swift; sourceTree = "<group>"; };
 		D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAppViewModel.swift; sourceTree = "<group>"; };
-		D57333FF2A57DA85004FB8DA /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = file; name = schema.graphqls; path = SwiftUITest/schema.graphqls; sourceTree = SOURCE_ROOT; };
+		D57333FF2A57DA85004FB8DA /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; name = schema.graphqls; path = SwiftUITest/schema.graphqls; sourceTree = SOURCE_ROOT; };
 		D57334012A57DA8D004FB8DA /* introspection_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = introspection_response.json; path = SwiftUITest/introspection_response.json; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 

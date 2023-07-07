@@ -10,11 +10,17 @@ import SwiftUI
 @main
 struct SwiftUITestApp: App {
     let persistenceController = PersistenceController.shared
+    @StateObject private var viewModel = PokemonAppViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.network, Dependencies.serviceClient)
+                .environmentObject(viewModel)
+                .onAppear {
+                    viewModel.setup()
+                }
         }
     }
 }

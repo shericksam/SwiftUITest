@@ -26,7 +26,7 @@ struct ActiveServerUrl {
     }
 
     static func getGraphQLServiceUrl() -> URL {
-        return getServerUrl().appendingPathComponent("graphql")
+        return getServerUrl()
     }
 
     static func getServerUrl() -> URL {

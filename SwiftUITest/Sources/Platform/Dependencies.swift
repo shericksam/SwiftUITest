@@ -9,7 +9,7 @@ import Apollo
 import Foundation
 
 public class Dependencies {
-    public private(set) static var serviceClient: ApolloServiceClientProvider = NoopApolloServiceClientProvider()
+    public private(set) static var serviceClient: ApolloServiceClientProvider = BaseApolloServiceClientProvider.shared
     public private(set) static var serverUrlProvider: ServerURLProvider = DefaultServerURL()
 
     public static func install(serverUrlProvider: ServerURLProvider,
@@ -20,17 +20,26 @@ public class Dependencies {
     }
 }
 
-private class NoopApolloServiceClientProvider: ApolloServiceClientProvider {
-    func cancelAllOperations() { }
+private class BaseApolloServiceClientProvider: ApolloServiceClientProvider {
+
+    static let shared = ExplorerApolloServiceClientProvider()
 
     var client: ApolloClient {
-        return ApolloClient(url: URL(string: "www.some.url")!)
+        let url = ActiveServerUrl.getGraphQLServiceUrl()
+        if let apolloClient = cachedApolloClient,
+           url.host == cachedApolloClientURL?.host {
+            return apolloClient
+        }
+
+        return createAndCacheApolloClient(url: url)
     }
 
     private var cachedApolloClient: ApolloClient?
     private var cachedApolloClientURL: URL?
 
     init() { }
+
+    func cancelAllOperations() { }
 
     func fetch<Query>(query: Query,
                       queue: DispatchQueue = .main,
@@ -44,6 +53,19 @@ private class NoopApolloServiceClientProvider: ApolloServiceClientProvider {
                            resultHandler: ((Swift.Result<GraphQLResult<Mutation.Data>, Error>) -> Void)?) -> ApolloCancellable? where Mutation: GraphQLMutation {
         return ApolloCancellable(apolloCancellable: client.perform(mutation: mutation,
                                                                    resultHandler: resultHandler))
+    }
+
+    private func createAndCacheApolloClient(url: URL) -> ApolloClient {
+        let store = ApolloStore()
+        let urlSessionClient = InsecureApolloURLSessionClient()
+        let interceptorProvider = ExplorerApolloNetworkStack(store: store,
+                                                             urlSessionClient: urlSessionClient)
+        let network = RequestChainNetworkTransport(interceptorProvider: interceptorProvider, endpointURL: url)
+        let apolloClient = ApolloClient(networkTransport: network,
+                                        store: store)
+        cachedApolloClientURL = url
+        cachedApolloClient = apolloClient
+        return apolloClient
     }
 }
 

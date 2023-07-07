@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "ACDD33EF-10A8-4156-8854-2B1C3ABB2CC0"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "75D67D3B-B428-4ADB-9F6A-021550C38159"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Sources/Platform/Network/ComponentNetwork.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "execute(serviceClient:queue:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "75D67D3B-B428-4ADB-9F6A-021550C38159 - 927aac57ec702d77"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Apollo.GraphQLQuery.execute(serviceClient: SwiftUITest.ApolloServiceClientProvider, queue: __C.OS_dispatch_queue, completion: (Swift.Result&lt;SwiftUITest.GraphQLCachingQueryResult&lt;&#x3c4;_0_0.Data&gt;, SwiftUITest.GraphQLCachingQueryError&gt;) -&gt; ()) -&gt; Swift.Optional&lt;SwiftUITest.ApolloCancellable&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Sources/Platform/Network/ComponentNetwork.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "152">
+               </Location>
+               <Location
+                  uuid = "75D67D3B-B428-4ADB-9F6A-021550C38159 - 1b03ebd95050fea3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;&#x3c4;_0_0.Data&gt;, Swift.Error&gt;) -&gt; () in Apollo.GraphQLQuery.execute(serviceClient: SwiftUITest.ApolloServiceClientProvider, queue: __C.OS_dispatch_queue, completion: (Swift.Result&lt;SwiftUITest.GraphQLCachingQueryResult&lt;&#x3c4;_0_0.Data&gt;, SwiftUITest.GraphQLCachingQueryError&gt;) -&gt; ()) -&gt; Swift.Optional&lt;SwiftUITest.ApolloCancellable&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Sources/Platform/Network/ComponentNetwork.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "904">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "33F170AA-7554-438F-BCA2-AC0EACF25FD4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/ClientSetup/ExplorerApolloServiceClientProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "ExplorerApolloServiceClientProvider"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4F22145D-3D96-4F57-82CF-4168AD4063FA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Sources/Platform/Network/ComponentNetwork.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "execute(serviceClient:queue:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6F1A904E-B528-4144-A6E7-E072CF2EDD7B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/SwiftUITest-dpxufirvltcdgaglqtxmxenootoi/SourcePackages/checkouts/apollo-ios/Sources/Apollo/NetworkFetchInterceptor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "interceptAsync(chain:request:response:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8FF323C7-ECDC-4542-98DA-4FC8FE09D75D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/ClientSetup/ExplorerApolloServiceClientProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "client"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E6A9CA6-DB57-48AB-9200-990247DA731C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/ClientSetup/ExplorerApolloServiceClientProvider.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "createAndCacheApolloClient(url:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D987C392-5B03-4B5A-8CEE-9021AB290F1E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/SwiftUITest-dpxufirvltcdgaglqtxmxenootoi/SourcePackages/checkouts/apollo-ios/Sources/Apollo/HTTPRequest.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "toURLRequest()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

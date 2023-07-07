@@ -1,0 +1,10 @@
+query AllPokemon($offset: Int = 89) {
+    getAllPokemon(offset: $offset) {
+        key
+        bulbapediaPage
+        levellingRate
+        species
+        sprite
+        num
+    }
+}

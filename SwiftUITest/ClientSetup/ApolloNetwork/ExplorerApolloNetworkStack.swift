@@ -24,11 +24,18 @@ class ExplorerApolloNetworkStack: InterceptorProvider {
 
     func interceptors<Operation>(for operation: Operation) -> [ApolloInterceptor] where Operation: GraphQLOperation {
         [
-            AuthenticationInterceptor(),
+//            AuthenticationInterceptor(),
+//            MaxRetryInterceptor(),
+//            CacheReadInterceptor(store: store),
+//            ResponseCodeInterceptor(),
+//            JSONResponseParsingInterceptor(cacheKeyForObject: store.cacheKeyForObject),
+//            AutomaticPersistedQueryInterceptor(),
+//            CacheWriteInterceptor(store: store)
             MaxRetryInterceptor(),
             CacheReadInterceptor(store: store),
+            NetworkFetchInterceptor(client: urlSessionClient),
             ResponseCodeInterceptor(),
-            JSONResponseParsingInterceptor(cacheKeyForObject: store.cacheKeyForObject),
+            JSONResponseParsingInterceptor(),
             AutomaticPersistedQueryInterceptor(),
             CacheWriteInterceptor(store: store)
         ]

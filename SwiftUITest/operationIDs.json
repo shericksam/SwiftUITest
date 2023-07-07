@@ -1,0 +1,6 @@
+{
+  "af25e734a8158afdae471279eec102f7ef78a35f1ebfda268ca2c35941d23f15": {
+    "name": "AllPokemon",
+    "source": "query AllPokemon($offset: Int = 89) {\n  getAllPokemon(offset: $offset) {\n    __typename\n    key\n    bulbapediaPage\n    levellingRate\n    species\n    sprite\n    num\n  }\n}"
+  }
+}

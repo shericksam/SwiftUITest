@@ -32,6 +32,13 @@
 		D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */; };
 		D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */; };
 		D57333EB2A57C04C004FB8DA /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333EA2A57C04C004FB8DA /* LoadingState.swift */; };
+		D57333EF2A57CBFF004FB8DA /* AllPokemonQuery.graphql in Sources */ = {isa = PBXBuildFile; fileRef = D57333EE2A57CBFF004FB8DA /* AllPokemonQuery.graphql */; };
+		D57333F22A57CCD0004FB8DA /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333F12A57CCD0004FB8DA /* API.swift */; };
+		D57333F42A57CDA3004FB8DA /* QueryHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333F32A57CDA3004FB8DA /* QueryHolder.swift */; };
+		D57333FB2A57CF29004FB8DA /* PokemonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333FA2A57CF29004FB8DA /* PokemonListView.swift */; };
+		D57333FE2A57D3C7004FB8DA /* PokemonAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */; };
+		D57334002A57DA85004FB8DA /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = D57333FF2A57DA85004FB8DA /* schema.graphqls */; };
+		D57334022A57DA8D004FB8DA /* introspection_response.json in Resources */ = {isa = PBXBuildFile; fileRef = D57334012A57DA8D004FB8DA /* introspection_response.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +86,13 @@
 		D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationInterceptor.swift; sourceTree = "<group>"; };
 		D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		D57333EA2A57C04C004FB8DA /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
+		D57333EE2A57CBFF004FB8DA /* AllPokemonQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AllPokemonQuery.graphql; sourceTree = "<group>"; };
+		D57333F12A57CCD0004FB8DA /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = API.swift; path = SwiftUITest/API.swift; sourceTree = SOURCE_ROOT; };
+		D57333F32A57CDA3004FB8DA /* QueryHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHolder.swift; sourceTree = "<group>"; };
+		D57333FA2A57CF29004FB8DA /* PokemonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListView.swift; sourceTree = "<group>"; };
+		D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAppViewModel.swift; sourceTree = "<group>"; };
+		D57333FF2A57DA85004FB8DA /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = file; name = schema.graphqls; path = SwiftUITest/schema.graphqls; sourceTree = SOURCE_ROOT; };
+		D57334012A57DA8D004FB8DA /* introspection_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = introspection_response.json; path = SwiftUITest/introspection_response.json; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,9 +144,11 @@
 		D57333952A57A725004FB8DA /* SwiftUITest */ = {
 			isa = PBXGroup;
 			children = (
+				D57334012A57DA8D004FB8DA /* introspection_response.json */,
+				D57333FF2A57DA85004FB8DA /* schema.graphqls */,
+				D57333FC2A57D3AA004FB8DA /* PokemonApp */,
 				D57333D02A57BB35004FB8DA /* Sources */,
 				D57333C82A57B90E004FB8DA /* ClientSetup */,
-				D57333962A57A725004FB8DA /* SwiftUITestApp.swift */,
 				D57333982A57A725004FB8DA /* ContentView.swift */,
 				D573339A2A57A728004FB8DA /* Assets.xcassets */,
 				D573339F2A57A728004FB8DA /* Persistence.swift */,
@@ -190,6 +206,8 @@
 		D57333D02A57BB35004FB8DA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D57333F82A57CEF9004FB8DA /* Production */,
+				D57333ED2A57CBE3004FB8DA /* GraphQL */,
 				D57333D12A57BB49004FB8DA /* Platform */,
 			);
 			path = Sources;
@@ -200,8 +218,10 @@
 			children = (
 				D57333D92A57BBF0004FB8DA /* Dependencies.swift */,
 				D57333E72A57BF18004FB8DA /* Extensions */,
-				D57333D22A57BB54004FB8DA /* Network */,
 				D57333EA2A57C04C004FB8DA /* LoadingState.swift */,
+				D57333D22A57BB54004FB8DA /* Network */,
+				D57333F52A57CE00004FB8DA /* Providers */,
+				D57333F32A57CDA3004FB8DA /* QueryHolder.swift */,
 			);
 			path = Platform;
 			sourceTree = "<group>";
@@ -228,6 +248,47 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D57333ED2A57CBE3004FB8DA /* GraphQL */ = {
+			isa = PBXGroup;
+			children = (
+				D57333F12A57CCD0004FB8DA /* API.swift */,
+				D57333EE2A57CBFF004FB8DA /* AllPokemonQuery.graphql */,
+			);
+			path = GraphQL;
+			sourceTree = "<group>";
+		};
+		D57333F52A57CE00004FB8DA /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		D57333F82A57CEF9004FB8DA /* Production */ = {
+			isa = PBXGroup;
+			children = (
+				D57333F92A57CF0A004FB8DA /* Components */,
+			);
+			path = Production;
+			sourceTree = "<group>";
+		};
+		D57333F92A57CF0A004FB8DA /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D57333FA2A57CF29004FB8DA /* PokemonListView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D57333FC2A57D3AA004FB8DA /* PokemonApp */ = {
+			isa = PBXGroup;
+			children = (
+				D57333962A57A725004FB8DA /* SwiftUITestApp.swift */,
+				D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */,
+			);
+			path = PokemonApp;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -235,10 +296,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D57333BC2A57A729004FB8DA /* Build configuration list for PBXNativeTarget "SwiftUITest" */;
 			buildPhases = (
-				D57333EC2A57C474004FB8DA /* Apollo */,
 				D573338F2A57A725004FB8DA /* Sources */,
 				D57333902A57A725004FB8DA /* Frameworks */,
 				D57333912A57A725004FB8DA /* Resources */,
+				D57333F02A57CC3A004FB8DA /* CodeGenerate */,
 			);
 			buildRules = (
 			);
@@ -340,6 +401,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D573339E2A57A728004FB8DA /* Preview Assets.xcassets in Resources */,
+				D57334002A57DA85004FB8DA /* schema.graphqls in Resources */,
+				D57334022A57DA8D004FB8DA /* introspection_response.json in Resources */,
 				D573339B2A57A728004FB8DA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,7 +424,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D57333EC2A57C474004FB8DA /* Apollo */ = {
+		D57333F02A57CC3A004FB8DA /* CodeGenerate */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -370,14 +433,14 @@
 			);
 			inputPaths = (
 			);
-			name = Apollo;
+			name = CodeGenerate;
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh schema:download --endpoint=\"https://graphqlpokemon.favware.tech/v7\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Don't run this during index builds\nif [ $ACTION = \"indexbuild\" ]; then exit 0; fi\n\ncd \"${SRCROOT}\"/ApolloCodegen\nxcrun -sdk macosx swift run ApolloCodegen generate\n\n# propagate the xcrun call's return code to Xcode\nexit $?\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -388,6 +451,7 @@
 			files = (
 				D57333D62A57BB9C004FB8DA /* Cancellable.swift in Sources */,
 				D57333E02A57BD37004FB8DA /* URLBuilder.swift in Sources */,
+				D57333FE2A57D3C7004FB8DA /* PokemonAppViewModel.swift in Sources */,
 				D57333DE2A57BCF8004FB8DA /* Result.swift in Sources */,
 				D57333A02A57A728004FB8DA /* Persistence.swift in Sources */,
 				D57333CF2A57BA63004FB8DA /* ApolloServiceClientProvider.swift in Sources */,
@@ -395,14 +459,18 @@
 				D57333E42A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift in Sources */,
 				D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */,
 				D57333992A57A725004FB8DA /* ContentView.swift in Sources */,
+				D57333EF2A57CBFF004FB8DA /* AllPokemonQuery.graphql in Sources */,
 				D57333972A57A725004FB8DA /* SwiftUITestApp.swift in Sources */,
 				D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */,
 				D57333DA2A57BBF0004FB8DA /* Dependencies.swift in Sources */,
+				D57333F22A57CCD0004FB8DA /* API.swift in Sources */,
 				D57333EB2A57C04C004FB8DA /* LoadingState.swift in Sources */,
 				D57333CB2A57B94B004FB8DA /* ExplorerURLProvider.swift in Sources */,
 				D57333A32A57A728004FB8DA /* SwiftUITest.xcdatamodeld in Sources */,
 				D57333E22A57BE4D004FB8DA /* InsecureApolloURLSessionClient.swift in Sources */,
+				D57333F42A57CDA3004FB8DA /* QueryHolder.swift in Sources */,
 				D57333D82A57BBC8004FB8DA /* NetworkEnvironment.swift in Sources */,
+				D57333FB2A57CF29004FB8DA /* PokemonListView.swift in Sources */,
 				D57333DC2A57BCC6004FB8DA /* ComponentNetwork.swift in Sources */,
 				D57333D42A57BB69004FB8DA /* ApolloCancellable.swift in Sources */,
 			);

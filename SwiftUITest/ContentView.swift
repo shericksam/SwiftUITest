@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -17,36 +18,55 @@ struct ContentView: View {
     private var items: FetchedResults<Item>
 
     @Environment(\.network) private var network: ApolloServiceClientProvider
+    @ObservedObject private var queryHolder: QueryHolder<AllPokemonQuery>
     @ObservedObject public private(set) var loadingStatePublisher: LoadingStatePublisher = LoadingStatePublisher()
     @State private var loadingState: LoadingState = .loading {
         didSet {
             loadingStatePublisher.loadingState = loadingState
         }
     }
+    @State private var result: GraphQLCachingQueryResult<AllPokemonQuery.Data>?
 
+    public init() {
+        self.queryHolder = QueryHolder(
+            query: AllPokemonQuery(offset: 89)
+        )
+    }
     var body: some View {
         NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
+            HStack {
+                if loadingState == .loaded {
+                    result?.data
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+                if loadingState == .loading {
+                    Text("loading")
                 }
             }
-            Text("Select an item")
+            .environmentObject(queryHolder)
+            .onReceive(queryHolder.$query) { query in
+                executeQuery(query)
+            }
+//            List {
+//                ForEach(items) { item in
+//                    NavigationLink {
+//                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+//                    } label: {
+//                        Text(item.timestamp!, formatter: itemFormatter)
+//                    }
+//                }
+//                .onDelete(perform: deleteItems)
+//            }
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    EditButton()
+//                }
+//                ToolbarItem {
+//                    Button(action: addItem) {
+//                        Label("Add Item", systemImage: "plus")
+//                    }
+//                }
+//            }
+//            Text("Select an item")
         }
     }
 
@@ -81,20 +101,21 @@ struct ContentView: View {
         }
     }
 
-//    func executeQuery(_ query: PropertyAvailabilityCalendarsQuery) {
-//        loadingState = .loading
-//        query
-//            .execute(serviceClient: network) { response in
-//                switch response {
-//                case .success(let result):
-//                    loadingState = .loaded
-//                    self.result = result
-//                    self.analyticsProvider.setContext(result.extensions)
-//                case .failure(let error):
-//                    loadingState = .error
-//                }
-//            }
-//    }
+    func executeQuery(_ query: AllPokemonQuery) {
+        loadingState = .loading
+        query
+            .execute(serviceClient: network) { response in
+                switch response {
+                case .success(let result):
+                    loadingState = .loaded
+                    self.result = result
+                case .failure(let error):
+                    loadingState = .error
+                    print(error)
+                    
+                }
+            }
+    }
 }
 
 private let itemFormatter: DateFormatter = {

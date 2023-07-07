@@ -16,6 +16,22 @@
 		D57333AD2A57A729004FB8DA /* SwiftUITestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333AC2A57A729004FB8DA /* SwiftUITestTests.swift */; };
 		D57333B72A57A729004FB8DA /* SwiftUITestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333B62A57A729004FB8DA /* SwiftUITestUITests.swift */; };
 		D57333B92A57A729004FB8DA /* SwiftUITestUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333B82A57A729004FB8DA /* SwiftUITestUITestsLaunchTests.swift */; };
+		D57333C72A57B8BD004FB8DA /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = D57333C62A57B8BD004FB8DA /* Apollo */; };
+		D57333CB2A57B94B004FB8DA /* ExplorerURLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333CA2A57B94B004FB8DA /* ExplorerURLProvider.swift */; };
+		D57333CD2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333CC2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift */; };
+		D57333CF2A57BA63004FB8DA /* ApolloServiceClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333CE2A57BA63004FB8DA /* ApolloServiceClientProvider.swift */; };
+		D57333D42A57BB69004FB8DA /* ApolloCancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333D32A57BB69004FB8DA /* ApolloCancellable.swift */; };
+		D57333D62A57BB9C004FB8DA /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333D52A57BB9C004FB8DA /* Cancellable.swift */; };
+		D57333D82A57BBC8004FB8DA /* NetworkEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333D72A57BBC8004FB8DA /* NetworkEnvironment.swift */; };
+		D57333DA2A57BBF0004FB8DA /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333D92A57BBF0004FB8DA /* Dependencies.swift */; };
+		D57333DC2A57BCC6004FB8DA /* ComponentNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333DB2A57BCC6004FB8DA /* ComponentNetwork.swift */; };
+		D57333DE2A57BCF8004FB8DA /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333DD2A57BCF8004FB8DA /* Result.swift */; };
+		D57333E02A57BD37004FB8DA /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333DF2A57BD37004FB8DA /* URLBuilder.swift */; };
+		D57333E22A57BE4D004FB8DA /* InsecureApolloURLSessionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E12A57BE4D004FB8DA /* InsecureApolloURLSessionClient.swift */; };
+		D57333E42A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E32A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift */; };
+		D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */; };
+		D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */; };
+		D57333EB2A57C04C004FB8DA /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333EA2A57C04C004FB8DA /* LoadingState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +64,21 @@
 		D57333B22A57A729004FB8DA /* SwiftUITestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftUITestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D57333B62A57A729004FB8DA /* SwiftUITestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestUITests.swift; sourceTree = "<group>"; };
 		D57333B82A57A729004FB8DA /* SwiftUITestUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D57333CA2A57B94B004FB8DA /* ExplorerURLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerURLProvider.swift; sourceTree = "<group>"; };
+		D57333CC2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerApolloServiceClientProvider.swift; sourceTree = "<group>"; };
+		D57333CE2A57BA63004FB8DA /* ApolloServiceClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloServiceClientProvider.swift; sourceTree = "<group>"; };
+		D57333D32A57BB69004FB8DA /* ApolloCancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloCancellable.swift; sourceTree = "<group>"; };
+		D57333D52A57BB9C004FB8DA /* Cancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
+		D57333D72A57BBC8004FB8DA /* NetworkEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkEnvironment.swift; sourceTree = "<group>"; };
+		D57333D92A57BBF0004FB8DA /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		D57333DB2A57BCC6004FB8DA /* ComponentNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentNetwork.swift; sourceTree = "<group>"; };
+		D57333DD2A57BCF8004FB8DA /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		D57333DF2A57BD37004FB8DA /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
+		D57333E12A57BE4D004FB8DA /* InsecureApolloURLSessionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsecureApolloURLSessionClient.swift; sourceTree = "<group>"; };
+		D57333E32A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerApolloNetworkStack.swift; sourceTree = "<group>"; };
+		D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationInterceptor.swift; sourceTree = "<group>"; };
+		D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		D57333EA2A57C04C004FB8DA /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D57333C72A57B8BD004FB8DA /* Apollo in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +130,8 @@
 		D57333952A57A725004FB8DA /* SwiftUITest */ = {
 			isa = PBXGroup;
 			children = (
+				D57333D02A57BB35004FB8DA /* Sources */,
+				D57333C82A57B90E004FB8DA /* ClientSetup */,
 				D57333962A57A725004FB8DA /* SwiftUITestApp.swift */,
 				D57333982A57A725004FB8DA /* ContentView.swift */,
 				D573339A2A57A728004FB8DA /* Assets.xcassets */,
@@ -133,6 +167,67 @@
 			path = SwiftUITestUITests;
 			sourceTree = "<group>";
 		};
+		D57333C82A57B90E004FB8DA /* ClientSetup */ = {
+			isa = PBXGroup;
+			children = (
+				D57333C92A57B91F004FB8DA /* ApolloNetwork */,
+				D57333CA2A57B94B004FB8DA /* ExplorerURLProvider.swift */,
+				D57333CC2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift */,
+			);
+			path = ClientSetup;
+			sourceTree = "<group>";
+		};
+		D57333C92A57B91F004FB8DA /* ApolloNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				D57333E12A57BE4D004FB8DA /* InsecureApolloURLSessionClient.swift */,
+				D57333E32A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift */,
+				D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */,
+			);
+			path = ApolloNetwork;
+			sourceTree = "<group>";
+		};
+		D57333D02A57BB35004FB8DA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D57333D12A57BB49004FB8DA /* Platform */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		D57333D12A57BB49004FB8DA /* Platform */ = {
+			isa = PBXGroup;
+			children = (
+				D57333D92A57BBF0004FB8DA /* Dependencies.swift */,
+				D57333E72A57BF18004FB8DA /* Extensions */,
+				D57333D22A57BB54004FB8DA /* Network */,
+				D57333EA2A57C04C004FB8DA /* LoadingState.swift */,
+			);
+			path = Platform;
+			sourceTree = "<group>";
+		};
+		D57333D22A57BB54004FB8DA /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				D57333D32A57BB69004FB8DA /* ApolloCancellable.swift */,
+				D57333CE2A57BA63004FB8DA /* ApolloServiceClientProvider.swift */,
+				D57333D52A57BB9C004FB8DA /* Cancellable.swift */,
+				D57333D72A57BBC8004FB8DA /* NetworkEnvironment.swift */,
+				D57333DB2A57BCC6004FB8DA /* ComponentNetwork.swift */,
+				D57333DD2A57BCF8004FB8DA /* Result.swift */,
+				D57333DF2A57BD37004FB8DA /* URLBuilder.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		D57333E72A57BF18004FB8DA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -140,6 +235,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D57333BC2A57A729004FB8DA /* Build configuration list for PBXNativeTarget "SwiftUITest" */;
 			buildPhases = (
+				D57333EC2A57C474004FB8DA /* Apollo */,
 				D573338F2A57A725004FB8DA /* Sources */,
 				D57333902A57A725004FB8DA /* Frameworks */,
 				D57333912A57A725004FB8DA /* Resources */,
@@ -149,6 +245,9 @@
 			dependencies = (
 			);
 			name = SwiftUITest;
+			packageProductDependencies = (
+				D57333C62A57B8BD004FB8DA /* Apollo */,
+			);
 			productName = SwiftUITest;
 			productReference = D57333932A57A725004FB8DA /* SwiftUITest.app */;
 			productType = "com.apple.product-type.application";
@@ -221,6 +320,9 @@
 				Base,
 			);
 			mainGroup = D573338A2A57A725004FB8DA;
+			packageReferences = (
+				D57333C52A57B8BD004FB8DA /* XCRemoteSwiftPackageReference "apollo-ios" */,
+			);
 			productRefGroup = D57333942A57A725004FB8DA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -258,15 +360,51 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D57333EC2A57C474004FB8DA /* Apollo */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Apollo;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh schema:download --endpoint=\"https://graphqlpokemon.favware.tech/v7\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D573338F2A57A725004FB8DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D57333D62A57BB9C004FB8DA /* Cancellable.swift in Sources */,
+				D57333E02A57BD37004FB8DA /* URLBuilder.swift in Sources */,
+				D57333DE2A57BCF8004FB8DA /* Result.swift in Sources */,
 				D57333A02A57A728004FB8DA /* Persistence.swift in Sources */,
+				D57333CF2A57BA63004FB8DA /* ApolloServiceClientProvider.swift in Sources */,
+				D57333CD2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift in Sources */,
+				D57333E42A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift in Sources */,
+				D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */,
 				D57333992A57A725004FB8DA /* ContentView.swift in Sources */,
 				D57333972A57A725004FB8DA /* SwiftUITestApp.swift in Sources */,
+				D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */,
+				D57333DA2A57BBF0004FB8DA /* Dependencies.swift in Sources */,
+				D57333EB2A57C04C004FB8DA /* LoadingState.swift in Sources */,
+				D57333CB2A57B94B004FB8DA /* ExplorerURLProvider.swift in Sources */,
 				D57333A32A57A728004FB8DA /* SwiftUITest.xcdatamodeld in Sources */,
+				D57333E22A57BE4D004FB8DA /* InsecureApolloURLSessionClient.swift in Sources */,
+				D57333D82A57BBC8004FB8DA /* NetworkEnvironment.swift in Sources */,
+				D57333DC2A57BCC6004FB8DA /* ComponentNetwork.swift in Sources */,
+				D57333D42A57BB69004FB8DA /* ApolloCancellable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,6 +723,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D57333C52A57B8BD004FB8DA /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.51.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D57333C62A57B8BD004FB8DA /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D57333C52A57B8BD004FB8DA /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		D57333A12A57A728004FB8DA /* SwiftUITest.xcdatamodeld */ = {

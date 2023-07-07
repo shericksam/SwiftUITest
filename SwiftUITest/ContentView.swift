@@ -16,6 +16,14 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
 
+    @Environment(\.network) private var network: ApolloServiceClientProvider
+    @ObservedObject public private(set) var loadingStatePublisher: LoadingStatePublisher = LoadingStatePublisher()
+    @State private var loadingState: LoadingState = .loading {
+        didSet {
+            loadingStatePublisher.loadingState = loadingState
+        }
+    }
+
     var body: some View {
         NavigationView {
             List {
@@ -72,6 +80,21 @@ struct ContentView: View {
             }
         }
     }
+
+//    func executeQuery(_ query: PropertyAvailabilityCalendarsQuery) {
+//        loadingState = .loading
+//        query
+//            .execute(serviceClient: network) { response in
+//                switch response {
+//                case .success(let result):
+//                    loadingState = .loaded
+//                    self.result = result
+//                    self.analyticsProvider.setContext(result.extensions)
+//                case .failure(let error):
+//                    loadingState = .error
+//                }
+//            }
+//    }
 }
 
 private let itemFormatter: DateFormatter = {

@@ -60,6 +60,8 @@ fragment StatsFragment on Stats {
 
 fragment FullDataFragmentWithoutNested on Pokemon {
     key
+    legendary
+    bulbapediaPage
     evYields {
         ...EvYieldsFragment
     }

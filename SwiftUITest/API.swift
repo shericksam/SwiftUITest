@@ -7268,7 +7268,7 @@ public final class GetPokemonQuery: GraphQLQuery {
 
   public let operationName: String = "GetPokemon"
 
-  public let operationIdentifier: String? = "98091af155e5c06f3815613eb22409dd62735d787c501114107150ea66176c5b"
+  public let operationIdentifier: String? = "91d594d10ee5c40e56879e884a4cc8c92c3602c5dead5d8f99b49e83eda5dd36"
 
   public var queryDocument: String {
     var document: String = operationDefinition
@@ -7341,6 +7341,8 @@ public final class GetPokemonQuery: GraphQLQuery {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
           GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
           GraphQLField("evolutionLevel", type: .scalar(String.self)),
           GraphQLField("forme", type: .scalar(String.self)),
@@ -7370,8 +7372,8 @@ public final class GetPokemonQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+      public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
       }
 
       public var __typename: String {
@@ -7390,6 +7392,26 @@ public final class GetPokemonQuery: GraphQLQuery {
         }
         set {
           resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+      public var legendary: Bool {
+        get {
+          return resultMap["legendary"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "legendary")
+        }
+      }
+
+      /// Bulbapedia page for a Pokémon
+      public var bulbapediaPage: String {
+        get {
+          return resultMap["bulbapediaPage"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "bulbapediaPage")
         }
       }
 
@@ -8287,6 +8309,8 @@ public final class GetPokemonQuery: GraphQLQuery {
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+            GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+            GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
             GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
             GraphQLField("evolutionLevel", type: .scalar(String.self)),
             GraphQLField("forme", type: .scalar(String.self)),
@@ -8316,8 +8340,8 @@ public final class GetPokemonQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
-          self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+        public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
         }
 
         public var __typename: String {
@@ -8336,6 +8360,26 @@ public final class GetPokemonQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "key")
+          }
+        }
+
+        /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+        public var legendary: Bool {
+          get {
+            return resultMap["legendary"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "legendary")
+          }
+        }
+
+        /// Bulbapedia page for a Pokémon
+        public var bulbapediaPage: String {
+          get {
+            return resultMap["bulbapediaPage"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "bulbapediaPage")
           }
         }
 
@@ -9224,6 +9268,8 @@ public final class GetPokemonQuery: GraphQLQuery {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
               GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
               GraphQLField("evolutionLevel", type: .scalar(String.self)),
               GraphQLField("forme", type: .scalar(String.self)),
@@ -9251,8 +9297,8 @@ public final class GetPokemonQuery: GraphQLQuery {
             self.resultMap = unsafeResultMap
           }
 
-          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
           }
 
           public var __typename: String {
@@ -9271,6 +9317,26 @@ public final class GetPokemonQuery: GraphQLQuery {
             }
             set {
               resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+          public var legendary: Bool {
+            get {
+              return resultMap["legendary"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "legendary")
+            }
+          }
+
+          /// Bulbapedia page for a Pokémon
+          public var bulbapediaPage: String {
+            get {
+              return resultMap["bulbapediaPage"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "bulbapediaPage")
             }
           }
 
@@ -10140,6 +10206,8 @@ public final class GetPokemonQuery: GraphQLQuery {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
               GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
               GraphQLField("evolutionLevel", type: .scalar(String.self)),
               GraphQLField("forme", type: .scalar(String.self)),
@@ -10167,8 +10235,8 @@ public final class GetPokemonQuery: GraphQLQuery {
             self.resultMap = unsafeResultMap
           }
 
-          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
           }
 
           public var __typename: String {
@@ -10187,6 +10255,26 @@ public final class GetPokemonQuery: GraphQLQuery {
             }
             set {
               resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+          public var legendary: Bool {
+            get {
+              return resultMap["legendary"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "legendary")
+            }
+          }
+
+          /// Bulbapedia page for a Pokémon
+          public var bulbapediaPage: String {
+            get {
+              return resultMap["bulbapediaPage"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "bulbapediaPage")
             }
           }
 
@@ -11057,6 +11145,8 @@ public final class GetPokemonQuery: GraphQLQuery {
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+            GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+            GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
             GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
             GraphQLField("evolutionLevel", type: .scalar(String.self)),
             GraphQLField("forme", type: .scalar(String.self)),
@@ -11086,8 +11176,8 @@ public final class GetPokemonQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
-          self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+        public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
         }
 
         public var __typename: String {
@@ -11106,6 +11196,26 @@ public final class GetPokemonQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "key")
+          }
+        }
+
+        /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+        public var legendary: Bool {
+          get {
+            return resultMap["legendary"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "legendary")
+          }
+        }
+
+        /// Bulbapedia page for a Pokémon
+        public var bulbapediaPage: String {
+          get {
+            return resultMap["bulbapediaPage"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "bulbapediaPage")
           }
         }
 
@@ -11994,6 +12104,8 @@ public final class GetPokemonQuery: GraphQLQuery {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
               GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
               GraphQLField("evolutionLevel", type: .scalar(String.self)),
               GraphQLField("forme", type: .scalar(String.self)),
@@ -12021,8 +12133,8 @@ public final class GetPokemonQuery: GraphQLQuery {
             self.resultMap = unsafeResultMap
           }
 
-          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
           }
 
           public var __typename: String {
@@ -12041,6 +12153,26 @@ public final class GetPokemonQuery: GraphQLQuery {
             }
             set {
               resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+          public var legendary: Bool {
+            get {
+              return resultMap["legendary"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "legendary")
+            }
+          }
+
+          /// Bulbapedia page for a Pokémon
+          public var bulbapediaPage: String {
+            get {
+              return resultMap["bulbapediaPage"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "bulbapediaPage")
             }
           }
 
@@ -12910,6 +13042,8 @@ public final class GetPokemonQuery: GraphQLQuery {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
               GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
               GraphQLField("evolutionLevel", type: .scalar(String.self)),
               GraphQLField("forme", type: .scalar(String.self)),
@@ -12937,8 +13071,8 @@ public final class GetPokemonQuery: GraphQLQuery {
             self.resultMap = unsafeResultMap
           }
 
-          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
           }
 
           public var __typename: String {
@@ -12957,6 +13091,26 @@ public final class GetPokemonQuery: GraphQLQuery {
             }
             set {
               resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+          public var legendary: Bool {
+            get {
+              return resultMap["legendary"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "legendary")
+            }
+          }
+
+          /// Bulbapedia page for a Pokémon
+          public var bulbapediaPage: String {
+            get {
+              return resultMap["bulbapediaPage"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "bulbapediaPage")
             }
           }
 
@@ -14645,6 +14799,8 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
     fragment FullDataFragmentWithoutNested on Pokemon {
       __typename
       key
+      legendary
+      bulbapediaPage
       evYields {
         __typename
         ...EvYieldsFragment
@@ -14684,6 +14840,8 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
     return [
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
       GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+      GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
       GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
       GraphQLField("evolutionLevel", type: .scalar(String.self)),
       GraphQLField("forme", type: .scalar(String.self)),
@@ -14711,8 +14869,8 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
     self.resultMap = unsafeResultMap
   }
 
-  public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+  public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
   }
 
   public var __typename: String {
@@ -14731,6 +14889,26 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
     }
     set {
       resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+  public var legendary: Bool {
+    get {
+      return resultMap["legendary"]! as! Bool
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "legendary")
+    }
+  }
+
+  /// Bulbapedia page for a Pokémon
+  public var bulbapediaPage: String {
+    get {
+      return resultMap["bulbapediaPage"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "bulbapediaPage")
     }
   }
 
@@ -15573,6 +15751,8 @@ public struct FullDataFragment: GraphQLFragment {
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
       GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+      GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
       GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
       GraphQLField("evolutionLevel", type: .scalar(String.self)),
       GraphQLField("forme", type: .scalar(String.self)),
@@ -15600,8 +15780,8 @@ public struct FullDataFragment: GraphQLFragment {
     self.resultMap = unsafeResultMap
   }
 
-  public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+  public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
   }
 
   public var __typename: String {
@@ -15620,6 +15800,26 @@ public struct FullDataFragment: GraphQLFragment {
     }
     set {
       resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+  public var legendary: Bool {
+    get {
+      return resultMap["legendary"]! as! Bool
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "legendary")
+    }
+  }
+
+  /// Bulbapedia page for a Pokémon
+  public var bulbapediaPage: String {
+    get {
+      return resultMap["bulbapediaPage"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "bulbapediaPage")
     }
   }
 
@@ -16513,6 +16713,8 @@ public struct FullData: GraphQLFragment {
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
       GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
       GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+      GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
       GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
       GraphQLField("evolutionLevel", type: .scalar(String.self)),
       GraphQLField("forme", type: .scalar(String.self)),
@@ -16542,8 +16744,8 @@ public struct FullData: GraphQLFragment {
     self.resultMap = unsafeResultMap
   }
 
-  public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
-    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+  public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
   }
 
   public var __typename: String {
@@ -16562,6 +16764,26 @@ public struct FullData: GraphQLFragment {
     }
     set {
       resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+  public var legendary: Bool {
+    get {
+      return resultMap["legendary"]! as! Bool
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "legendary")
+    }
+  }
+
+  /// Bulbapedia page for a Pokémon
+  public var bulbapediaPage: String {
+    get {
+      return resultMap["bulbapediaPage"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "bulbapediaPage")
     }
   }
 
@@ -17450,6 +17672,8 @@ public struct FullData: GraphQLFragment {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+        GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
         GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
         GraphQLField("evolutionLevel", type: .scalar(String.self)),
         GraphQLField("forme", type: .scalar(String.self)),
@@ -17479,8 +17703,8 @@ public struct FullData: GraphQLFragment {
       self.resultMap = unsafeResultMap
     }
 
-    public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+    public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
     }
 
     public var __typename: String {
@@ -17499,6 +17723,26 @@ public struct FullData: GraphQLFragment {
       }
       set {
         resultMap.updateValue(newValue, forKey: "key")
+      }
+    }
+
+    /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+    public var legendary: Bool {
+      get {
+        return resultMap["legendary"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "legendary")
+      }
+    }
+
+    /// Bulbapedia page for a Pokémon
+    public var bulbapediaPage: String {
+      get {
+        return resultMap["bulbapediaPage"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "bulbapediaPage")
       }
     }
 
@@ -18387,6 +18631,8 @@ public struct FullData: GraphQLFragment {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
           GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
           GraphQLField("evolutionLevel", type: .scalar(String.self)),
           GraphQLField("forme", type: .scalar(String.self)),
@@ -18414,8 +18660,8 @@ public struct FullData: GraphQLFragment {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
       }
 
       public var __typename: String {
@@ -18434,6 +18680,26 @@ public struct FullData: GraphQLFragment {
         }
         set {
           resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+      public var legendary: Bool {
+        get {
+          return resultMap["legendary"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "legendary")
+        }
+      }
+
+      /// Bulbapedia page for a Pokémon
+      public var bulbapediaPage: String {
+        get {
+          return resultMap["bulbapediaPage"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "bulbapediaPage")
         }
       }
 
@@ -19303,6 +19569,8 @@ public struct FullData: GraphQLFragment {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
           GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
           GraphQLField("evolutionLevel", type: .scalar(String.self)),
           GraphQLField("forme", type: .scalar(String.self)),
@@ -19330,8 +19598,8 @@ public struct FullData: GraphQLFragment {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
       }
 
       public var __typename: String {
@@ -19350,6 +19618,26 @@ public struct FullData: GraphQLFragment {
         }
         set {
           resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+      public var legendary: Bool {
+        get {
+          return resultMap["legendary"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "legendary")
+        }
+      }
+
+      /// Bulbapedia page for a Pokémon
+      public var bulbapediaPage: String {
+        get {
+          return resultMap["bulbapediaPage"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "bulbapediaPage")
         }
       }
 
@@ -20220,6 +20508,8 @@ public struct FullData: GraphQLFragment {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+        GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
         GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
         GraphQLField("evolutionLevel", type: .scalar(String.self)),
         GraphQLField("forme", type: .scalar(String.self)),
@@ -20249,8 +20539,8 @@ public struct FullData: GraphQLFragment {
       self.resultMap = unsafeResultMap
     }
 
-    public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+    public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
     }
 
     public var __typename: String {
@@ -20269,6 +20559,26 @@ public struct FullData: GraphQLFragment {
       }
       set {
         resultMap.updateValue(newValue, forKey: "key")
+      }
+    }
+
+    /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+    public var legendary: Bool {
+      get {
+        return resultMap["legendary"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "legendary")
+      }
+    }
+
+    /// Bulbapedia page for a Pokémon
+    public var bulbapediaPage: String {
+      get {
+        return resultMap["bulbapediaPage"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "bulbapediaPage")
       }
     }
 
@@ -21157,6 +21467,8 @@ public struct FullData: GraphQLFragment {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
           GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
           GraphQLField("evolutionLevel", type: .scalar(String.self)),
           GraphQLField("forme", type: .scalar(String.self)),
@@ -21184,8 +21496,8 @@ public struct FullData: GraphQLFragment {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
       }
 
       public var __typename: String {
@@ -21204,6 +21516,26 @@ public struct FullData: GraphQLFragment {
         }
         set {
           resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+      public var legendary: Bool {
+        get {
+          return resultMap["legendary"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "legendary")
+        }
+      }
+
+      /// Bulbapedia page for a Pokémon
+      public var bulbapediaPage: String {
+        get {
+          return resultMap["bulbapediaPage"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "bulbapediaPage")
         }
       }
 
@@ -22073,6 +22405,8 @@ public struct FullData: GraphQLFragment {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("legendary", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
           GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
           GraphQLField("evolutionLevel", type: .scalar(String.self)),
           GraphQLField("forme", type: .scalar(String.self)),
@@ -22100,8 +22434,8 @@ public struct FullData: GraphQLFragment {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      public init(key: PokemonEnum, legendary: Bool, bulbapediaPage: String, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "legendary": legendary, "bulbapediaPage": bulbapediaPage, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
       }
 
       public var __typename: String {
@@ -22120,6 +22454,26 @@ public struct FullData: GraphQLFragment {
         }
         set {
           resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// Whether this Pokémon is a legendary Pokémon. The list is based on what is provided by Bulbapedia.
+      public var legendary: Bool {
+        get {
+          return resultMap["legendary"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "legendary")
+        }
+      }
+
+      /// Bulbapedia page for a Pokémon
+      public var bulbapediaPage: String {
+        get {
+          return resultMap["bulbapediaPage"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "bulbapediaPage")
         }
       }
 

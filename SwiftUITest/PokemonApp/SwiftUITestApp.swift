@@ -14,7 +14,7 @@ struct SwiftUITestApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PokemonListView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.network, Dependencies.serviceClient)
                 .environmentObject(viewModel)

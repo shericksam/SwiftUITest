@@ -39,6 +39,7 @@
 		D57333FE2A57D3C7004FB8DA /* PokemonAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */; };
 		D57334002A57DA85004FB8DA /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = D57333FF2A57DA85004FB8DA /* schema.graphqls */; };
 		D57334022A57DA8D004FB8DA /* introspection_response.json in Resources */ = {isa = PBXBuildFile; fileRef = D57334012A57DA8D004FB8DA /* introspection_response.json */; };
+		D57334052A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57334042A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAppViewModel.swift; sourceTree = "<group>"; };
 		D57333FF2A57DA85004FB8DA /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; name = schema.graphqls; path = SwiftUITest/schema.graphqls; sourceTree = SOURCE_ROOT; };
 		D57334012A57DA8D004FB8DA /* introspection_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = introspection_response.json; path = SwiftUITest/introspection_response.json; sourceTree = SOURCE_ROOT; };
+		D57334042A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonPaginatedItemProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,7 +151,6 @@
 				D57333FC2A57D3AA004FB8DA /* PokemonApp */,
 				D57333D02A57BB35004FB8DA /* Sources */,
 				D57333C82A57B90E004FB8DA /* ClientSetup */,
-				D57333982A57A725004FB8DA /* ContentView.swift */,
 				D573339A2A57A728004FB8DA /* Assets.xcassets */,
 				D573339F2A57A728004FB8DA /* Persistence.swift */,
 				D57333A12A57A728004FB8DA /* SwiftUITest.xcdatamodeld */,
@@ -275,7 +276,7 @@
 		D57333F92A57CF0A004FB8DA /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				D57333FA2A57CF29004FB8DA /* PokemonListView.swift */,
+				D57334032A57E682004FB8DA /* PokemonList */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -287,6 +288,16 @@
 				D57333FD2A57D3C7004FB8DA /* PokemonAppViewModel.swift */,
 			);
 			path = PokemonApp;
+			sourceTree = "<group>";
+		};
+		D57334032A57E682004FB8DA /* PokemonList */ = {
+			isa = PBXGroup;
+			children = (
+				D57333FA2A57CF29004FB8DA /* PokemonListView.swift */,
+				D57334042A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift */,
+				D57333982A57A725004FB8DA /* ContentView.swift */,
+			);
+			path = PokemonList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -458,6 +469,7 @@
 				D57333CD2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift in Sources */,
 				D57333E42A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift in Sources */,
 				D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */,
+				D57334052A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift in Sources */,
 				D57333992A57A725004FB8DA /* ContentView.swift in Sources */,
 				D57333EF2A57CBFF004FB8DA /* AllPokemonQuery.graphql in Sources */,
 				D57333972A57A725004FB8DA /* SwiftUITestApp.swift in Sources */,

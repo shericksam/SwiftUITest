@@ -24,4 +24,14 @@ struct TypeEffectivenessModel {
         self.normalTypes = coreDataModel.normalTypes as? [String]
         self.resistedTypes = coreDataModel.resistedTypes as? [String]
     }
+
+    init?(with fragment: TypeEffectivenessFragment?) {
+        guard let fragment else { return nil }
+        self.doubleEffectiveTypes = fragment.doubleEffectiveTypes
+        self.doubleResistedTypes = fragment.doubleResistedTypes
+        self.effectiveTypes = fragment.effectiveTypes
+        self.effectlessTypes = fragment.effectlessTypes
+        self.normalTypes = fragment.normalTypes
+        self.resistedTypes = fragment.resistedTypes
+    }
 }

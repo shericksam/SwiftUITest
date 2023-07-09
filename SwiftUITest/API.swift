@@ -7270,7 +7270,7 @@ public final class GetPokemonQuery: GraphQLQuery {
 
   public let operationName: String = "GetPokemon"
 
-  public let operationIdentifier: String? = "91d594d10ee5c40e56879e884a4cc8c92c3602c5dead5d8f99b49e83eda5dd36"
+  public let operationIdentifier: String? = "a67810f5c4c39f3c6d246d3aa857071069d04cffb90365ecd706ffe9b9f12bcc"
 
   public var queryDocument: String {
     var document: String = operationDefinition
@@ -7280,6 +7280,8 @@ public final class GetPokemonQuery: GraphQLQuery {
     document.append("\n" + EvYieldsFragment.fragmentDefinition)
     document.append("\n" + GenderFragment.fragmentDefinition)
     document.append("\n" + PokemonTypeFragment.fragmentDefinition)
+    document.append("\n" + TypeMatchupFragment.fragmentDefinition)
+    document.append("\n" + TypeEffectivenessFragment.fragmentDefinition)
     document.append("\n" + StatsFragment.fragmentDefinition)
     return document
   }
@@ -7944,6 +7946,7 @@ public final class GetPokemonQuery: GraphQLQuery {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
               GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
             ]
@@ -7988,11 +7991,38 @@ public final class GetPokemonQuery: GraphQLQuery {
             }
           }
 
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeMatchupFragment: TypeMatchupFragment {
+              get {
+                return TypeMatchupFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
           public struct Attacking: GraphQLSelectionSet {
             public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
             public static var selections: [GraphQLSelection] {
               return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -8079,6 +8109,32 @@ public final class GetPokemonQuery: GraphQLQuery {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -8089,6 +8145,7 @@ public final class GetPokemonQuery: GraphQLQuery {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -8174,6 +8231,32 @@ public final class GetPokemonQuery: GraphQLQuery {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -8903,6 +8986,7 @@ public final class GetPokemonQuery: GraphQLQuery {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
                 GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
               ]
@@ -8947,11 +9031,38 @@ public final class GetPokemonQuery: GraphQLQuery {
               }
             }
 
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeMatchupFragment: TypeMatchupFragment {
+                get {
+                  return TypeMatchupFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+
             public struct Attacking: GraphQLSelectionSet {
               public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
               public static var selections: [GraphQLSelection] {
                 return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                   GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -9038,6 +9149,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
                 set {
                   resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                  get {
+                    return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
                 }
               }
             }
@@ -9048,6 +9185,7 @@ public final class GetPokemonQuery: GraphQLQuery {
               public static var selections: [GraphQLSelection] {
                 return [
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                   GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                   GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -9133,6 +9271,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
                 set {
                   resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                  get {
+                    return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
                 }
               }
             }
@@ -9840,6 +10004,7 @@ public final class GetPokemonQuery: GraphQLQuery {
               public static var selections: [GraphQLSelection] {
                 return [
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
                   GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
                 ]
@@ -9884,11 +10049,38 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
               }
 
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeMatchupFragment: TypeMatchupFragment {
+                  get {
+                    return TypeMatchupFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+              }
+
               public struct Attacking: GraphQLSelectionSet {
                 public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
                 public static var selections: [GraphQLSelection] {
                   return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -9975,6 +10167,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -9985,6 +10203,7 @@ public final class GetPokemonQuery: GraphQLQuery {
                 public static var selections: [GraphQLSelection] {
                   return [
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -10070,6 +10289,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -10778,6 +11023,7 @@ public final class GetPokemonQuery: GraphQLQuery {
               public static var selections: [GraphQLSelection] {
                 return [
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
                   GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
                 ]
@@ -10822,11 +11068,38 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
               }
 
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeMatchupFragment: TypeMatchupFragment {
+                  get {
+                    return TypeMatchupFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+              }
+
               public struct Attacking: GraphQLSelectionSet {
                 public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
                 public static var selections: [GraphQLSelection] {
                   return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -10913,6 +11186,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -10923,6 +11222,7 @@ public final class GetPokemonQuery: GraphQLQuery {
                 public static var selections: [GraphQLSelection] {
                   return [
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -11008,6 +11308,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -11739,6 +12065,7 @@ public final class GetPokemonQuery: GraphQLQuery {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
                 GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
               ]
@@ -11783,11 +12110,38 @@ public final class GetPokemonQuery: GraphQLQuery {
               }
             }
 
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeMatchupFragment: TypeMatchupFragment {
+                get {
+                  return TypeMatchupFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+
             public struct Attacking: GraphQLSelectionSet {
               public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
               public static var selections: [GraphQLSelection] {
                 return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                   GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -11874,6 +12228,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
                 set {
                   resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                  get {
+                    return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
                 }
               }
             }
@@ -11884,6 +12264,7 @@ public final class GetPokemonQuery: GraphQLQuery {
               public static var selections: [GraphQLSelection] {
                 return [
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                   GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                   GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -11969,6 +12350,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
                 set {
                   resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                  get {
+                    return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
                 }
               }
             }
@@ -12676,6 +13083,7 @@ public final class GetPokemonQuery: GraphQLQuery {
               public static var selections: [GraphQLSelection] {
                 return [
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
                   GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
                 ]
@@ -12720,11 +13128,38 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
               }
 
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeMatchupFragment: TypeMatchupFragment {
+                  get {
+                    return TypeMatchupFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+              }
+
               public struct Attacking: GraphQLSelectionSet {
                 public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
                 public static var selections: [GraphQLSelection] {
                   return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -12811,6 +13246,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -12821,6 +13282,7 @@ public final class GetPokemonQuery: GraphQLQuery {
                 public static var selections: [GraphQLSelection] {
                   return [
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -12906,6 +13368,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -13614,6 +14102,7 @@ public final class GetPokemonQuery: GraphQLQuery {
               public static var selections: [GraphQLSelection] {
                 return [
                   GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
                   GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
                 ]
@@ -13658,11 +14147,38 @@ public final class GetPokemonQuery: GraphQLQuery {
                 }
               }
 
+              public var fragments: Fragments {
+                get {
+                  return Fragments(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+
+              public struct Fragments {
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public var typeMatchupFragment: TypeMatchupFragment {
+                  get {
+                    return TypeMatchupFragment(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+              }
+
               public struct Attacking: GraphQLSelectionSet {
                 public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
                 public static var selections: [GraphQLSelection] {
                   return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -13749,6 +14265,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -13759,6 +14301,7 @@ public final class GetPokemonQuery: GraphQLQuery {
                 public static var selections: [GraphQLSelection] {
                   return [
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                     GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                     GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -13844,6 +14387,32 @@ public final class GetPokemonQuery: GraphQLQuery {
                   }
                   set {
                     resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+
+                public var fragments: Fragments {
+                  get {
+                    return Fragments(unsafeResultMap: resultMap)
+                  }
+                  set {
+                    resultMap += newValue.resultMap
+                  }
+                }
+
+                public struct Fragments {
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                    get {
+                      return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                    }
+                    set {
+                      resultMap += newValue.resultMap
+                    }
                   }
                 }
               }
@@ -14372,24 +14941,7 @@ public struct PokemonTypeFragment: GraphQLFragment {
       name
       matchup {
         __typename
-        attacking {
-          __typename
-          doubleEffectiveTypes
-          doubleResistedTypes
-          effectiveTypes
-          effectlessTypes
-          normalTypes
-          resistedTypes
-        }
-        defending {
-          __typename
-          doubleEffectiveTypes
-          doubleResistedTypes
-          effectiveTypes
-          effectlessTypes
-          normalTypes
-          resistedTypes
-        }
+        ...TypeMatchupFragment
       }
     }
     """
@@ -14449,6 +15001,7 @@ public struct PokemonTypeFragment: GraphQLFragment {
     public static var selections: [GraphQLSelection] {
       return [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
         GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
       ]
@@ -14493,11 +15046,38 @@ public struct PokemonTypeFragment: GraphQLFragment {
       }
     }
 
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var typeMatchupFragment: TypeMatchupFragment {
+        get {
+          return TypeMatchupFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
     public struct Attacking: GraphQLSelectionSet {
       public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
       public static var selections: [GraphQLSelection] {
         return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
           GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -14584,6 +15164,32 @@ public struct PokemonTypeFragment: GraphQLFragment {
         }
         set {
           resultMap.updateValue(newValue, forKey: "resistedTypes")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var typeEffectivenessFragment: TypeEffectivenessFragment {
+          get {
+            return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
         }
       }
     }
@@ -14594,6 +15200,7 @@ public struct PokemonTypeFragment: GraphQLFragment {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
           GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
           GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -14681,6 +15288,452 @@ public struct PokemonTypeFragment: GraphQLFragment {
           resultMap.updateValue(newValue, forKey: "resistedTypes")
         }
       }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var typeEffectivenessFragment: TypeEffectivenessFragment {
+          get {
+            return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
+public struct TypeMatchupFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment TypeMatchupFragment on TypeMatchup {
+      __typename
+      attacking {
+        __typename
+        ...TypeEffectivenessFragment
+      }
+      defending {
+        __typename
+        ...TypeEffectivenessFragment
+      }
+    }
+    """
+
+  public static let possibleTypes: [String] = ["TypeMatchup"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+      GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(attacking: Attacking, defending: Defending) {
+    self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The type matchups when attacking
+  public var attacking: Attacking {
+    get {
+      return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+    }
+  }
+
+  /// The type matchups when defending
+  public var defending: Defending {
+    get {
+      return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "defending")
+    }
+  }
+
+  public struct Attacking: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+      self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The types with 4x effectiveness
+    public var doubleEffectiveTypes: [String] {
+      get {
+        return resultMap["doubleEffectiveTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+      }
+    }
+
+    /// The types with 0.25x effectiveness
+    public var doubleResistedTypes: [String] {
+      get {
+        return resultMap["doubleResistedTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+      }
+    }
+
+    /// The types with 2x effectiveness
+    public var effectiveTypes: [String] {
+      get {
+        return resultMap["effectiveTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "effectiveTypes")
+      }
+    }
+
+    /// The types with 0x effectiveness
+    public var effectlessTypes: [String] {
+      get {
+        return resultMap["effectlessTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "effectlessTypes")
+      }
+    }
+
+    /// The types with 1x effectiveness
+    public var normalTypes: [String] {
+      get {
+        return resultMap["normalTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "normalTypes")
+      }
+    }
+
+    /// The types with 0.5x effectiveness
+    public var resistedTypes: [String] {
+      get {
+        return resultMap["resistedTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "resistedTypes")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var typeEffectivenessFragment: TypeEffectivenessFragment {
+        get {
+          return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct Defending: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+      self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The types with 4x effectiveness
+    public var doubleEffectiveTypes: [String] {
+      get {
+        return resultMap["doubleEffectiveTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+      }
+    }
+
+    /// The types with 0.25x effectiveness
+    public var doubleResistedTypes: [String] {
+      get {
+        return resultMap["doubleResistedTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+      }
+    }
+
+    /// The types with 2x effectiveness
+    public var effectiveTypes: [String] {
+      get {
+        return resultMap["effectiveTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "effectiveTypes")
+      }
+    }
+
+    /// The types with 0x effectiveness
+    public var effectlessTypes: [String] {
+      get {
+        return resultMap["effectlessTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "effectlessTypes")
+      }
+    }
+
+    /// The types with 1x effectiveness
+    public var normalTypes: [String] {
+      get {
+        return resultMap["normalTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "normalTypes")
+      }
+    }
+
+    /// The types with 0.5x effectiveness
+    public var resistedTypes: [String] {
+      get {
+        return resultMap["resistedTypes"]! as! [String]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "resistedTypes")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var typeEffectivenessFragment: TypeEffectivenessFragment {
+        get {
+          return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+}
+
+public struct TypeEffectivenessFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment TypeEffectivenessFragment on TypeEffectiveness {
+      __typename
+      doubleEffectiveTypes
+      doubleResistedTypes
+      effectiveTypes
+      effectlessTypes
+      normalTypes
+      resistedTypes
+    }
+    """
+
+  public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+      GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+    self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The types with 4x effectiveness
+  public var doubleEffectiveTypes: [String] {
+    get {
+      return resultMap["doubleEffectiveTypes"]! as! [String]
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+    }
+  }
+
+  /// The types with 0.25x effectiveness
+  public var doubleResistedTypes: [String] {
+    get {
+      return resultMap["doubleResistedTypes"]! as! [String]
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+    }
+  }
+
+  /// The types with 2x effectiveness
+  public var effectiveTypes: [String] {
+    get {
+      return resultMap["effectiveTypes"]! as! [String]
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "effectiveTypes")
+    }
+  }
+
+  /// The types with 0x effectiveness
+  public var effectlessTypes: [String] {
+    get {
+      return resultMap["effectlessTypes"]! as! [String]
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "effectlessTypes")
+    }
+  }
+
+  /// The types with 1x effectiveness
+  public var normalTypes: [String] {
+    get {
+      return resultMap["normalTypes"]! as! [String]
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "normalTypes")
+    }
+  }
+
+  /// The types with 0.5x effectiveness
+  public var resistedTypes: [String] {
+    get {
+      return resultMap["resistedTypes"]! as! [String]
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "resistedTypes")
     }
   }
 }
@@ -15377,6 +16430,7 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
           GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
         ]
@@ -15421,11 +16475,38 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
         }
       }
 
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var typeMatchupFragment: TypeMatchupFragment {
+          get {
+            return TypeMatchupFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
       public struct Attacking: GraphQLSelectionSet {
         public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
         public static var selections: [GraphQLSelection] {
           return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -15512,6 +16593,32 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
           }
           set {
             resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeEffectivenessFragment: TypeEffectivenessFragment {
+            get {
+              return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
           }
         }
       }
@@ -15522,6 +16629,7 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -15607,6 +16715,32 @@ public struct FullDataFragmentWithoutNested: GraphQLFragment {
           }
           set {
             resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeEffectivenessFragment: TypeEffectivenessFragment {
+            get {
+              return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
           }
         }
       }
@@ -16314,6 +17448,7 @@ public struct FullDataFragment: GraphQLFragment {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
           GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
         ]
@@ -16358,11 +17493,38 @@ public struct FullDataFragment: GraphQLFragment {
         }
       }
 
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var typeMatchupFragment: TypeMatchupFragment {
+          get {
+            return TypeMatchupFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
       public struct Attacking: GraphQLSelectionSet {
         public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
         public static var selections: [GraphQLSelection] {
           return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -16449,6 +17611,32 @@ public struct FullDataFragment: GraphQLFragment {
           }
           set {
             resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeEffectivenessFragment: TypeEffectivenessFragment {
+            get {
+              return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
           }
         }
       }
@@ -16459,6 +17647,7 @@ public struct FullDataFragment: GraphQLFragment {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -16544,6 +17733,32 @@ public struct FullDataFragment: GraphQLFragment {
           }
           set {
             resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeEffectivenessFragment: TypeEffectivenessFragment {
+            get {
+              return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
           }
         }
       }
@@ -17307,6 +18522,7 @@ public struct FullData: GraphQLFragment {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
           GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
         ]
@@ -17351,11 +18567,38 @@ public struct FullData: GraphQLFragment {
         }
       }
 
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var typeMatchupFragment: TypeMatchupFragment {
+          get {
+            return TypeMatchupFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
       public struct Attacking: GraphQLSelectionSet {
         public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
         public static var selections: [GraphQLSelection] {
           return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -17442,6 +18685,32 @@ public struct FullData: GraphQLFragment {
           }
           set {
             resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeEffectivenessFragment: TypeEffectivenessFragment {
+            get {
+              return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
           }
         }
       }
@@ -17452,6 +18721,7 @@ public struct FullData: GraphQLFragment {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
             GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -17537,6 +18807,32 @@ public struct FullData: GraphQLFragment {
           }
           set {
             resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeEffectivenessFragment: TypeEffectivenessFragment {
+            get {
+              return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
           }
         }
       }
@@ -18266,6 +19562,7 @@ public struct FullData: GraphQLFragment {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
             GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
           ]
@@ -18310,11 +19607,38 @@ public struct FullData: GraphQLFragment {
           }
         }
 
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeMatchupFragment: TypeMatchupFragment {
+            get {
+              return TypeMatchupFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
         public struct Attacking: GraphQLSelectionSet {
           public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
           public static var selections: [GraphQLSelection] {
             return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
               GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -18401,6 +19725,32 @@ public struct FullData: GraphQLFragment {
             }
             set {
               resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeEffectivenessFragment: TypeEffectivenessFragment {
+              get {
+                return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
             }
           }
         }
@@ -18411,6 +19761,7 @@ public struct FullData: GraphQLFragment {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
               GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
               GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -18496,6 +19847,32 @@ public struct FullData: GraphQLFragment {
             }
             set {
               resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeEffectivenessFragment: TypeEffectivenessFragment {
+              get {
+                return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
             }
           }
         }
@@ -19203,6 +20580,7 @@ public struct FullData: GraphQLFragment {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
               GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
             ]
@@ -19247,11 +20625,38 @@ public struct FullData: GraphQLFragment {
             }
           }
 
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeMatchupFragment: TypeMatchupFragment {
+              get {
+                return TypeMatchupFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
           public struct Attacking: GraphQLSelectionSet {
             public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
             public static var selections: [GraphQLSelection] {
               return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -19338,6 +20743,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -19348,6 +20779,7 @@ public struct FullData: GraphQLFragment {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -19433,6 +20865,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -20141,6 +21599,7 @@ public struct FullData: GraphQLFragment {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
               GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
             ]
@@ -20185,11 +21644,38 @@ public struct FullData: GraphQLFragment {
             }
           }
 
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeMatchupFragment: TypeMatchupFragment {
+              get {
+                return TypeMatchupFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
           public struct Attacking: GraphQLSelectionSet {
             public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
             public static var selections: [GraphQLSelection] {
               return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -20276,6 +21762,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -20286,6 +21798,7 @@ public struct FullData: GraphQLFragment {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -20371,6 +21884,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -21102,6 +22641,7 @@ public struct FullData: GraphQLFragment {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
             GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
             GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
           ]
@@ -21146,11 +22686,38 @@ public struct FullData: GraphQLFragment {
           }
         }
 
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var typeMatchupFragment: TypeMatchupFragment {
+            get {
+              return TypeMatchupFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
         public struct Attacking: GraphQLSelectionSet {
           public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
           public static var selections: [GraphQLSelection] {
             return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
               GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -21237,6 +22804,32 @@ public struct FullData: GraphQLFragment {
             }
             set {
               resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeEffectivenessFragment: TypeEffectivenessFragment {
+              get {
+                return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
             }
           }
         }
@@ -21247,6 +22840,7 @@ public struct FullData: GraphQLFragment {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
               GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
               GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -21332,6 +22926,32 @@ public struct FullData: GraphQLFragment {
             }
             set {
               resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeEffectivenessFragment: TypeEffectivenessFragment {
+              get {
+                return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
             }
           }
         }
@@ -22039,6 +23659,7 @@ public struct FullData: GraphQLFragment {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
               GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
             ]
@@ -22083,11 +23704,38 @@ public struct FullData: GraphQLFragment {
             }
           }
 
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeMatchupFragment: TypeMatchupFragment {
+              get {
+                return TypeMatchupFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
           public struct Attacking: GraphQLSelectionSet {
             public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
             public static var selections: [GraphQLSelection] {
               return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -22174,6 +23822,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -22184,6 +23858,7 @@ public struct FullData: GraphQLFragment {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -22269,6 +23944,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -22977,6 +24678,7 @@ public struct FullData: GraphQLFragment {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
               GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
             ]
@@ -23021,11 +24723,38 @@ public struct FullData: GraphQLFragment {
             }
           }
 
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var typeMatchupFragment: TypeMatchupFragment {
+              get {
+                return TypeMatchupFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
           public struct Attacking: GraphQLSelectionSet {
             public static let possibleTypes: [String] = ["TypeEffectiveness"]
 
             public static var selections: [GraphQLSelection] {
               return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -23112,6 +24841,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }
@@ -23122,6 +24877,7 @@ public struct FullData: GraphQLFragment {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                 GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
                 GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
@@ -23207,6 +24963,32 @@ public struct FullData: GraphQLFragment {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var typeEffectivenessFragment: TypeEffectivenessFragment {
+                get {
+                  return TypeEffectivenessFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
               }
             }
           }

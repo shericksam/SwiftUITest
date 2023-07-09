@@ -16,4 +16,10 @@ struct TypeMatchupModel {
         self.attacking = TypeEffectivenessModel(with: coreDataModel.attacking)
         self.defending = TypeEffectivenessModel(with: coreDataModel.defending)
     }
+
+    init?(with fragment: TypeMatchupFragment?) {
+        guard let fragment else { return nil }
+        self.attacking = TypeEffectivenessModel(with: fragment.attacking.fragments.typeEffectivenessFragment)
+        self.defending = TypeEffectivenessModel(with: fragment.defending.fragments.typeEffectivenessFragment)
+    }
 }

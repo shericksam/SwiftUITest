@@ -12,6 +12,7 @@ typealias PokemonFragmentItem = AllPokemonQuery.Data.GetAllPokemon
 
 class PokemonPaginatedItemProvider: ObservableObject {
     @Published var showLoadingView: Bool = true
+    @Published var errorMessage: String?
     private(set) var items: [PokemonListingItem] = []
     private(set) var pageSize: Int
     private(set) var startingIndex: Int
@@ -50,7 +51,20 @@ class PokemonPaginatedItemProvider: ObservableObject {
         )
         self.viewContext = viewContext
         self.repository = repository
-        self.paginate(with: queryHolder)
+        Task {
+            await self.getPokemon()
+        }
+    }
+
+    private func getPokemon() async {
+        let pagination = PaginationImp(items: items, pageSize: 20)
+        let pokemonResult = await self.repository.getPokemon(pagination)
+        switch pokemonResult {
+        case .success(let models):
+            self.items = models.map({ PokemonListingItem(index: $0.num, listing: $0) })
+        case .failure(let error):
+            self.errorMessage = error.localizedDescription
+        }
     }
 
     private func paginate(with queryHolder: QueryHolder<AllPokemonQuery>) {
@@ -69,6 +83,7 @@ class PokemonPaginatedItemProvider: ObservableObject {
                         self.isPaginating = false
                         let items = fragment.convertToListing()
                         self.saveDataFromAPI(items.map({ $0.listing }))
+
                         self.items.append(contentsOf: items)
                     case .failure:
                         self.isPaginating = false

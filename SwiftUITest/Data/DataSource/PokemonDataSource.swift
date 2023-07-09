@@ -8,8 +8,8 @@
 import Foundation
 
 protocol PokemonDataSource {
-    func getAll() async throws -> [PokemonModel]
-    func getById(_ num: Int) async throws -> PokemonModel?
+    func getAll(_ pagination: (any Pagination)?) async throws -> [PokemonModel]
+    func getById(_ pokemonEnum: String) async throws -> PokemonModel?
     func delete(_ num: Int) async throws -> ()
     func create(pokemon: PokemonModel) async throws -> ()
     func update(num: Int, pokemon: PokemonModel) async throws -> ()

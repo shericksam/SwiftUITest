@@ -24,4 +24,14 @@ struct StatsModel {
         self.specialdefense = Int(coreDataModel.specialdefense)
         self.speed = Int(coreDataModel.speed)
     }
+
+    init?(with fragment: StatsFragment?) {
+        guard let fragment else { return nil }
+        self.attack = Int(fragment.attack)
+        self.defense = Int(fragment.defense)
+        self.hp = Int(fragment.hp)
+        self.specialattack = Int(fragment.specialattack)
+        self.specialdefense = Int(fragment.specialdefense)
+        self.speed = Int(fragment.speed)
+    }
 }

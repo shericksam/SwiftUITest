@@ -77,4 +77,61 @@ struct PokemonModel: Identifiable {
             PokemonTypeModel(name: ligthtype.name)
         })
     }
+
+    init(with fragment: FullData) {
+        self.backSprite = fragment.backSprite
+        self.baseStatsTotal = Int(fragment.baseStatsTotal)
+        self.bulbapediaPage = fragment.bulbapediaPage
+        self.color = fragment.color
+        self.evolutionLevel = fragment.evolutionLevel
+        self.forme = fragment.forme
+        self.formeLetter = fragment.formeLetter
+        self.height = Float(fragment.height)
+        self.isEggObtainable = fragment.isEggObtainable
+        self.key = fragment.key.rawValue
+        self.legendary = fragment.legendary
+        self.num = Int(fragment.num)
+        self.shinyBackSprite = fragment.shinyBackSprite
+        self.shinySprite = fragment.shinySprite
+        self.species = fragment.species
+        self.sprite = fragment.sprite
+        self.timestamp = Date()
+        self.weight = Float(fragment.weight)
+        self.baseStats = StatsModel(with: fragment.baseStats.fragments.statsFragment)
+        self.evolutions = fragment.evolutions?
+            .map({ $0.fragments.fullDataFragment })
+            .map({ PokemonModel(with: $0) })
+        self.evYields = EvYieldsModel(with: fragment.evYields.fragments.evYieldsFragment)
+        self.gender = GenderModel(with: fragment.gender.fragments.genderFragment)
+        self.preevolutions = fragment.preevolutions?
+            .map({ $0.fragments.fullDataFragment })
+            .map({ PokemonModel(with: $0) })
+        self.types = fragment.types
+            .map({ PokemonTypeModel(with: $0.fragments.pokemonTypeFragment) })
+            .compactMap { $0 }
+    }
+
+    init(with fragment: FullDataFragment) {
+        self.backSprite = fragment.backSprite
+        self.baseStatsTotal = Int(fragment.baseStatsTotal)
+        self.bulbapediaPage = fragment.bulbapediaPage
+        self.color = fragment.color
+        self.evolutionLevel = fragment.evolutionLevel
+        self.forme = fragment.forme
+        self.formeLetter = fragment.formeLetter
+        self.height = Float(fragment.height)
+        self.isEggObtainable = fragment.isEggObtainable
+        self.key = fragment.key.rawValue
+        self.legendary = fragment.legendary
+        self.num = Int(fragment.num)
+        self.shinyBackSprite = fragment.shinyBackSprite
+        self.shinySprite = fragment.shinySprite
+        self.species = fragment.species
+        self.sprite = fragment.sprite
+        self.timestamp = Date()
+        self.weight = Float(fragment.weight)
+        self.types = fragment.types
+            .map({ PokemonTypeModel(with: $0.fragments.pokemonTypeFragment) })
+            .compactMap { $0 }
+    }
 }

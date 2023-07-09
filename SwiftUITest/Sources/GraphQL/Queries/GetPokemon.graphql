@@ -30,23 +30,26 @@ fragment GenderFragment on Gender {
 fragment PokemonTypeFragment on PokemonType {
     name
     matchup {
-        attacking {
-            doubleEffectiveTypes
-            doubleResistedTypes
-            effectiveTypes
-            effectlessTypes
-            normalTypes
-            resistedTypes
-        }
-        defending {
-            doubleEffectiveTypes
-            doubleResistedTypes
-            effectiveTypes
-            effectlessTypes
-            normalTypes
-            resistedTypes
-        }
+        ...TypeMatchupFragment
     }
+}
+
+fragment TypeMatchupFragment on TypeMatchup {
+    attacking {
+        ...TypeEffectivenessFragment
+    }
+    defending {
+        ...TypeEffectivenessFragment
+    }
+}
+
+fragment TypeEffectivenessFragment on TypeEffectiveness {
+    doubleEffectiveTypes
+    doubleResistedTypes
+    effectiveTypes
+    effectlessTypes
+    normalTypes
+    resistedTypes
 }
 
 fragment StatsFragment on Stats {

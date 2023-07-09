@@ -11,9 +11,9 @@ struct PokemonRepositoryImpl: PokemonRepository {
 
     var dataSource: PokemonDataSource
 
-    func getPokemon(num: Int) async  -> Result<PokemonModel?, DataSourceGenericError> {
+    func getPokemon(pokemonEnum: String) async  -> Result<PokemonModel?, DataSourceGenericError> {
         do{
-            let _todo =  try await dataSource.getById(num)
+            let _todo =  try await dataSource.getById(pokemonEnum)
             return .success(_todo)
         }catch{
             return .failure(.FetchError)
@@ -51,9 +51,9 @@ struct PokemonRepositoryImpl: PokemonRepository {
 
     }
 
-    func getPokemon() async -> Result<[PokemonModel], DataSourceGenericError> {
+    func getPokemon(_ pagination: (any Pagination)?) async -> Result<[PokemonModel], DataSourceGenericError> {
         do{
-            let _todos =  try await dataSource.getAll()
+            let _todos =  try await dataSource.getAll(pagination)
             return .success(_todos)
         }catch{
             return .failure(.FetchError)

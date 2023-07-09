@@ -64,6 +64,8 @@
 		D59F54D32A5A99300039B364 /* FragmentUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54D22A5A99300039B364 /* FragmentUpdatable.swift */; };
 		D59F54D52A5A99780039B364 /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54D42A5A99780039B364 /* ManagedObject.swift */; };
 		D59F54D72A5AA2C60039B364 /* PokemonFragmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54D62A5AA2C60039B364 /* PokemonFragmentModel.swift */; };
+		D59F54D92A5B54B20039B364 /* Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54D82A5B54B20039B364 /* Pagination.swift */; };
+		D59F54DC2A5B567B0039B364 /* PokemonAPIDataSourceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54DB2A5B567B0039B364 /* PokemonAPIDataSourceImp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +146,8 @@
 		D59F54D22A5A99300039B364 /* FragmentUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FragmentUpdatable.swift; sourceTree = "<group>"; };
 		D59F54D42A5A99780039B364 /* ManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObject.swift; sourceTree = "<group>"; };
 		D59F54D62A5AA2C60039B364 /* PokemonFragmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonFragmentModel.swift; sourceTree = "<group>"; };
+		D59F54D82A5B54B20039B364 /* Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pagination.swift; sourceTree = "<group>"; };
+		D59F54DB2A5B567B0039B364 /* PokemonAPIDataSourceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAPIDataSourceImp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -379,6 +383,7 @@
 		D59F54A82A5A83B40039B364 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				D59F54DA2A5B56440039B364 /* GraphQL */,
 				D59F54B32A5A85990039B364 /* CoreData */,
 				D59F54A92A5A83CB0039B364 /* PokemonDataSource.swift */,
 			);
@@ -457,8 +462,17 @@
 			children = (
 				D59F54D22A5A99300039B364 /* FragmentUpdatable.swift */,
 				D59F54D42A5A99780039B364 /* ManagedObject.swift */,
+				D59F54D82A5B54B20039B364 /* Pagination.swift */,
 			);
 			path = Providers;
+			sourceTree = "<group>";
+		};
+		D59F54DA2A5B56440039B364 /* GraphQL */ = {
+			isa = PBXGroup;
+			children = (
+				D59F54DB2A5B567B0039B364 /* PokemonAPIDataSourceImp.swift */,
+			);
+			path = GraphQL;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -640,6 +654,7 @@
 				D59F54C42A5A88D80039B364 /* TypeModel.swift in Sources */,
 				D50391EC2A5A66200041378C /* GetPokemon.graphql in Sources */,
 				D59F54CB2A5A900F0039B364 /* OptionalExtensions.swift in Sources */,
+				D59F54D92A5B54B20039B364 /* Pagination.swift in Sources */,
 				D59F54D52A5A99780039B364 /* ManagedObject.swift in Sources */,
 				D59F54AA2A5A83CB0039B364 /* PokemonDataSource.swift in Sources */,
 				D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */,
@@ -650,6 +665,7 @@
 				D57333972A57A725004FB8DA /* SwiftUITestApp.swift in Sources */,
 				D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */,
 				D59F54C72A5A8A110039B364 /* DataSourceGenericError.swift in Sources */,
+				D59F54DC2A5B567B0039B364 /* PokemonAPIDataSourceImp.swift in Sources */,
 				D57333DA2A57BBF0004FB8DA /* Dependencies.swift in Sources */,
 				D59F54BB2A5A871C0039B364 /* StatsModel.swift in Sources */,
 				D57333F22A57CCD0004FB8DA /* API.swift in Sources */,

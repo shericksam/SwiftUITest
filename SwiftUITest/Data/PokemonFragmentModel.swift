@@ -20,3 +20,10 @@ extension AllPokemonQuery.Data {
         }
     }
 }
+
+extension GetPokemonQuery.Data {
+    func convertToModel() -> PokemonModel {
+        PokemonModel(with: self.getPokemon.fragments.fullData)
+    }
+
+}

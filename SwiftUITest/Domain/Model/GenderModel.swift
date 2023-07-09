@@ -16,4 +16,10 @@ struct GenderModel {
         self.female = coreDataModel.female
         self.male = coreDataModel.male
     }
+
+    init?(with fragment: GenderFragment?) {
+        guard let fragment else { return nil }
+        self.female = fragment.female
+        self.male = fragment.male
+    }
 }

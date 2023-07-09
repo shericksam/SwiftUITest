@@ -15,7 +15,7 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
         self.container = container
     }
 
-    func getAll() throws -> [PokemonModel] {
+    func getAll(_ pagination: (any Pagination)?) throws -> [PokemonModel] {
         let request = Pokemon.fetchRequest()
         return try container.viewContext.fetch(request).map({ pokemonCoreDataEntity in
             PokemonModel(with: pokemonCoreDataEntity)
@@ -23,14 +23,14 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
 
     }
 
-    func getById(_ num: Int)  throws  -> PokemonModel? {
-        let pokemonCoreDataEntity = try getEntityById(num)!
+    func getById(_ pokemonEnum: String)  throws  -> PokemonModel? {
+        let pokemonCoreDataEntity = try getEntityById(pokemonEnum)!
         return PokemonModel(with: pokemonCoreDataEntity)
 
     }
 
     func delete(_ num: Int) throws -> () {
-        let todoCoreDataEntity = try getEntityById(num)!
+        let todoCoreDataEntity = try getEntityByNum(num)!
         let context = container.viewContext;
         context.delete(todoCoreDataEntity)
         do{
@@ -44,7 +44,7 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
 
     func create(pokemon: PokemonModel) throws -> () {
         do {
-            if try getEntityById(pokemon.num) == nil {
+            if try getEntityByNum(pokemon.num) == nil {
                 let todoCoreDataEntity = Pokemon(context: container.viewContext)
                 todoCoreDataEntity.update(with: pokemon, container.viewContext)
                 saveContext()
@@ -55,12 +55,22 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
     }
 
     func update(num: Int, pokemon: PokemonModel) throws -> () {
-        let todoCoreDataEntity = try getEntityById(num)!
+        let todoCoreDataEntity = try getEntityByNum(num)!
         todoCoreDataEntity.update(with: pokemon, container.viewContext)
         saveContext()
     }
 
-    private func getEntityById(_ num: Int)  throws  -> Pokemon? {
+    private func getEntityById(_ pokemonEnum: String)  throws  -> Pokemon? {
+        let request = Pokemon.fetchRequest()
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "key = %@", pokemonEnum)
+        let context =  container.viewContext
+        let pkmnCoreDataEntity = try context.fetch(request).first
+        return pkmnCoreDataEntity
+
+    }
+
+    private func getEntityByNum(_ num: Int)  throws  -> Pokemon? {
         let request = Pokemon.fetchRequest()
         request.fetchLimit = 1
         request.predicate = NSPredicate(format: "num = %@", num.description)

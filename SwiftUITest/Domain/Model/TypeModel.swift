@@ -21,4 +21,10 @@ struct PokemonTypeModel: Identifiable {
     init(name: String) {
         self.name = name
     }
+
+    init?(with fragment: PokemonTypeFragment?) {
+        guard let fragment else { return nil }
+        self.name = fragment.name
+        self.matchup = TypeMatchupModel(with: fragment.matchup.fragments.typeMatchupFragment)
+    }
 }

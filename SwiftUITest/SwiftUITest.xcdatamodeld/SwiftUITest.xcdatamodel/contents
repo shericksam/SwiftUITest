@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G651" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="EvYields" representedClassName="EvYields" syncable="YES" codeGenerationType="class">
+        <attribute name="attack" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="defense" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="hp" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="specialattack" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="specialdefense" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-    </elements>
+    <entity name="Gender" representedClassName="Gender" syncable="YES" codeGenerationType="class">
+        <attribute name="female" optional="YES" attributeType="String"/>
+        <attribute name="male" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Pokemon" representedClassName="Pokemon" syncable="YES" codeGenerationType="class">
+        <attribute name="backSprite" optional="YES" attributeType="String"/>
+        <attribute name="baseStatsTotal" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="bulbapediaPage" optional="YES" attributeType="String"/>
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="desc" optional="YES" attributeType="String"/>
+        <attribute name="evolutionLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="forme" optional="YES" attributeType="String"/>
+        <attribute name="formeLetter" optional="YES" attributeType="String"/>
+        <attribute name="height" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="isEggObtainable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="legendary" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="num" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="shinyBackSprite" optional="YES" attributeType="String"/>
+        <attribute name="shinySprite" optional="YES" attributeType="String"/>
+        <attribute name="species" optional="YES" attributeType="String"/>
+        <attribute name="sprite" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="baseStats" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stats"/>
+        <relationship name="evolutions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon"/>
+        <relationship name="evYields" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EvYields"/>
+        <relationship name="gender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Gender"/>
+        <relationship name="preevolutions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon"/>
+        <relationship name="types" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PokemonType"/>
+    </entity>
+    <entity name="PokemonType" representedClassName="PokemonType" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="matchup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TypeMatchup"/>
+    </entity>
+    <entity name="Stats" representedClassName="Stats" syncable="YES" codeGenerationType="class">
+        <attribute name="attack" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="defense" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="hp" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="specialattack" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="specialdefense" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="TypeEffectiveness" representedClassName="TypeEffectiveness" syncable="YES" codeGenerationType="class">
+        <attribute name="doubleEffectiveTypes" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="doubleResistedTypes" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="effectiveTypes" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="effectlessTypes" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="normalTypes" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="resistedTypes" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+    </entity>
+    <entity name="TypeMatchup" representedClassName="TypeMatchup" syncable="YES" codeGenerationType="class">
+        <relationship name="attacking" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TypeEffectiveness"/>
+        <relationship name="defending" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TypeEffectiveness"/>
+    </entity>
 </model>

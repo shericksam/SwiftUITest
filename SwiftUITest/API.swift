@@ -7002,19 +7002,21 @@ public final class AllPokemonQuery: GraphQLQuery {
     query AllPokemon($offset: Int = 89) {
       getAllPokemon(offset: $offset) {
         __typename
-        key
-        bulbapediaPage
-        levellingRate
-        species
-        sprite
-        num
+        ...LightDataFragmentWithoutNested
       }
     }
     """
 
   public let operationName: String = "AllPokemon"
 
-  public let operationIdentifier: String? = "af25e734a8158afdae471279eec102f7ef78a35f1ebfda268ca2c35941d23f15"
+  public let operationIdentifier: String? = "5a3a2598869ecb24b4d9bf6b42b3bdcbac50e1e214c58befc406a55afa447190"
+
+  public var queryDocument: String {
+    var document: String = operationDefinition
+    document.append("\n" + LightDataFragmentWithoutNested.fragmentDefinition)
+    document.append("\n" + PokemonLightTypeFragment.fragmentDefinition)
+    return document
+  }
 
   public var offset: Int?
 
@@ -7073,12 +7075,12 @@ public final class AllPokemonQuery: GraphQLQuery {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
-          GraphQLField("bulbapediaPage", type: .nonNull(.scalar(String.self))),
-          GraphQLField("levellingRate", type: .scalar(String.self)),
+          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
           GraphQLField("species", type: .nonNull(.scalar(String.self))),
           GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
-          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
         ]
       }
 
@@ -7088,8 +7090,8 @@ public final class AllPokemonQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, bulbapediaPage: String, levellingRate: String? = nil, species: String, sprite: String, num: Int) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "bulbapediaPage": bulbapediaPage, "levellingRate": levellingRate, "species": species, "sprite": sprite, "num": num])
+      public init(key: PokemonEnum, num: Int, species: String, sprite: String, types: [`Type`]) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "num": num, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }])
       }
 
       public var __typename: String {
@@ -7111,23 +7113,13 @@ public final class AllPokemonQuery: GraphQLQuery {
         }
       }
 
-      /// Bulbapedia page for a Pokémon
-      public var bulbapediaPage: String {
+      /// The dex number for a Pokémon
+      public var num: Int {
         get {
-          return resultMap["bulbapediaPage"]! as! String
+          return resultMap["num"]! as! Int
         }
         set {
-          resultMap.updateValue(newValue, forKey: "bulbapediaPage")
-        }
-      }
-
-      /// The levelling rate of a Pokémon
-      public var levellingRate: String? {
-        get {
-          return resultMap["levellingRate"] as? String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "levellingRate")
+          resultMap.updateValue(newValue, forKey: "num")
         }
       }
 
@@ -7151,6 +7143,336 @@ public final class AllPokemonQuery: GraphQLQuery {
         }
       }
 
+      /// The types for a Pokémon
+      public var types: [`Type`] {
+        get {
+          return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var lightDataFragmentWithoutNested: LightDataFragmentWithoutNested {
+          get {
+            return LightDataFragmentWithoutNested(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct `Type`: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["PokemonType"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("name", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String) {
+          self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The name of the typ
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var pokemonLightTypeFragment: PokemonLightTypeFragment {
+            get {
+              return PokemonLightTypeFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class GetPokemonQuery: GraphQLQuery {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    query GetPokemon($pokemon: PokemonEnum!, $offsetFlavorTexts: Int, $takeFlavorTexts: Int, $reverseFlavorTexts: Boolean) {
+      getPokemon(
+        pokemon: $pokemon
+        offsetFlavorTexts: $offsetFlavorTexts
+        takeFlavorTexts: $takeFlavorTexts
+        reverseFlavorTexts: $reverseFlavorTexts
+      ) {
+        __typename
+        ...FullData
+      }
+    }
+    """
+
+  public let operationName: String = "GetPokemon"
+
+  public let operationIdentifier: String? = "98091af155e5c06f3815613eb22409dd62735d787c501114107150ea66176c5b"
+
+  public var queryDocument: String {
+    var document: String = operationDefinition
+    document.append("\n" + FullData.fragmentDefinition)
+    document.append("\n" + FullDataFragment.fragmentDefinition)
+    document.append("\n" + FullDataFragmentWithoutNested.fragmentDefinition)
+    document.append("\n" + EvYieldsFragment.fragmentDefinition)
+    document.append("\n" + GenderFragment.fragmentDefinition)
+    document.append("\n" + PokemonTypeFragment.fragmentDefinition)
+    document.append("\n" + StatsFragment.fragmentDefinition)
+    return document
+  }
+
+  public var pokemon: PokemonEnum
+  public var offsetFlavorTexts: Int?
+  public var takeFlavorTexts: Int?
+  public var reverseFlavorTexts: Bool?
+
+  public init(pokemon: PokemonEnum, offsetFlavorTexts: Int? = nil, takeFlavorTexts: Int? = nil, reverseFlavorTexts: Bool? = nil) {
+    self.pokemon = pokemon
+    self.offsetFlavorTexts = offsetFlavorTexts
+    self.takeFlavorTexts = takeFlavorTexts
+    self.reverseFlavorTexts = reverseFlavorTexts
+  }
+
+  public var variables: GraphQLMap? {
+    return ["pokemon": pokemon, "offsetFlavorTexts": offsetFlavorTexts, "takeFlavorTexts": takeFlavorTexts, "reverseFlavorTexts": reverseFlavorTexts]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Query"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("getPokemon", arguments: ["pokemon": GraphQLVariable("pokemon"), "offsetFlavorTexts": GraphQLVariable("offsetFlavorTexts"), "takeFlavorTexts": GraphQLVariable("takeFlavorTexts"), "reverseFlavorTexts": GraphQLVariable("reverseFlavorTexts")], type: .nonNull(.object(GetPokemon.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(getPokemon: GetPokemon) {
+      self.init(unsafeResultMap: ["__typename": "Query", "getPokemon": getPokemon.resultMap])
+    }
+
+    /// Gets details on a single Pokémon based on species name
+    /// 
+    /// You can provide `takeFlavorTexts` to limit the amount of flavour texts to return, set the offset of where to start with `offsetFlavorTexts`, and reverse the entire array with `reverseFlavorTexts`.
+    /// 
+    /// **Reversal is applied before pagination!**
+    public var getPokemon: GetPokemon {
+      get {
+        return GetPokemon(unsafeResultMap: resultMap["getPokemon"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "getPokemon")
+      }
+    }
+
+    public struct GetPokemon: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Pokemon"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+          GraphQLField("evolutionLevel", type: .scalar(String.self)),
+          GraphQLField("forme", type: .scalar(String.self)),
+          GraphQLField("formeLetter", type: .scalar(String.self)),
+          GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+          GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("species", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+          GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+          GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
+          GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("evolutions", type: .list(.nonNull(.object(Evolution.selections)))),
+          GraphQLField("preevolutions", type: .list(.nonNull(.object(Preevolution.selections)))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The key of the Pokémon as stored in the API
+      public var key: PokemonEnum {
+        get {
+          return resultMap["key"]! as! PokemonEnum
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// EV yields for a Pokémon
+      public var evYields: EvYield {
+        get {
+          return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+        }
+      }
+
+      /// The evolution level, or special method, for a Pokémon
+      public var evolutionLevel: String? {
+        get {
+          return resultMap["evolutionLevel"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "evolutionLevel")
+        }
+      }
+
+      /// The form identifier of a Pokémon
+      public var forme: String? {
+        get {
+          return resultMap["forme"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "forme")
+        }
+      }
+
+      /// The single letter identifier of the form
+      public var formeLetter: String? {
+        get {
+          return resultMap["formeLetter"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "formeLetter")
+        }
+      }
+
+      /// The gender data for a Pokémon
+      public var gender: Gender {
+        get {
+          return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "gender")
+        }
+      }
+
+      /// The height of a Pokémon in meters
+      public var height: Double {
+        get {
+          return resultMap["height"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "height")
+        }
+      }
+
+      /// Whether the egg of a Pokémon is obtainable
+      public var isEggObtainable: Bool {
+        get {
+          return resultMap["isEggObtainable"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "isEggObtainable")
+        }
+      }
+
+      /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var backSprite: String {
+        get {
+          return resultMap["backSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "backSprite")
+        }
+      }
+
       /// The dex number for a Pokémon
       public var num: Int {
         get {
@@ -7158,6 +7480,15502 @@ public final class AllPokemonQuery: GraphQLQuery {
         }
         set {
           resultMap.updateValue(newValue, forKey: "num")
+        }
+      }
+
+      /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinyBackSprite: String {
+        get {
+          return resultMap["shinyBackSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+        }
+      }
+
+      /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinySprite: String {
+        get {
+          return resultMap["shinySprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinySprite")
+        }
+      }
+
+      /// The species name for a Pokémon
+      public var species: String {
+        get {
+          return resultMap["species"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "species")
+        }
+      }
+
+      /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var sprite: String {
+        get {
+          return resultMap["sprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sprite")
+        }
+      }
+
+      /// The types for a Pokémon
+      public var types: [`Type`] {
+        get {
+          return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+        }
+      }
+
+      /// Base stats for a Pokémon
+      public var baseStats: BaseStat {
+        get {
+          return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+        }
+      }
+
+      /// The total of all base stats for a Pokémon
+      public var baseStatsTotal: Int {
+        get {
+          return resultMap["baseStatsTotal"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+        }
+      }
+
+      /// The colour of a Pokémon as listed in the Pokedex
+      public var color: String {
+        get {
+          return resultMap["color"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "color")
+        }
+      }
+
+      /// The weight of a Pokémon in kilograms
+      public var weight: Double {
+        get {
+          return resultMap["weight"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "weight")
+        }
+      }
+
+      /// The evolutions for a Pokémon, if any
+      public var evolutions: [Evolution]? {
+        get {
+          return (resultMap["evolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Evolution] in value.map { (value: ResultMap) -> Evolution in Evolution(unsafeResultMap: value) } }
+        }
+        set {
+          resultMap.updateValue(newValue.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, forKey: "evolutions")
+        }
+      }
+
+      /// The preevolutions for a Pokémon, if any
+      public var preevolutions: [Preevolution]? {
+        get {
+          return (resultMap["preevolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Preevolution] in value.map { (value: ResultMap) -> Preevolution in Preevolution(unsafeResultMap: value) } }
+        }
+        set {
+          resultMap.updateValue(newValue.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }, forKey: "preevolutions")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var fullData: FullData {
+          get {
+            return FullData(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public var fullDataFragment: FullDataFragment {
+          get {
+            return FullDataFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+          get {
+            return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct EvYield: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["EvYields"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The HP EV yield of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The attack EV yield of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The defense EV yield of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The special attack EV yield of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The special defense EV yield of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The speed EV yield of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var evYieldsFragment: EvYieldsFragment {
+            get {
+              return EvYieldsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct Gender: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Gender"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("female", type: .nonNull(.scalar(String.self))),
+            GraphQLField("male", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(female: String, male: String) {
+          self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The percentage for female occurrences
+        public var female: String {
+          get {
+            return resultMap["female"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "female")
+          }
+        }
+
+        /// The percentage of male occurrences
+        public var male: String {
+          get {
+            return resultMap["male"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "male")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var genderFragment: GenderFragment {
+            get {
+              return GenderFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct `Type`: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["PokemonType"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("name", type: .nonNull(.scalar(String.self))),
+            GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String, matchup: Matchup) {
+          self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The name of the typ
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type matchup for this type
+        public var matchup: Matchup {
+          get {
+            return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var pokemonTypeFragment: PokemonTypeFragment {
+            get {
+              return PokemonTypeFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Matchup: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeMatchup"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+              GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(attacking: Attacking, defending: Defending) {
+            self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The type matchups when attacking
+          public var attacking: Attacking {
+            get {
+              return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+            }
+          }
+
+          /// The type matchups when defending
+          public var defending: Defending {
+            get {
+              return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "defending")
+            }
+          }
+
+          public struct Attacking: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+
+          public struct Defending: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+        }
+      }
+
+      public struct BaseStat: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Stats"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The base HP stat of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The base attack stat of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The base defense stat of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The base special attack stat of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The base special defense stat of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The base speed stat of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var statsFragment: StatsFragment {
+            get {
+              return StatsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct Evolution: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Pokemon"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+            GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+            GraphQLField("evolutionLevel", type: .scalar(String.self)),
+            GraphQLField("forme", type: .scalar(String.self)),
+            GraphQLField("formeLetter", type: .scalar(String.self)),
+            GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+            GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+            GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+            GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("species", type: .nonNull(.scalar(String.self))),
+            GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+            GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+            GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("color", type: .nonNull(.scalar(String.self))),
+            GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+            GraphQLField("evolutions", type: .list(.nonNull(.object(Evolution.selections)))),
+            GraphQLField("preevolutions", type: .list(.nonNull(.object(Preevolution.selections)))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The key of the Pokémon as stored in the API
+        public var key: PokemonEnum {
+          get {
+            return resultMap["key"]! as! PokemonEnum
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "key")
+          }
+        }
+
+        /// EV yields for a Pokémon
+        public var evYields: EvYield {
+          get {
+            return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+          }
+        }
+
+        /// The evolution level, or special method, for a Pokémon
+        public var evolutionLevel: String? {
+          get {
+            return resultMap["evolutionLevel"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "evolutionLevel")
+          }
+        }
+
+        /// The form identifier of a Pokémon
+        public var forme: String? {
+          get {
+            return resultMap["forme"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "forme")
+          }
+        }
+
+        /// The single letter identifier of the form
+        public var formeLetter: String? {
+          get {
+            return resultMap["formeLetter"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "formeLetter")
+          }
+        }
+
+        /// The gender data for a Pokémon
+        public var gender: Gender {
+          get {
+            return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "gender")
+          }
+        }
+
+        /// The height of a Pokémon in meters
+        public var height: Double {
+          get {
+            return resultMap["height"]! as! Double
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "height")
+          }
+        }
+
+        /// Whether the egg of a Pokémon is obtainable
+        public var isEggObtainable: Bool {
+          get {
+            return resultMap["isEggObtainable"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "isEggObtainable")
+          }
+        }
+
+        /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var backSprite: String {
+          get {
+            return resultMap["backSprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "backSprite")
+          }
+        }
+
+        /// The dex number for a Pokémon
+        public var num: Int {
+          get {
+            return resultMap["num"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "num")
+          }
+        }
+
+        /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var shinyBackSprite: String {
+          get {
+            return resultMap["shinyBackSprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+          }
+        }
+
+        /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var shinySprite: String {
+          get {
+            return resultMap["shinySprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "shinySprite")
+          }
+        }
+
+        /// The species name for a Pokémon
+        public var species: String {
+          get {
+            return resultMap["species"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "species")
+          }
+        }
+
+        /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var sprite: String {
+          get {
+            return resultMap["sprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "sprite")
+          }
+        }
+
+        /// The types for a Pokémon
+        public var types: [`Type`] {
+          get {
+            return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+          }
+          set {
+            resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+          }
+        }
+
+        /// Base stats for a Pokémon
+        public var baseStats: BaseStat {
+          get {
+            return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+          }
+        }
+
+        /// The total of all base stats for a Pokémon
+        public var baseStatsTotal: Int {
+          get {
+            return resultMap["baseStatsTotal"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+          }
+        }
+
+        /// The colour of a Pokémon as listed in the Pokedex
+        public var color: String {
+          get {
+            return resultMap["color"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "color")
+          }
+        }
+
+        /// The weight of a Pokémon in kilograms
+        public var weight: Double {
+          get {
+            return resultMap["weight"]! as! Double
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "weight")
+          }
+        }
+
+        /// The evolutions for a Pokémon, if any
+        public var evolutions: [Evolution]? {
+          get {
+            return (resultMap["evolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Evolution] in value.map { (value: ResultMap) -> Evolution in Evolution(unsafeResultMap: value) } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, forKey: "evolutions")
+          }
+        }
+
+        /// The preevolutions for a Pokémon, if any
+        public var preevolutions: [Preevolution]? {
+          get {
+            return (resultMap["preevolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Preevolution] in value.map { (value: ResultMap) -> Preevolution in Preevolution(unsafeResultMap: value) } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }, forKey: "preevolutions")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var fullDataFragment: FullDataFragment {
+            get {
+              return FullDataFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+            get {
+              return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct EvYield: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["EvYields"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+            self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The HP EV yield of a pokémon
+          public var hp: Int {
+            get {
+              return resultMap["hp"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "hp")
+            }
+          }
+
+          /// The attack EV yield of a Pokémon
+          public var attack: Int {
+            get {
+              return resultMap["attack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "attack")
+            }
+          }
+
+          /// The defense EV yield of a Pokémon
+          public var defense: Int {
+            get {
+              return resultMap["defense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "defense")
+            }
+          }
+
+          /// The special attack EV yield of a Pokémon
+          public var specialattack: Int {
+            get {
+              return resultMap["specialattack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialattack")
+            }
+          }
+
+          /// The special defense EV yield of a Pokémon
+          public var specialdefense: Int {
+            get {
+              return resultMap["specialdefense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialdefense")
+            }
+          }
+
+          /// The speed EV yield of a Pokémon
+          public var speed: Int {
+            get {
+              return resultMap["speed"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "speed")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var evYieldsFragment: EvYieldsFragment {
+              get {
+                return EvYieldsFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+
+        public struct Gender: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Gender"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("female", type: .nonNull(.scalar(String.self))),
+              GraphQLField("male", type: .nonNull(.scalar(String.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(female: String, male: String) {
+            self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The percentage for female occurrences
+          public var female: String {
+            get {
+              return resultMap["female"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "female")
+            }
+          }
+
+          /// The percentage of male occurrences
+          public var male: String {
+            get {
+              return resultMap["male"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "male")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var genderFragment: GenderFragment {
+              get {
+                return GenderFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+
+        public struct `Type`: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["PokemonType"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("name", type: .nonNull(.scalar(String.self))),
+              GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(name: String, matchup: Matchup) {
+            self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The name of the typ
+          public var name: String {
+            get {
+              return resultMap["name"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+
+          /// The type matchup for this type
+          public var matchup: Matchup {
+            get {
+              return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var pokemonTypeFragment: PokemonTypeFragment {
+              get {
+                return PokemonTypeFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
+          public struct Matchup: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeMatchup"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+                GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(attacking: Attacking, defending: Defending) {
+              self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The type matchups when attacking
+            public var attacking: Attacking {
+              get {
+                return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+              }
+            }
+
+            /// The type matchups when defending
+            public var defending: Defending {
+              get {
+                return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "defending")
+              }
+            }
+
+            public struct Attacking: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The types with 4x effectiveness
+              public var doubleEffectiveTypes: [String] {
+                get {
+                  return resultMap["doubleEffectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                }
+              }
+
+              /// The types with 0.25x effectiveness
+              public var doubleResistedTypes: [String] {
+                get {
+                  return resultMap["doubleResistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                }
+              }
+
+              /// The types with 2x effectiveness
+              public var effectiveTypes: [String] {
+                get {
+                  return resultMap["effectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                }
+              }
+
+              /// The types with 0x effectiveness
+              public var effectlessTypes: [String] {
+                get {
+                  return resultMap["effectlessTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                }
+              }
+
+              /// The types with 1x effectiveness
+              public var normalTypes: [String] {
+                get {
+                  return resultMap["normalTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "normalTypes")
+                }
+              }
+
+              /// The types with 0.5x effectiveness
+              public var resistedTypes: [String] {
+                get {
+                  return resultMap["resistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+            }
+
+            public struct Defending: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The types with 4x effectiveness
+              public var doubleEffectiveTypes: [String] {
+                get {
+                  return resultMap["doubleEffectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                }
+              }
+
+              /// The types with 0.25x effectiveness
+              public var doubleResistedTypes: [String] {
+                get {
+                  return resultMap["doubleResistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                }
+              }
+
+              /// The types with 2x effectiveness
+              public var effectiveTypes: [String] {
+                get {
+                  return resultMap["effectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                }
+              }
+
+              /// The types with 0x effectiveness
+              public var effectlessTypes: [String] {
+                get {
+                  return resultMap["effectlessTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                }
+              }
+
+              /// The types with 1x effectiveness
+              public var normalTypes: [String] {
+                get {
+                  return resultMap["normalTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "normalTypes")
+                }
+              }
+
+              /// The types with 0.5x effectiveness
+              public var resistedTypes: [String] {
+                get {
+                  return resultMap["resistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+            }
+          }
+        }
+
+        public struct BaseStat: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Stats"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+            self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The base HP stat of a pokémon
+          public var hp: Int {
+            get {
+              return resultMap["hp"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "hp")
+            }
+          }
+
+          /// The base attack stat of a Pokémon
+          public var attack: Int {
+            get {
+              return resultMap["attack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "attack")
+            }
+          }
+
+          /// The base defense stat of a Pokémon
+          public var defense: Int {
+            get {
+              return resultMap["defense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "defense")
+            }
+          }
+
+          /// The base special attack stat of a Pokémon
+          public var specialattack: Int {
+            get {
+              return resultMap["specialattack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialattack")
+            }
+          }
+
+          /// The base special defense stat of a Pokémon
+          public var specialdefense: Int {
+            get {
+              return resultMap["specialdefense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialdefense")
+            }
+          }
+
+          /// The base speed stat of a Pokémon
+          public var speed: Int {
+            get {
+              return resultMap["speed"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "speed")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var statsFragment: StatsFragment {
+              get {
+                return StatsFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+
+        public struct Evolution: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Pokemon"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+              GraphQLField("evolutionLevel", type: .scalar(String.self)),
+              GraphQLField("forme", type: .scalar(String.self)),
+              GraphQLField("formeLetter", type: .scalar(String.self)),
+              GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+              GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+              GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("species", type: .nonNull(.scalar(String.self))),
+              GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+              GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+              GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("color", type: .nonNull(.scalar(String.self))),
+              GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The key of the Pokémon as stored in the API
+          public var key: PokemonEnum {
+            get {
+              return resultMap["key"]! as! PokemonEnum
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// EV yields for a Pokémon
+          public var evYields: EvYield {
+            get {
+              return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+            }
+          }
+
+          /// The evolution level, or special method, for a Pokémon
+          public var evolutionLevel: String? {
+            get {
+              return resultMap["evolutionLevel"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "evolutionLevel")
+            }
+          }
+
+          /// The form identifier of a Pokémon
+          public var forme: String? {
+            get {
+              return resultMap["forme"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "forme")
+            }
+          }
+
+          /// The single letter identifier of the form
+          public var formeLetter: String? {
+            get {
+              return resultMap["formeLetter"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "formeLetter")
+            }
+          }
+
+          /// The gender data for a Pokémon
+          public var gender: Gender {
+            get {
+              return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "gender")
+            }
+          }
+
+          /// The height of a Pokémon in meters
+          public var height: Double {
+            get {
+              return resultMap["height"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "height")
+            }
+          }
+
+          /// Whether the egg of a Pokémon is obtainable
+          public var isEggObtainable: Bool {
+            get {
+              return resultMap["isEggObtainable"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "isEggObtainable")
+            }
+          }
+
+          /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var backSprite: String {
+            get {
+              return resultMap["backSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "backSprite")
+            }
+          }
+
+          /// The dex number for a Pokémon
+          public var num: Int {
+            get {
+              return resultMap["num"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "num")
+            }
+          }
+
+          /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinyBackSprite: String {
+            get {
+              return resultMap["shinyBackSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+            }
+          }
+
+          /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinySprite: String {
+            get {
+              return resultMap["shinySprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinySprite")
+            }
+          }
+
+          /// The species name for a Pokémon
+          public var species: String {
+            get {
+              return resultMap["species"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "species")
+            }
+          }
+
+          /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var sprite: String {
+            get {
+              return resultMap["sprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "sprite")
+            }
+          }
+
+          /// The types for a Pokémon
+          public var types: [`Type`] {
+            get {
+              return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+            }
+            set {
+              resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+            }
+          }
+
+          /// Base stats for a Pokémon
+          public var baseStats: BaseStat {
+            get {
+              return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+            }
+          }
+
+          /// The total of all base stats for a Pokémon
+          public var baseStatsTotal: Int {
+            get {
+              return resultMap["baseStatsTotal"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+            }
+          }
+
+          /// The colour of a Pokémon as listed in the Pokedex
+          public var color: String {
+            get {
+              return resultMap["color"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "color")
+            }
+          }
+
+          /// The weight of a Pokémon in kilograms
+          public var weight: Double {
+            get {
+              return resultMap["weight"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "weight")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var fullDataFragment: FullDataFragment {
+              get {
+                return FullDataFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+              get {
+                return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
+          public struct EvYield: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["EvYields"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The HP EV yield of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The attack EV yield of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The defense EV yield of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The special attack EV yield of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The special defense EV yield of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The speed EV yield of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var evYieldsFragment: EvYieldsFragment {
+                get {
+                  return EvYieldsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct Gender: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Gender"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("female", type: .nonNull(.scalar(String.self))),
+                GraphQLField("male", type: .nonNull(.scalar(String.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(female: String, male: String) {
+              self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The percentage for female occurrences
+            public var female: String {
+              get {
+                return resultMap["female"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "female")
+              }
+            }
+
+            /// The percentage of male occurrences
+            public var male: String {
+              get {
+                return resultMap["male"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "male")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var genderFragment: GenderFragment {
+                get {
+                  return GenderFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct `Type`: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["PokemonType"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("name", type: .nonNull(.scalar(String.self))),
+                GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(name: String, matchup: Matchup) {
+              self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The name of the typ
+            public var name: String {
+              get {
+                return resultMap["name"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "name")
+              }
+            }
+
+            /// The type matchup for this type
+            public var matchup: Matchup {
+              get {
+                return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var pokemonTypeFragment: PokemonTypeFragment {
+                get {
+                  return PokemonTypeFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+
+            public struct Matchup: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeMatchup"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+                  GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(attacking: Attacking, defending: Defending) {
+                self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The type matchups when attacking
+              public var attacking: Attacking {
+                get {
+                  return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+                }
+              }
+
+              /// The type matchups when defending
+              public var defending: Defending {
+                get {
+                  return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "defending")
+                }
+              }
+
+              public struct Attacking: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+
+              public struct Defending: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+            }
+          }
+
+          public struct BaseStat: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Stats"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The base HP stat of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The base attack stat of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The base defense stat of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The base special attack stat of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The base special defense stat of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The base speed stat of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var statsFragment: StatsFragment {
+                get {
+                  return StatsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+        }
+
+        public struct Preevolution: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Pokemon"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+              GraphQLField("evolutionLevel", type: .scalar(String.self)),
+              GraphQLField("forme", type: .scalar(String.self)),
+              GraphQLField("formeLetter", type: .scalar(String.self)),
+              GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+              GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+              GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("species", type: .nonNull(.scalar(String.self))),
+              GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+              GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+              GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("color", type: .nonNull(.scalar(String.self))),
+              GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The key of the Pokémon as stored in the API
+          public var key: PokemonEnum {
+            get {
+              return resultMap["key"]! as! PokemonEnum
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// EV yields for a Pokémon
+          public var evYields: EvYield {
+            get {
+              return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+            }
+          }
+
+          /// The evolution level, or special method, for a Pokémon
+          public var evolutionLevel: String? {
+            get {
+              return resultMap["evolutionLevel"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "evolutionLevel")
+            }
+          }
+
+          /// The form identifier of a Pokémon
+          public var forme: String? {
+            get {
+              return resultMap["forme"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "forme")
+            }
+          }
+
+          /// The single letter identifier of the form
+          public var formeLetter: String? {
+            get {
+              return resultMap["formeLetter"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "formeLetter")
+            }
+          }
+
+          /// The gender data for a Pokémon
+          public var gender: Gender {
+            get {
+              return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "gender")
+            }
+          }
+
+          /// The height of a Pokémon in meters
+          public var height: Double {
+            get {
+              return resultMap["height"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "height")
+            }
+          }
+
+          /// Whether the egg of a Pokémon is obtainable
+          public var isEggObtainable: Bool {
+            get {
+              return resultMap["isEggObtainable"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "isEggObtainable")
+            }
+          }
+
+          /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var backSprite: String {
+            get {
+              return resultMap["backSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "backSprite")
+            }
+          }
+
+          /// The dex number for a Pokémon
+          public var num: Int {
+            get {
+              return resultMap["num"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "num")
+            }
+          }
+
+          /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinyBackSprite: String {
+            get {
+              return resultMap["shinyBackSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+            }
+          }
+
+          /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinySprite: String {
+            get {
+              return resultMap["shinySprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinySprite")
+            }
+          }
+
+          /// The species name for a Pokémon
+          public var species: String {
+            get {
+              return resultMap["species"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "species")
+            }
+          }
+
+          /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var sprite: String {
+            get {
+              return resultMap["sprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "sprite")
+            }
+          }
+
+          /// The types for a Pokémon
+          public var types: [`Type`] {
+            get {
+              return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+            }
+            set {
+              resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+            }
+          }
+
+          /// Base stats for a Pokémon
+          public var baseStats: BaseStat {
+            get {
+              return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+            }
+          }
+
+          /// The total of all base stats for a Pokémon
+          public var baseStatsTotal: Int {
+            get {
+              return resultMap["baseStatsTotal"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+            }
+          }
+
+          /// The colour of a Pokémon as listed in the Pokedex
+          public var color: String {
+            get {
+              return resultMap["color"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "color")
+            }
+          }
+
+          /// The weight of a Pokémon in kilograms
+          public var weight: Double {
+            get {
+              return resultMap["weight"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "weight")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var fullDataFragment: FullDataFragment {
+              get {
+                return FullDataFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+              get {
+                return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
+          public struct EvYield: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["EvYields"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The HP EV yield of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The attack EV yield of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The defense EV yield of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The special attack EV yield of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The special defense EV yield of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The speed EV yield of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var evYieldsFragment: EvYieldsFragment {
+                get {
+                  return EvYieldsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct Gender: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Gender"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("female", type: .nonNull(.scalar(String.self))),
+                GraphQLField("male", type: .nonNull(.scalar(String.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(female: String, male: String) {
+              self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The percentage for female occurrences
+            public var female: String {
+              get {
+                return resultMap["female"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "female")
+              }
+            }
+
+            /// The percentage of male occurrences
+            public var male: String {
+              get {
+                return resultMap["male"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "male")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var genderFragment: GenderFragment {
+                get {
+                  return GenderFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct `Type`: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["PokemonType"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("name", type: .nonNull(.scalar(String.self))),
+                GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(name: String, matchup: Matchup) {
+              self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The name of the typ
+            public var name: String {
+              get {
+                return resultMap["name"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "name")
+              }
+            }
+
+            /// The type matchup for this type
+            public var matchup: Matchup {
+              get {
+                return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var pokemonTypeFragment: PokemonTypeFragment {
+                get {
+                  return PokemonTypeFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+
+            public struct Matchup: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeMatchup"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+                  GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(attacking: Attacking, defending: Defending) {
+                self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The type matchups when attacking
+              public var attacking: Attacking {
+                get {
+                  return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+                }
+              }
+
+              /// The type matchups when defending
+              public var defending: Defending {
+                get {
+                  return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "defending")
+                }
+              }
+
+              public struct Attacking: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+
+              public struct Defending: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+            }
+          }
+
+          public struct BaseStat: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Stats"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The base HP stat of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The base attack stat of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The base defense stat of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The base special attack stat of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The base special defense stat of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The base speed stat of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var statsFragment: StatsFragment {
+                get {
+                  return StatsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+        }
+      }
+
+      public struct Preevolution: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Pokemon"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+            GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+            GraphQLField("evolutionLevel", type: .scalar(String.self)),
+            GraphQLField("forme", type: .scalar(String.self)),
+            GraphQLField("formeLetter", type: .scalar(String.self)),
+            GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+            GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+            GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+            GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("species", type: .nonNull(.scalar(String.self))),
+            GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+            GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+            GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+            GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("color", type: .nonNull(.scalar(String.self))),
+            GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+            GraphQLField("evolutions", type: .list(.nonNull(.object(Evolution.selections)))),
+            GraphQLField("preevolutions", type: .list(.nonNull(.object(Preevolution.selections)))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The key of the Pokémon as stored in the API
+        public var key: PokemonEnum {
+          get {
+            return resultMap["key"]! as! PokemonEnum
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "key")
+          }
+        }
+
+        /// EV yields for a Pokémon
+        public var evYields: EvYield {
+          get {
+            return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+          }
+        }
+
+        /// The evolution level, or special method, for a Pokémon
+        public var evolutionLevel: String? {
+          get {
+            return resultMap["evolutionLevel"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "evolutionLevel")
+          }
+        }
+
+        /// The form identifier of a Pokémon
+        public var forme: String? {
+          get {
+            return resultMap["forme"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "forme")
+          }
+        }
+
+        /// The single letter identifier of the form
+        public var formeLetter: String? {
+          get {
+            return resultMap["formeLetter"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "formeLetter")
+          }
+        }
+
+        /// The gender data for a Pokémon
+        public var gender: Gender {
+          get {
+            return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "gender")
+          }
+        }
+
+        /// The height of a Pokémon in meters
+        public var height: Double {
+          get {
+            return resultMap["height"]! as! Double
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "height")
+          }
+        }
+
+        /// Whether the egg of a Pokémon is obtainable
+        public var isEggObtainable: Bool {
+          get {
+            return resultMap["isEggObtainable"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "isEggObtainable")
+          }
+        }
+
+        /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var backSprite: String {
+          get {
+            return resultMap["backSprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "backSprite")
+          }
+        }
+
+        /// The dex number for a Pokémon
+        public var num: Int {
+          get {
+            return resultMap["num"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "num")
+          }
+        }
+
+        /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var shinyBackSprite: String {
+          get {
+            return resultMap["shinyBackSprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+          }
+        }
+
+        /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var shinySprite: String {
+          get {
+            return resultMap["shinySprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "shinySprite")
+          }
+        }
+
+        /// The species name for a Pokémon
+        public var species: String {
+          get {
+            return resultMap["species"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "species")
+          }
+        }
+
+        /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+        public var sprite: String {
+          get {
+            return resultMap["sprite"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "sprite")
+          }
+        }
+
+        /// The types for a Pokémon
+        public var types: [`Type`] {
+          get {
+            return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+          }
+          set {
+            resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+          }
+        }
+
+        /// Base stats for a Pokémon
+        public var baseStats: BaseStat {
+          get {
+            return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+          }
+        }
+
+        /// The total of all base stats for a Pokémon
+        public var baseStatsTotal: Int {
+          get {
+            return resultMap["baseStatsTotal"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+          }
+        }
+
+        /// The colour of a Pokémon as listed in the Pokedex
+        public var color: String {
+          get {
+            return resultMap["color"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "color")
+          }
+        }
+
+        /// The weight of a Pokémon in kilograms
+        public var weight: Double {
+          get {
+            return resultMap["weight"]! as! Double
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "weight")
+          }
+        }
+
+        /// The evolutions for a Pokémon, if any
+        public var evolutions: [Evolution]? {
+          get {
+            return (resultMap["evolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Evolution] in value.map { (value: ResultMap) -> Evolution in Evolution(unsafeResultMap: value) } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, forKey: "evolutions")
+          }
+        }
+
+        /// The preevolutions for a Pokémon, if any
+        public var preevolutions: [Preevolution]? {
+          get {
+            return (resultMap["preevolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Preevolution] in value.map { (value: ResultMap) -> Preevolution in Preevolution(unsafeResultMap: value) } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }, forKey: "preevolutions")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var fullDataFragment: FullDataFragment {
+            get {
+              return FullDataFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+            get {
+              return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct EvYield: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["EvYields"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+            self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The HP EV yield of a pokémon
+          public var hp: Int {
+            get {
+              return resultMap["hp"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "hp")
+            }
+          }
+
+          /// The attack EV yield of a Pokémon
+          public var attack: Int {
+            get {
+              return resultMap["attack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "attack")
+            }
+          }
+
+          /// The defense EV yield of a Pokémon
+          public var defense: Int {
+            get {
+              return resultMap["defense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "defense")
+            }
+          }
+
+          /// The special attack EV yield of a Pokémon
+          public var specialattack: Int {
+            get {
+              return resultMap["specialattack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialattack")
+            }
+          }
+
+          /// The special defense EV yield of a Pokémon
+          public var specialdefense: Int {
+            get {
+              return resultMap["specialdefense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialdefense")
+            }
+          }
+
+          /// The speed EV yield of a Pokémon
+          public var speed: Int {
+            get {
+              return resultMap["speed"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "speed")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var evYieldsFragment: EvYieldsFragment {
+              get {
+                return EvYieldsFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+
+        public struct Gender: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Gender"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("female", type: .nonNull(.scalar(String.self))),
+              GraphQLField("male", type: .nonNull(.scalar(String.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(female: String, male: String) {
+            self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The percentage for female occurrences
+          public var female: String {
+            get {
+              return resultMap["female"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "female")
+            }
+          }
+
+          /// The percentage of male occurrences
+          public var male: String {
+            get {
+              return resultMap["male"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "male")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var genderFragment: GenderFragment {
+              get {
+                return GenderFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+
+        public struct `Type`: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["PokemonType"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("name", type: .nonNull(.scalar(String.self))),
+              GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(name: String, matchup: Matchup) {
+            self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The name of the typ
+          public var name: String {
+            get {
+              return resultMap["name"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+
+          /// The type matchup for this type
+          public var matchup: Matchup {
+            get {
+              return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var pokemonTypeFragment: PokemonTypeFragment {
+              get {
+                return PokemonTypeFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
+          public struct Matchup: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeMatchup"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+                GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(attacking: Attacking, defending: Defending) {
+              self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The type matchups when attacking
+            public var attacking: Attacking {
+              get {
+                return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+              }
+            }
+
+            /// The type matchups when defending
+            public var defending: Defending {
+              get {
+                return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "defending")
+              }
+            }
+
+            public struct Attacking: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The types with 4x effectiveness
+              public var doubleEffectiveTypes: [String] {
+                get {
+                  return resultMap["doubleEffectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                }
+              }
+
+              /// The types with 0.25x effectiveness
+              public var doubleResistedTypes: [String] {
+                get {
+                  return resultMap["doubleResistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                }
+              }
+
+              /// The types with 2x effectiveness
+              public var effectiveTypes: [String] {
+                get {
+                  return resultMap["effectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                }
+              }
+
+              /// The types with 0x effectiveness
+              public var effectlessTypes: [String] {
+                get {
+                  return resultMap["effectlessTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                }
+              }
+
+              /// The types with 1x effectiveness
+              public var normalTypes: [String] {
+                get {
+                  return resultMap["normalTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "normalTypes")
+                }
+              }
+
+              /// The types with 0.5x effectiveness
+              public var resistedTypes: [String] {
+                get {
+                  return resultMap["resistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+            }
+
+            public struct Defending: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The types with 4x effectiveness
+              public var doubleEffectiveTypes: [String] {
+                get {
+                  return resultMap["doubleEffectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                }
+              }
+
+              /// The types with 0.25x effectiveness
+              public var doubleResistedTypes: [String] {
+                get {
+                  return resultMap["doubleResistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                }
+              }
+
+              /// The types with 2x effectiveness
+              public var effectiveTypes: [String] {
+                get {
+                  return resultMap["effectiveTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                }
+              }
+
+              /// The types with 0x effectiveness
+              public var effectlessTypes: [String] {
+                get {
+                  return resultMap["effectlessTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                }
+              }
+
+              /// The types with 1x effectiveness
+              public var normalTypes: [String] {
+                get {
+                  return resultMap["normalTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "normalTypes")
+                }
+              }
+
+              /// The types with 0.5x effectiveness
+              public var resistedTypes: [String] {
+                get {
+                  return resultMap["resistedTypes"]! as! [String]
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "resistedTypes")
+                }
+              }
+            }
+          }
+        }
+
+        public struct BaseStat: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Stats"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+            self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The base HP stat of a pokémon
+          public var hp: Int {
+            get {
+              return resultMap["hp"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "hp")
+            }
+          }
+
+          /// The base attack stat of a Pokémon
+          public var attack: Int {
+            get {
+              return resultMap["attack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "attack")
+            }
+          }
+
+          /// The base defense stat of a Pokémon
+          public var defense: Int {
+            get {
+              return resultMap["defense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "defense")
+            }
+          }
+
+          /// The base special attack stat of a Pokémon
+          public var specialattack: Int {
+            get {
+              return resultMap["specialattack"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialattack")
+            }
+          }
+
+          /// The base special defense stat of a Pokémon
+          public var specialdefense: Int {
+            get {
+              return resultMap["specialdefense"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "specialdefense")
+            }
+          }
+
+          /// The base speed stat of a Pokémon
+          public var speed: Int {
+            get {
+              return resultMap["speed"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "speed")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var statsFragment: StatsFragment {
+              get {
+                return StatsFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+        }
+
+        public struct Evolution: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Pokemon"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+              GraphQLField("evolutionLevel", type: .scalar(String.self)),
+              GraphQLField("forme", type: .scalar(String.self)),
+              GraphQLField("formeLetter", type: .scalar(String.self)),
+              GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+              GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+              GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("species", type: .nonNull(.scalar(String.self))),
+              GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+              GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+              GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("color", type: .nonNull(.scalar(String.self))),
+              GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The key of the Pokémon as stored in the API
+          public var key: PokemonEnum {
+            get {
+              return resultMap["key"]! as! PokemonEnum
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// EV yields for a Pokémon
+          public var evYields: EvYield {
+            get {
+              return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+            }
+          }
+
+          /// The evolution level, or special method, for a Pokémon
+          public var evolutionLevel: String? {
+            get {
+              return resultMap["evolutionLevel"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "evolutionLevel")
+            }
+          }
+
+          /// The form identifier of a Pokémon
+          public var forme: String? {
+            get {
+              return resultMap["forme"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "forme")
+            }
+          }
+
+          /// The single letter identifier of the form
+          public var formeLetter: String? {
+            get {
+              return resultMap["formeLetter"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "formeLetter")
+            }
+          }
+
+          /// The gender data for a Pokémon
+          public var gender: Gender {
+            get {
+              return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "gender")
+            }
+          }
+
+          /// The height of a Pokémon in meters
+          public var height: Double {
+            get {
+              return resultMap["height"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "height")
+            }
+          }
+
+          /// Whether the egg of a Pokémon is obtainable
+          public var isEggObtainable: Bool {
+            get {
+              return resultMap["isEggObtainable"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "isEggObtainable")
+            }
+          }
+
+          /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var backSprite: String {
+            get {
+              return resultMap["backSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "backSprite")
+            }
+          }
+
+          /// The dex number for a Pokémon
+          public var num: Int {
+            get {
+              return resultMap["num"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "num")
+            }
+          }
+
+          /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinyBackSprite: String {
+            get {
+              return resultMap["shinyBackSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+            }
+          }
+
+          /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinySprite: String {
+            get {
+              return resultMap["shinySprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinySprite")
+            }
+          }
+
+          /// The species name for a Pokémon
+          public var species: String {
+            get {
+              return resultMap["species"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "species")
+            }
+          }
+
+          /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var sprite: String {
+            get {
+              return resultMap["sprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "sprite")
+            }
+          }
+
+          /// The types for a Pokémon
+          public var types: [`Type`] {
+            get {
+              return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+            }
+            set {
+              resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+            }
+          }
+
+          /// Base stats for a Pokémon
+          public var baseStats: BaseStat {
+            get {
+              return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+            }
+          }
+
+          /// The total of all base stats for a Pokémon
+          public var baseStatsTotal: Int {
+            get {
+              return resultMap["baseStatsTotal"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+            }
+          }
+
+          /// The colour of a Pokémon as listed in the Pokedex
+          public var color: String {
+            get {
+              return resultMap["color"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "color")
+            }
+          }
+
+          /// The weight of a Pokémon in kilograms
+          public var weight: Double {
+            get {
+              return resultMap["weight"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "weight")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var fullDataFragment: FullDataFragment {
+              get {
+                return FullDataFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+              get {
+                return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
+          public struct EvYield: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["EvYields"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The HP EV yield of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The attack EV yield of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The defense EV yield of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The special attack EV yield of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The special defense EV yield of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The speed EV yield of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var evYieldsFragment: EvYieldsFragment {
+                get {
+                  return EvYieldsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct Gender: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Gender"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("female", type: .nonNull(.scalar(String.self))),
+                GraphQLField("male", type: .nonNull(.scalar(String.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(female: String, male: String) {
+              self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The percentage for female occurrences
+            public var female: String {
+              get {
+                return resultMap["female"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "female")
+              }
+            }
+
+            /// The percentage of male occurrences
+            public var male: String {
+              get {
+                return resultMap["male"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "male")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var genderFragment: GenderFragment {
+                get {
+                  return GenderFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct `Type`: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["PokemonType"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("name", type: .nonNull(.scalar(String.self))),
+                GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(name: String, matchup: Matchup) {
+              self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The name of the typ
+            public var name: String {
+              get {
+                return resultMap["name"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "name")
+              }
+            }
+
+            /// The type matchup for this type
+            public var matchup: Matchup {
+              get {
+                return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var pokemonTypeFragment: PokemonTypeFragment {
+                get {
+                  return PokemonTypeFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+
+            public struct Matchup: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeMatchup"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+                  GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(attacking: Attacking, defending: Defending) {
+                self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The type matchups when attacking
+              public var attacking: Attacking {
+                get {
+                  return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+                }
+              }
+
+              /// The type matchups when defending
+              public var defending: Defending {
+                get {
+                  return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "defending")
+                }
+              }
+
+              public struct Attacking: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+
+              public struct Defending: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+            }
+          }
+
+          public struct BaseStat: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Stats"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The base HP stat of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The base attack stat of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The base defense stat of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The base special attack stat of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The base special defense stat of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The base speed stat of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var statsFragment: StatsFragment {
+                get {
+                  return StatsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+        }
+
+        public struct Preevolution: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Pokemon"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+              GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+              GraphQLField("evolutionLevel", type: .scalar(String.self)),
+              GraphQLField("forme", type: .scalar(String.self)),
+              GraphQLField("formeLetter", type: .scalar(String.self)),
+              GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+              GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+              GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+              GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("species", type: .nonNull(.scalar(String.self))),
+              GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+              GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+              GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+              GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+              GraphQLField("color", type: .nonNull(.scalar(String.self))),
+              GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+            self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The key of the Pokémon as stored in the API
+          public var key: PokemonEnum {
+            get {
+              return resultMap["key"]! as! PokemonEnum
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "key")
+            }
+          }
+
+          /// EV yields for a Pokémon
+          public var evYields: EvYield {
+            get {
+              return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+            }
+          }
+
+          /// The evolution level, or special method, for a Pokémon
+          public var evolutionLevel: String? {
+            get {
+              return resultMap["evolutionLevel"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "evolutionLevel")
+            }
+          }
+
+          /// The form identifier of a Pokémon
+          public var forme: String? {
+            get {
+              return resultMap["forme"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "forme")
+            }
+          }
+
+          /// The single letter identifier of the form
+          public var formeLetter: String? {
+            get {
+              return resultMap["formeLetter"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "formeLetter")
+            }
+          }
+
+          /// The gender data for a Pokémon
+          public var gender: Gender {
+            get {
+              return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "gender")
+            }
+          }
+
+          /// The height of a Pokémon in meters
+          public var height: Double {
+            get {
+              return resultMap["height"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "height")
+            }
+          }
+
+          /// Whether the egg of a Pokémon is obtainable
+          public var isEggObtainable: Bool {
+            get {
+              return resultMap["isEggObtainable"]! as! Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "isEggObtainable")
+            }
+          }
+
+          /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var backSprite: String {
+            get {
+              return resultMap["backSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "backSprite")
+            }
+          }
+
+          /// The dex number for a Pokémon
+          public var num: Int {
+            get {
+              return resultMap["num"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "num")
+            }
+          }
+
+          /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinyBackSprite: String {
+            get {
+              return resultMap["shinyBackSprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+            }
+          }
+
+          /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var shinySprite: String {
+            get {
+              return resultMap["shinySprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "shinySprite")
+            }
+          }
+
+          /// The species name for a Pokémon
+          public var species: String {
+            get {
+              return resultMap["species"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "species")
+            }
+          }
+
+          /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+          public var sprite: String {
+            get {
+              return resultMap["sprite"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "sprite")
+            }
+          }
+
+          /// The types for a Pokémon
+          public var types: [`Type`] {
+            get {
+              return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+            }
+            set {
+              resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+            }
+          }
+
+          /// Base stats for a Pokémon
+          public var baseStats: BaseStat {
+            get {
+              return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+            }
+          }
+
+          /// The total of all base stats for a Pokémon
+          public var baseStatsTotal: Int {
+            get {
+              return resultMap["baseStatsTotal"]! as! Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+            }
+          }
+
+          /// The colour of a Pokémon as listed in the Pokedex
+          public var color: String {
+            get {
+              return resultMap["color"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "color")
+            }
+          }
+
+          /// The weight of a Pokémon in kilograms
+          public var weight: Double {
+            get {
+              return resultMap["weight"]! as! Double
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "weight")
+            }
+          }
+
+          public var fragments: Fragments {
+            get {
+              return Fragments(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public var fullDataFragment: FullDataFragment {
+              get {
+                return FullDataFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+              get {
+                return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+          }
+
+          public struct EvYield: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["EvYields"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The HP EV yield of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The attack EV yield of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The defense EV yield of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The special attack EV yield of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The special defense EV yield of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The speed EV yield of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var evYieldsFragment: EvYieldsFragment {
+                get {
+                  return EvYieldsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct Gender: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Gender"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("female", type: .nonNull(.scalar(String.self))),
+                GraphQLField("male", type: .nonNull(.scalar(String.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(female: String, male: String) {
+              self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The percentage for female occurrences
+            public var female: String {
+              get {
+                return resultMap["female"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "female")
+              }
+            }
+
+            /// The percentage of male occurrences
+            public var male: String {
+              get {
+                return resultMap["male"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "male")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var genderFragment: GenderFragment {
+                get {
+                  return GenderFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+
+          public struct `Type`: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["PokemonType"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("name", type: .nonNull(.scalar(String.self))),
+                GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(name: String, matchup: Matchup) {
+              self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The name of the typ
+            public var name: String {
+              get {
+                return resultMap["name"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "name")
+              }
+            }
+
+            /// The type matchup for this type
+            public var matchup: Matchup {
+              get {
+                return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+              }
+              set {
+                resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var pokemonTypeFragment: PokemonTypeFragment {
+                get {
+                  return PokemonTypeFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+
+            public struct Matchup: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["TypeMatchup"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+                  GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(attacking: Attacking, defending: Defending) {
+                self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              /// The type matchups when attacking
+              public var attacking: Attacking {
+                get {
+                  return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+                }
+              }
+
+              /// The type matchups when defending
+              public var defending: Defending {
+                get {
+                  return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+                }
+                set {
+                  resultMap.updateValue(newValue.resultMap, forKey: "defending")
+                }
+              }
+
+              public struct Attacking: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+
+              public struct Defending: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                    GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+                  self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                /// The types with 4x effectiveness
+                public var doubleEffectiveTypes: [String] {
+                  get {
+                    return resultMap["doubleEffectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+                  }
+                }
+
+                /// The types with 0.25x effectiveness
+                public var doubleResistedTypes: [String] {
+                  get {
+                    return resultMap["doubleResistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+                  }
+                }
+
+                /// The types with 2x effectiveness
+                public var effectiveTypes: [String] {
+                  get {
+                    return resultMap["effectiveTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectiveTypes")
+                  }
+                }
+
+                /// The types with 0x effectiveness
+                public var effectlessTypes: [String] {
+                  get {
+                    return resultMap["effectlessTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "effectlessTypes")
+                  }
+                }
+
+                /// The types with 1x effectiveness
+                public var normalTypes: [String] {
+                  get {
+                    return resultMap["normalTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "normalTypes")
+                  }
+                }
+
+                /// The types with 0.5x effectiveness
+                public var resistedTypes: [String] {
+                  get {
+                    return resultMap["resistedTypes"]! as! [String]
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "resistedTypes")
+                  }
+                }
+              }
+            }
+          }
+
+          public struct BaseStat: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["Stats"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+                GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+              self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The base HP stat of a pokémon
+            public var hp: Int {
+              get {
+                return resultMap["hp"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "hp")
+              }
+            }
+
+            /// The base attack stat of a Pokémon
+            public var attack: Int {
+              get {
+                return resultMap["attack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "attack")
+              }
+            }
+
+            /// The base defense stat of a Pokémon
+            public var defense: Int {
+              get {
+                return resultMap["defense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "defense")
+              }
+            }
+
+            /// The base special attack stat of a Pokémon
+            public var specialattack: Int {
+              get {
+                return resultMap["specialattack"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialattack")
+              }
+            }
+
+            /// The base special defense stat of a Pokémon
+            public var specialdefense: Int {
+              get {
+                return resultMap["specialdefense"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "specialdefense")
+              }
+            }
+
+            /// The base speed stat of a Pokémon
+            public var speed: Int {
+              get {
+                return resultMap["speed"]! as! Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "speed")
+              }
+            }
+
+            public var fragments: Fragments {
+              get {
+                return Fragments(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
+            }
+
+            public struct Fragments {
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public var statsFragment: StatsFragment {
+                get {
+                  return StatsFragment(unsafeResultMap: resultMap)
+                }
+                set {
+                  resultMap += newValue.resultMap
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+public struct LightDataFragmentWithoutNested: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment LightDataFragmentWithoutNested on Pokemon {
+      __typename
+      key
+      num
+      species
+      sprite
+      types {
+        __typename
+        ...PokemonLightTypeFragment
+      }
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Pokemon"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("species", type: .nonNull(.scalar(String.self))),
+      GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(key: PokemonEnum, num: Int, species: String, sprite: String, types: [`Type`]) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "num": num, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The key of the Pokémon as stored in the API
+  public var key: PokemonEnum {
+    get {
+      return resultMap["key"]! as! PokemonEnum
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// The dex number for a Pokémon
+  public var num: Int {
+    get {
+      return resultMap["num"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "num")
+    }
+  }
+
+  /// The species name for a Pokémon
+  public var species: String {
+    get {
+      return resultMap["species"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "species")
+    }
+  }
+
+  /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var sprite: String {
+    get {
+      return resultMap["sprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "sprite")
+    }
+  }
+
+  /// The types for a Pokémon
+  public var types: [`Type`] {
+    get {
+      return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+    }
+    set {
+      resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+    }
+  }
+
+  public struct `Type`: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["PokemonType"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(name: String) {
+      self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The name of the typ
+    public var name: String {
+      get {
+        return resultMap["name"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var pokemonLightTypeFragment: PokemonLightTypeFragment {
+        get {
+          return PokemonLightTypeFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+}
+
+public struct PokemonLightTypeFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment PokemonLightTypeFragment on PokemonType {
+      __typename
+      name
+    }
+    """
+
+  public static let possibleTypes: [String] = ["PokemonType"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("name", type: .nonNull(.scalar(String.self))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(name: String) {
+    self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The name of the typ
+  public var name: String {
+    get {
+      return resultMap["name"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "name")
+    }
+  }
+}
+
+public struct EvYieldsFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment EvYieldsFragment on EvYields {
+      __typename
+      hp
+      attack
+      defense
+      specialattack
+      specialdefense
+      speed
+    }
+    """
+
+  public static let possibleTypes: [String] = ["EvYields"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+    self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The HP EV yield of a pokémon
+  public var hp: Int {
+    get {
+      return resultMap["hp"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "hp")
+    }
+  }
+
+  /// The attack EV yield of a Pokémon
+  public var attack: Int {
+    get {
+      return resultMap["attack"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "attack")
+    }
+  }
+
+  /// The defense EV yield of a Pokémon
+  public var defense: Int {
+    get {
+      return resultMap["defense"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "defense")
+    }
+  }
+
+  /// The special attack EV yield of a Pokémon
+  public var specialattack: Int {
+    get {
+      return resultMap["specialattack"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "specialattack")
+    }
+  }
+
+  /// The special defense EV yield of a Pokémon
+  public var specialdefense: Int {
+    get {
+      return resultMap["specialdefense"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "specialdefense")
+    }
+  }
+
+  /// The speed EV yield of a Pokémon
+  public var speed: Int {
+    get {
+      return resultMap["speed"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "speed")
+    }
+  }
+}
+
+public struct GenderFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment GenderFragment on Gender {
+      __typename
+      female
+      male
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Gender"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("female", type: .nonNull(.scalar(String.self))),
+      GraphQLField("male", type: .nonNull(.scalar(String.self))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(female: String, male: String) {
+    self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The percentage for female occurrences
+  public var female: String {
+    get {
+      return resultMap["female"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "female")
+    }
+  }
+
+  /// The percentage of male occurrences
+  public var male: String {
+    get {
+      return resultMap["male"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "male")
+    }
+  }
+}
+
+public struct PokemonTypeFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment PokemonTypeFragment on PokemonType {
+      __typename
+      name
+      matchup {
+        __typename
+        attacking {
+          __typename
+          doubleEffectiveTypes
+          doubleResistedTypes
+          effectiveTypes
+          effectlessTypes
+          normalTypes
+          resistedTypes
+        }
+        defending {
+          __typename
+          doubleEffectiveTypes
+          doubleResistedTypes
+          effectiveTypes
+          effectlessTypes
+          normalTypes
+          resistedTypes
+        }
+      }
+    }
+    """
+
+  public static let possibleTypes: [String] = ["PokemonType"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("name", type: .nonNull(.scalar(String.self))),
+      GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(name: String, matchup: Matchup) {
+    self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The name of the typ
+  public var name: String {
+    get {
+      return resultMap["name"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "name")
+    }
+  }
+
+  /// The type matchup for this type
+  public var matchup: Matchup {
+    get {
+      return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+    }
+  }
+
+  public struct Matchup: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["TypeMatchup"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+        GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(attacking: Attacking, defending: Defending) {
+      self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The type matchups when attacking
+    public var attacking: Attacking {
+      get {
+        return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+      }
+    }
+
+    /// The type matchups when defending
+    public var defending: Defending {
+      get {
+        return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "defending")
+      }
+    }
+
+    public struct Attacking: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+        self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The types with 4x effectiveness
+      public var doubleEffectiveTypes: [String] {
+        get {
+          return resultMap["doubleEffectiveTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+        }
+      }
+
+      /// The types with 0.25x effectiveness
+      public var doubleResistedTypes: [String] {
+        get {
+          return resultMap["doubleResistedTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+        }
+      }
+
+      /// The types with 2x effectiveness
+      public var effectiveTypes: [String] {
+        get {
+          return resultMap["effectiveTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "effectiveTypes")
+        }
+      }
+
+      /// The types with 0x effectiveness
+      public var effectlessTypes: [String] {
+        get {
+          return resultMap["effectlessTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "effectlessTypes")
+        }
+      }
+
+      /// The types with 1x effectiveness
+      public var normalTypes: [String] {
+        get {
+          return resultMap["normalTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "normalTypes")
+        }
+      }
+
+      /// The types with 0.5x effectiveness
+      public var resistedTypes: [String] {
+        get {
+          return resultMap["resistedTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "resistedTypes")
+        }
+      }
+    }
+
+    public struct Defending: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+        self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The types with 4x effectiveness
+      public var doubleEffectiveTypes: [String] {
+        get {
+          return resultMap["doubleEffectiveTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+        }
+      }
+
+      /// The types with 0.25x effectiveness
+      public var doubleResistedTypes: [String] {
+        get {
+          return resultMap["doubleResistedTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+        }
+      }
+
+      /// The types with 2x effectiveness
+      public var effectiveTypes: [String] {
+        get {
+          return resultMap["effectiveTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "effectiveTypes")
+        }
+      }
+
+      /// The types with 0x effectiveness
+      public var effectlessTypes: [String] {
+        get {
+          return resultMap["effectlessTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "effectlessTypes")
+        }
+      }
+
+      /// The types with 1x effectiveness
+      public var normalTypes: [String] {
+        get {
+          return resultMap["normalTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "normalTypes")
+        }
+      }
+
+      /// The types with 0.5x effectiveness
+      public var resistedTypes: [String] {
+        get {
+          return resultMap["resistedTypes"]! as! [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "resistedTypes")
+        }
+      }
+    }
+  }
+}
+
+public struct StatsFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment StatsFragment on Stats {
+      __typename
+      hp
+      attack
+      defense
+      specialattack
+      specialdefense
+      speed
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Stats"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+    self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The base HP stat of a pokémon
+  public var hp: Int {
+    get {
+      return resultMap["hp"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "hp")
+    }
+  }
+
+  /// The base attack stat of a Pokémon
+  public var attack: Int {
+    get {
+      return resultMap["attack"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "attack")
+    }
+  }
+
+  /// The base defense stat of a Pokémon
+  public var defense: Int {
+    get {
+      return resultMap["defense"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "defense")
+    }
+  }
+
+  /// The base special attack stat of a Pokémon
+  public var specialattack: Int {
+    get {
+      return resultMap["specialattack"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "specialattack")
+    }
+  }
+
+  /// The base special defense stat of a Pokémon
+  public var specialdefense: Int {
+    get {
+      return resultMap["specialdefense"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "specialdefense")
+    }
+  }
+
+  /// The base speed stat of a Pokémon
+  public var speed: Int {
+    get {
+      return resultMap["speed"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "speed")
+    }
+  }
+}
+
+public struct FullDataFragmentWithoutNested: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment FullDataFragmentWithoutNested on Pokemon {
+      __typename
+      key
+      evYields {
+        __typename
+        ...EvYieldsFragment
+      }
+      evolutionLevel
+      forme
+      formeLetter
+      gender {
+        __typename
+        ...GenderFragment
+      }
+      height
+      isEggObtainable
+      backSprite
+      num
+      shinyBackSprite
+      shinySprite
+      species
+      sprite
+      types {
+        __typename
+        ...PokemonTypeFragment
+      }
+      baseStats {
+        __typename
+        ...StatsFragment
+      }
+      baseStatsTotal
+      color
+      weight
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Pokemon"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+      GraphQLField("evolutionLevel", type: .scalar(String.self)),
+      GraphQLField("forme", type: .scalar(String.self)),
+      GraphQLField("formeLetter", type: .scalar(String.self)),
+      GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+      GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+      GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+      GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("species", type: .nonNull(.scalar(String.self))),
+      GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+      GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+      GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("color", type: .nonNull(.scalar(String.self))),
+      GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The key of the Pokémon as stored in the API
+  public var key: PokemonEnum {
+    get {
+      return resultMap["key"]! as! PokemonEnum
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// EV yields for a Pokémon
+  public var evYields: EvYield {
+    get {
+      return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+    }
+  }
+
+  /// The evolution level, or special method, for a Pokémon
+  public var evolutionLevel: String? {
+    get {
+      return resultMap["evolutionLevel"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "evolutionLevel")
+    }
+  }
+
+  /// The form identifier of a Pokémon
+  public var forme: String? {
+    get {
+      return resultMap["forme"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "forme")
+    }
+  }
+
+  /// The single letter identifier of the form
+  public var formeLetter: String? {
+    get {
+      return resultMap["formeLetter"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "formeLetter")
+    }
+  }
+
+  /// The gender data for a Pokémon
+  public var gender: Gender {
+    get {
+      return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "gender")
+    }
+  }
+
+  /// The height of a Pokémon in meters
+  public var height: Double {
+    get {
+      return resultMap["height"]! as! Double
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "height")
+    }
+  }
+
+  /// Whether the egg of a Pokémon is obtainable
+  public var isEggObtainable: Bool {
+    get {
+      return resultMap["isEggObtainable"]! as! Bool
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "isEggObtainable")
+    }
+  }
+
+  /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var backSprite: String {
+    get {
+      return resultMap["backSprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "backSprite")
+    }
+  }
+
+  /// The dex number for a Pokémon
+  public var num: Int {
+    get {
+      return resultMap["num"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "num")
+    }
+  }
+
+  /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var shinyBackSprite: String {
+    get {
+      return resultMap["shinyBackSprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+    }
+  }
+
+  /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var shinySprite: String {
+    get {
+      return resultMap["shinySprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "shinySprite")
+    }
+  }
+
+  /// The species name for a Pokémon
+  public var species: String {
+    get {
+      return resultMap["species"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "species")
+    }
+  }
+
+  /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var sprite: String {
+    get {
+      return resultMap["sprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "sprite")
+    }
+  }
+
+  /// The types for a Pokémon
+  public var types: [`Type`] {
+    get {
+      return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+    }
+    set {
+      resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+    }
+  }
+
+  /// Base stats for a Pokémon
+  public var baseStats: BaseStat {
+    get {
+      return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+    }
+  }
+
+  /// The total of all base stats for a Pokémon
+  public var baseStatsTotal: Int {
+    get {
+      return resultMap["baseStatsTotal"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+    }
+  }
+
+  /// The colour of a Pokémon as listed in the Pokedex
+  public var color: String {
+    get {
+      return resultMap["color"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "color")
+    }
+  }
+
+  /// The weight of a Pokémon in kilograms
+  public var weight: Double {
+    get {
+      return resultMap["weight"]! as! Double
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "weight")
+    }
+  }
+
+  public struct EvYield: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["EvYields"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+      self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The HP EV yield of a pokémon
+    public var hp: Int {
+      get {
+        return resultMap["hp"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "hp")
+      }
+    }
+
+    /// The attack EV yield of a Pokémon
+    public var attack: Int {
+      get {
+        return resultMap["attack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "attack")
+      }
+    }
+
+    /// The defense EV yield of a Pokémon
+    public var defense: Int {
+      get {
+        return resultMap["defense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "defense")
+      }
+    }
+
+    /// The special attack EV yield of a Pokémon
+    public var specialattack: Int {
+      get {
+        return resultMap["specialattack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialattack")
+      }
+    }
+
+    /// The special defense EV yield of a Pokémon
+    public var specialdefense: Int {
+      get {
+        return resultMap["specialdefense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialdefense")
+      }
+    }
+
+    /// The speed EV yield of a Pokémon
+    public var speed: Int {
+      get {
+        return resultMap["speed"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "speed")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var evYieldsFragment: EvYieldsFragment {
+        get {
+          return EvYieldsFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct Gender: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Gender"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("female", type: .nonNull(.scalar(String.self))),
+        GraphQLField("male", type: .nonNull(.scalar(String.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(female: String, male: String) {
+      self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The percentage for female occurrences
+    public var female: String {
+      get {
+        return resultMap["female"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "female")
+      }
+    }
+
+    /// The percentage of male occurrences
+    public var male: String {
+      get {
+        return resultMap["male"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "male")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var genderFragment: GenderFragment {
+        get {
+          return GenderFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct `Type`: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["PokemonType"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
+        GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(name: String, matchup: Matchup) {
+      self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The name of the typ
+    public var name: String {
+      get {
+        return resultMap["name"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+
+    /// The type matchup for this type
+    public var matchup: Matchup {
+      get {
+        return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var pokemonTypeFragment: PokemonTypeFragment {
+        get {
+          return PokemonTypeFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
+    public struct Matchup: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["TypeMatchup"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+          GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(attacking: Attacking, defending: Defending) {
+        self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The type matchups when attacking
+      public var attacking: Attacking {
+        get {
+          return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+        }
+      }
+
+      /// The type matchups when defending
+      public var defending: Defending {
+        get {
+          return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "defending")
+        }
+      }
+
+      public struct Attacking: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+          self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The types with 4x effectiveness
+        public var doubleEffectiveTypes: [String] {
+          get {
+            return resultMap["doubleEffectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+          }
+        }
+
+        /// The types with 0.25x effectiveness
+        public var doubleResistedTypes: [String] {
+          get {
+            return resultMap["doubleResistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+          }
+        }
+
+        /// The types with 2x effectiveness
+        public var effectiveTypes: [String] {
+          get {
+            return resultMap["effectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectiveTypes")
+          }
+        }
+
+        /// The types with 0x effectiveness
+        public var effectlessTypes: [String] {
+          get {
+            return resultMap["effectlessTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectlessTypes")
+          }
+        }
+
+        /// The types with 1x effectiveness
+        public var normalTypes: [String] {
+          get {
+            return resultMap["normalTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "normalTypes")
+          }
+        }
+
+        /// The types with 0.5x effectiveness
+        public var resistedTypes: [String] {
+          get {
+            return resultMap["resistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+      }
+
+      public struct Defending: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+          self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The types with 4x effectiveness
+        public var doubleEffectiveTypes: [String] {
+          get {
+            return resultMap["doubleEffectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+          }
+        }
+
+        /// The types with 0.25x effectiveness
+        public var doubleResistedTypes: [String] {
+          get {
+            return resultMap["doubleResistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+          }
+        }
+
+        /// The types with 2x effectiveness
+        public var effectiveTypes: [String] {
+          get {
+            return resultMap["effectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectiveTypes")
+          }
+        }
+
+        /// The types with 0x effectiveness
+        public var effectlessTypes: [String] {
+          get {
+            return resultMap["effectlessTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectlessTypes")
+          }
+        }
+
+        /// The types with 1x effectiveness
+        public var normalTypes: [String] {
+          get {
+            return resultMap["normalTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "normalTypes")
+          }
+        }
+
+        /// The types with 0.5x effectiveness
+        public var resistedTypes: [String] {
+          get {
+            return resultMap["resistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+      }
+    }
+  }
+
+  public struct BaseStat: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Stats"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+      self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The base HP stat of a pokémon
+    public var hp: Int {
+      get {
+        return resultMap["hp"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "hp")
+      }
+    }
+
+    /// The base attack stat of a Pokémon
+    public var attack: Int {
+      get {
+        return resultMap["attack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "attack")
+      }
+    }
+
+    /// The base defense stat of a Pokémon
+    public var defense: Int {
+      get {
+        return resultMap["defense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "defense")
+      }
+    }
+
+    /// The base special attack stat of a Pokémon
+    public var specialattack: Int {
+      get {
+        return resultMap["specialattack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialattack")
+      }
+    }
+
+    /// The base special defense stat of a Pokémon
+    public var specialdefense: Int {
+      get {
+        return resultMap["specialdefense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialdefense")
+      }
+    }
+
+    /// The base speed stat of a Pokémon
+    public var speed: Int {
+      get {
+        return resultMap["speed"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "speed")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var statsFragment: StatsFragment {
+        get {
+          return StatsFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+}
+
+public struct FullDataFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment FullDataFragment on Pokemon {
+      __typename
+      ...FullDataFragmentWithoutNested
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Pokemon"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+      GraphQLField("evolutionLevel", type: .scalar(String.self)),
+      GraphQLField("forme", type: .scalar(String.self)),
+      GraphQLField("formeLetter", type: .scalar(String.self)),
+      GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+      GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+      GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+      GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("species", type: .nonNull(.scalar(String.self))),
+      GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+      GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+      GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("color", type: .nonNull(.scalar(String.self))),
+      GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The key of the Pokémon as stored in the API
+  public var key: PokemonEnum {
+    get {
+      return resultMap["key"]! as! PokemonEnum
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// EV yields for a Pokémon
+  public var evYields: EvYield {
+    get {
+      return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+    }
+  }
+
+  /// The evolution level, or special method, for a Pokémon
+  public var evolutionLevel: String? {
+    get {
+      return resultMap["evolutionLevel"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "evolutionLevel")
+    }
+  }
+
+  /// The form identifier of a Pokémon
+  public var forme: String? {
+    get {
+      return resultMap["forme"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "forme")
+    }
+  }
+
+  /// The single letter identifier of the form
+  public var formeLetter: String? {
+    get {
+      return resultMap["formeLetter"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "formeLetter")
+    }
+  }
+
+  /// The gender data for a Pokémon
+  public var gender: Gender {
+    get {
+      return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "gender")
+    }
+  }
+
+  /// The height of a Pokémon in meters
+  public var height: Double {
+    get {
+      return resultMap["height"]! as! Double
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "height")
+    }
+  }
+
+  /// Whether the egg of a Pokémon is obtainable
+  public var isEggObtainable: Bool {
+    get {
+      return resultMap["isEggObtainable"]! as! Bool
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "isEggObtainable")
+    }
+  }
+
+  /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var backSprite: String {
+    get {
+      return resultMap["backSprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "backSprite")
+    }
+  }
+
+  /// The dex number for a Pokémon
+  public var num: Int {
+    get {
+      return resultMap["num"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "num")
+    }
+  }
+
+  /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var shinyBackSprite: String {
+    get {
+      return resultMap["shinyBackSprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+    }
+  }
+
+  /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var shinySprite: String {
+    get {
+      return resultMap["shinySprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "shinySprite")
+    }
+  }
+
+  /// The species name for a Pokémon
+  public var species: String {
+    get {
+      return resultMap["species"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "species")
+    }
+  }
+
+  /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var sprite: String {
+    get {
+      return resultMap["sprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "sprite")
+    }
+  }
+
+  /// The types for a Pokémon
+  public var types: [`Type`] {
+    get {
+      return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+    }
+    set {
+      resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+    }
+  }
+
+  /// Base stats for a Pokémon
+  public var baseStats: BaseStat {
+    get {
+      return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+    }
+  }
+
+  /// The total of all base stats for a Pokémon
+  public var baseStatsTotal: Int {
+    get {
+      return resultMap["baseStatsTotal"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+    }
+  }
+
+  /// The colour of a Pokémon as listed in the Pokedex
+  public var color: String {
+    get {
+      return resultMap["color"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "color")
+    }
+  }
+
+  /// The weight of a Pokémon in kilograms
+  public var weight: Double {
+    get {
+      return resultMap["weight"]! as! Double
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "weight")
+    }
+  }
+
+  public var fragments: Fragments {
+    get {
+      return Fragments(unsafeResultMap: resultMap)
+    }
+    set {
+      resultMap += newValue.resultMap
+    }
+  }
+
+  public struct Fragments {
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+      get {
+        return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+  }
+
+  public struct EvYield: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["EvYields"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+      self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The HP EV yield of a pokémon
+    public var hp: Int {
+      get {
+        return resultMap["hp"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "hp")
+      }
+    }
+
+    /// The attack EV yield of a Pokémon
+    public var attack: Int {
+      get {
+        return resultMap["attack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "attack")
+      }
+    }
+
+    /// The defense EV yield of a Pokémon
+    public var defense: Int {
+      get {
+        return resultMap["defense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "defense")
+      }
+    }
+
+    /// The special attack EV yield of a Pokémon
+    public var specialattack: Int {
+      get {
+        return resultMap["specialattack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialattack")
+      }
+    }
+
+    /// The special defense EV yield of a Pokémon
+    public var specialdefense: Int {
+      get {
+        return resultMap["specialdefense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialdefense")
+      }
+    }
+
+    /// The speed EV yield of a Pokémon
+    public var speed: Int {
+      get {
+        return resultMap["speed"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "speed")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var evYieldsFragment: EvYieldsFragment {
+        get {
+          return EvYieldsFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct Gender: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Gender"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("female", type: .nonNull(.scalar(String.self))),
+        GraphQLField("male", type: .nonNull(.scalar(String.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(female: String, male: String) {
+      self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The percentage for female occurrences
+    public var female: String {
+      get {
+        return resultMap["female"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "female")
+      }
+    }
+
+    /// The percentage of male occurrences
+    public var male: String {
+      get {
+        return resultMap["male"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "male")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var genderFragment: GenderFragment {
+        get {
+          return GenderFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct `Type`: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["PokemonType"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
+        GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(name: String, matchup: Matchup) {
+      self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The name of the typ
+    public var name: String {
+      get {
+        return resultMap["name"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+
+    /// The type matchup for this type
+    public var matchup: Matchup {
+      get {
+        return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var pokemonTypeFragment: PokemonTypeFragment {
+        get {
+          return PokemonTypeFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
+    public struct Matchup: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["TypeMatchup"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+          GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(attacking: Attacking, defending: Defending) {
+        self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The type matchups when attacking
+      public var attacking: Attacking {
+        get {
+          return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+        }
+      }
+
+      /// The type matchups when defending
+      public var defending: Defending {
+        get {
+          return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "defending")
+        }
+      }
+
+      public struct Attacking: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+          self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The types with 4x effectiveness
+        public var doubleEffectiveTypes: [String] {
+          get {
+            return resultMap["doubleEffectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+          }
+        }
+
+        /// The types with 0.25x effectiveness
+        public var doubleResistedTypes: [String] {
+          get {
+            return resultMap["doubleResistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+          }
+        }
+
+        /// The types with 2x effectiveness
+        public var effectiveTypes: [String] {
+          get {
+            return resultMap["effectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectiveTypes")
+          }
+        }
+
+        /// The types with 0x effectiveness
+        public var effectlessTypes: [String] {
+          get {
+            return resultMap["effectlessTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectlessTypes")
+          }
+        }
+
+        /// The types with 1x effectiveness
+        public var normalTypes: [String] {
+          get {
+            return resultMap["normalTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "normalTypes")
+          }
+        }
+
+        /// The types with 0.5x effectiveness
+        public var resistedTypes: [String] {
+          get {
+            return resultMap["resistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+      }
+
+      public struct Defending: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+          self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The types with 4x effectiveness
+        public var doubleEffectiveTypes: [String] {
+          get {
+            return resultMap["doubleEffectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+          }
+        }
+
+        /// The types with 0.25x effectiveness
+        public var doubleResistedTypes: [String] {
+          get {
+            return resultMap["doubleResistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+          }
+        }
+
+        /// The types with 2x effectiveness
+        public var effectiveTypes: [String] {
+          get {
+            return resultMap["effectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectiveTypes")
+          }
+        }
+
+        /// The types with 0x effectiveness
+        public var effectlessTypes: [String] {
+          get {
+            return resultMap["effectlessTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectlessTypes")
+          }
+        }
+
+        /// The types with 1x effectiveness
+        public var normalTypes: [String] {
+          get {
+            return resultMap["normalTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "normalTypes")
+          }
+        }
+
+        /// The types with 0.5x effectiveness
+        public var resistedTypes: [String] {
+          get {
+            return resultMap["resistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+      }
+    }
+  }
+
+  public struct BaseStat: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Stats"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+      self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The base HP stat of a pokémon
+    public var hp: Int {
+      get {
+        return resultMap["hp"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "hp")
+      }
+    }
+
+    /// The base attack stat of a Pokémon
+    public var attack: Int {
+      get {
+        return resultMap["attack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "attack")
+      }
+    }
+
+    /// The base defense stat of a Pokémon
+    public var defense: Int {
+      get {
+        return resultMap["defense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "defense")
+      }
+    }
+
+    /// The base special attack stat of a Pokémon
+    public var specialattack: Int {
+      get {
+        return resultMap["specialattack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialattack")
+      }
+    }
+
+    /// The base special defense stat of a Pokémon
+    public var specialdefense: Int {
+      get {
+        return resultMap["specialdefense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialdefense")
+      }
+    }
+
+    /// The base speed stat of a Pokémon
+    public var speed: Int {
+      get {
+        return resultMap["speed"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "speed")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var statsFragment: StatsFragment {
+        get {
+          return StatsFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+}
+
+public struct FullData: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment FullData on Pokemon {
+      __typename
+      ...FullDataFragment
+      evolutions {
+        __typename
+        ...FullDataFragment
+        evolutions {
+          __typename
+          ...FullDataFragment
+        }
+        preevolutions {
+          __typename
+          ...FullDataFragment
+        }
+      }
+      preevolutions {
+        __typename
+        ...FullDataFragment
+        evolutions {
+          __typename
+          ...FullDataFragment
+        }
+        preevolutions {
+          __typename
+          ...FullDataFragment
+        }
+      }
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Pokemon"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+      GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+      GraphQLField("evolutionLevel", type: .scalar(String.self)),
+      GraphQLField("forme", type: .scalar(String.self)),
+      GraphQLField("formeLetter", type: .scalar(String.self)),
+      GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+      GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+      GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+      GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("species", type: .nonNull(.scalar(String.self))),
+      GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+      GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+      GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+      GraphQLField("color", type: .nonNull(.scalar(String.self))),
+      GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+      GraphQLField("evolutions", type: .list(.nonNull(.object(Evolution.selections)))),
+      GraphQLField("preevolutions", type: .list(.nonNull(.object(Preevolution.selections)))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  /// The key of the Pokémon as stored in the API
+  public var key: PokemonEnum {
+    get {
+      return resultMap["key"]! as! PokemonEnum
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "key")
+    }
+  }
+
+  /// EV yields for a Pokémon
+  public var evYields: EvYield {
+    get {
+      return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+    }
+  }
+
+  /// The evolution level, or special method, for a Pokémon
+  public var evolutionLevel: String? {
+    get {
+      return resultMap["evolutionLevel"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "evolutionLevel")
+    }
+  }
+
+  /// The form identifier of a Pokémon
+  public var forme: String? {
+    get {
+      return resultMap["forme"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "forme")
+    }
+  }
+
+  /// The single letter identifier of the form
+  public var formeLetter: String? {
+    get {
+      return resultMap["formeLetter"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "formeLetter")
+    }
+  }
+
+  /// The gender data for a Pokémon
+  public var gender: Gender {
+    get {
+      return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "gender")
+    }
+  }
+
+  /// The height of a Pokémon in meters
+  public var height: Double {
+    get {
+      return resultMap["height"]! as! Double
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "height")
+    }
+  }
+
+  /// Whether the egg of a Pokémon is obtainable
+  public var isEggObtainable: Bool {
+    get {
+      return resultMap["isEggObtainable"]! as! Bool
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "isEggObtainable")
+    }
+  }
+
+  /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var backSprite: String {
+    get {
+      return resultMap["backSprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "backSprite")
+    }
+  }
+
+  /// The dex number for a Pokémon
+  public var num: Int {
+    get {
+      return resultMap["num"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "num")
+    }
+  }
+
+  /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var shinyBackSprite: String {
+    get {
+      return resultMap["shinyBackSprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+    }
+  }
+
+  /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var shinySprite: String {
+    get {
+      return resultMap["shinySprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "shinySprite")
+    }
+  }
+
+  /// The species name for a Pokémon
+  public var species: String {
+    get {
+      return resultMap["species"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "species")
+    }
+  }
+
+  /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+  public var sprite: String {
+    get {
+      return resultMap["sprite"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "sprite")
+    }
+  }
+
+  /// The types for a Pokémon
+  public var types: [`Type`] {
+    get {
+      return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+    }
+    set {
+      resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+    }
+  }
+
+  /// Base stats for a Pokémon
+  public var baseStats: BaseStat {
+    get {
+      return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+    }
+    set {
+      resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+    }
+  }
+
+  /// The total of all base stats for a Pokémon
+  public var baseStatsTotal: Int {
+    get {
+      return resultMap["baseStatsTotal"]! as! Int
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+    }
+  }
+
+  /// The colour of a Pokémon as listed in the Pokedex
+  public var color: String {
+    get {
+      return resultMap["color"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "color")
+    }
+  }
+
+  /// The weight of a Pokémon in kilograms
+  public var weight: Double {
+    get {
+      return resultMap["weight"]! as! Double
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "weight")
+    }
+  }
+
+  /// The evolutions for a Pokémon, if any
+  public var evolutions: [Evolution]? {
+    get {
+      return (resultMap["evolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Evolution] in value.map { (value: ResultMap) -> Evolution in Evolution(unsafeResultMap: value) } }
+    }
+    set {
+      resultMap.updateValue(newValue.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, forKey: "evolutions")
+    }
+  }
+
+  /// The preevolutions for a Pokémon, if any
+  public var preevolutions: [Preevolution]? {
+    get {
+      return (resultMap["preevolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Preevolution] in value.map { (value: ResultMap) -> Preevolution in Preevolution(unsafeResultMap: value) } }
+    }
+    set {
+      resultMap.updateValue(newValue.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }, forKey: "preevolutions")
+    }
+  }
+
+  public var fragments: Fragments {
+    get {
+      return Fragments(unsafeResultMap: resultMap)
+    }
+    set {
+      resultMap += newValue.resultMap
+    }
+  }
+
+  public struct Fragments {
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public var fullDataFragment: FullDataFragment {
+      get {
+        return FullDataFragment(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+      get {
+        return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+  }
+
+  public struct EvYield: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["EvYields"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+      self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The HP EV yield of a pokémon
+    public var hp: Int {
+      get {
+        return resultMap["hp"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "hp")
+      }
+    }
+
+    /// The attack EV yield of a Pokémon
+    public var attack: Int {
+      get {
+        return resultMap["attack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "attack")
+      }
+    }
+
+    /// The defense EV yield of a Pokémon
+    public var defense: Int {
+      get {
+        return resultMap["defense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "defense")
+      }
+    }
+
+    /// The special attack EV yield of a Pokémon
+    public var specialattack: Int {
+      get {
+        return resultMap["specialattack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialattack")
+      }
+    }
+
+    /// The special defense EV yield of a Pokémon
+    public var specialdefense: Int {
+      get {
+        return resultMap["specialdefense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialdefense")
+      }
+    }
+
+    /// The speed EV yield of a Pokémon
+    public var speed: Int {
+      get {
+        return resultMap["speed"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "speed")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var evYieldsFragment: EvYieldsFragment {
+        get {
+          return EvYieldsFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct Gender: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Gender"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("female", type: .nonNull(.scalar(String.self))),
+        GraphQLField("male", type: .nonNull(.scalar(String.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(female: String, male: String) {
+      self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The percentage for female occurrences
+    public var female: String {
+      get {
+        return resultMap["female"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "female")
+      }
+    }
+
+    /// The percentage of male occurrences
+    public var male: String {
+      get {
+        return resultMap["male"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "male")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var genderFragment: GenderFragment {
+        get {
+          return GenderFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct `Type`: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["PokemonType"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
+        GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(name: String, matchup: Matchup) {
+      self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The name of the typ
+    public var name: String {
+      get {
+        return resultMap["name"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+
+    /// The type matchup for this type
+    public var matchup: Matchup {
+      get {
+        return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var pokemonTypeFragment: PokemonTypeFragment {
+        get {
+          return PokemonTypeFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
+    public struct Matchup: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["TypeMatchup"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+          GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(attacking: Attacking, defending: Defending) {
+        self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The type matchups when attacking
+      public var attacking: Attacking {
+        get {
+          return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+        }
+      }
+
+      /// The type matchups when defending
+      public var defending: Defending {
+        get {
+          return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "defending")
+        }
+      }
+
+      public struct Attacking: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+          self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The types with 4x effectiveness
+        public var doubleEffectiveTypes: [String] {
+          get {
+            return resultMap["doubleEffectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+          }
+        }
+
+        /// The types with 0.25x effectiveness
+        public var doubleResistedTypes: [String] {
+          get {
+            return resultMap["doubleResistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+          }
+        }
+
+        /// The types with 2x effectiveness
+        public var effectiveTypes: [String] {
+          get {
+            return resultMap["effectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectiveTypes")
+          }
+        }
+
+        /// The types with 0x effectiveness
+        public var effectlessTypes: [String] {
+          get {
+            return resultMap["effectlessTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectlessTypes")
+          }
+        }
+
+        /// The types with 1x effectiveness
+        public var normalTypes: [String] {
+          get {
+            return resultMap["normalTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "normalTypes")
+          }
+        }
+
+        /// The types with 0.5x effectiveness
+        public var resistedTypes: [String] {
+          get {
+            return resultMap["resistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+      }
+
+      public struct Defending: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+          self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The types with 4x effectiveness
+        public var doubleEffectiveTypes: [String] {
+          get {
+            return resultMap["doubleEffectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+          }
+        }
+
+        /// The types with 0.25x effectiveness
+        public var doubleResistedTypes: [String] {
+          get {
+            return resultMap["doubleResistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+          }
+        }
+
+        /// The types with 2x effectiveness
+        public var effectiveTypes: [String] {
+          get {
+            return resultMap["effectiveTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectiveTypes")
+          }
+        }
+
+        /// The types with 0x effectiveness
+        public var effectlessTypes: [String] {
+          get {
+            return resultMap["effectlessTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "effectlessTypes")
+          }
+        }
+
+        /// The types with 1x effectiveness
+        public var normalTypes: [String] {
+          get {
+            return resultMap["normalTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "normalTypes")
+          }
+        }
+
+        /// The types with 0.5x effectiveness
+        public var resistedTypes: [String] {
+          get {
+            return resultMap["resistedTypes"]! as! [String]
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "resistedTypes")
+          }
+        }
+      }
+    }
+  }
+
+  public struct BaseStat: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Stats"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+      self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The base HP stat of a pokémon
+    public var hp: Int {
+      get {
+        return resultMap["hp"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "hp")
+      }
+    }
+
+    /// The base attack stat of a Pokémon
+    public var attack: Int {
+      get {
+        return resultMap["attack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "attack")
+      }
+    }
+
+    /// The base defense stat of a Pokémon
+    public var defense: Int {
+      get {
+        return resultMap["defense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "defense")
+      }
+    }
+
+    /// The base special attack stat of a Pokémon
+    public var specialattack: Int {
+      get {
+        return resultMap["specialattack"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialattack")
+      }
+    }
+
+    /// The base special defense stat of a Pokémon
+    public var specialdefense: Int {
+      get {
+        return resultMap["specialdefense"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "specialdefense")
+      }
+    }
+
+    /// The base speed stat of a Pokémon
+    public var speed: Int {
+      get {
+        return resultMap["speed"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "speed")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var statsFragment: StatsFragment {
+        get {
+          return StatsFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct Evolution: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Pokemon"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+        GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+        GraphQLField("evolutionLevel", type: .scalar(String.self)),
+        GraphQLField("forme", type: .scalar(String.self)),
+        GraphQLField("formeLetter", type: .scalar(String.self)),
+        GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+        GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("species", type: .nonNull(.scalar(String.self))),
+        GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+        GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+        GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("color", type: .nonNull(.scalar(String.self))),
+        GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("evolutions", type: .list(.nonNull(.object(Evolution.selections)))),
+        GraphQLField("preevolutions", type: .list(.nonNull(.object(Preevolution.selections)))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The key of the Pokémon as stored in the API
+    public var key: PokemonEnum {
+      get {
+        return resultMap["key"]! as! PokemonEnum
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "key")
+      }
+    }
+
+    /// EV yields for a Pokémon
+    public var evYields: EvYield {
+      get {
+        return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+      }
+    }
+
+    /// The evolution level, or special method, for a Pokémon
+    public var evolutionLevel: String? {
+      get {
+        return resultMap["evolutionLevel"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "evolutionLevel")
+      }
+    }
+
+    /// The form identifier of a Pokémon
+    public var forme: String? {
+      get {
+        return resultMap["forme"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "forme")
+      }
+    }
+
+    /// The single letter identifier of the form
+    public var formeLetter: String? {
+      get {
+        return resultMap["formeLetter"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "formeLetter")
+      }
+    }
+
+    /// The gender data for a Pokémon
+    public var gender: Gender {
+      get {
+        return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "gender")
+      }
+    }
+
+    /// The height of a Pokémon in meters
+    public var height: Double {
+      get {
+        return resultMap["height"]! as! Double
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "height")
+      }
+    }
+
+    /// Whether the egg of a Pokémon is obtainable
+    public var isEggObtainable: Bool {
+      get {
+        return resultMap["isEggObtainable"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "isEggObtainable")
+      }
+    }
+
+    /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var backSprite: String {
+      get {
+        return resultMap["backSprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "backSprite")
+      }
+    }
+
+    /// The dex number for a Pokémon
+    public var num: Int {
+      get {
+        return resultMap["num"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "num")
+      }
+    }
+
+    /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var shinyBackSprite: String {
+      get {
+        return resultMap["shinyBackSprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+      }
+    }
+
+    /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var shinySprite: String {
+      get {
+        return resultMap["shinySprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "shinySprite")
+      }
+    }
+
+    /// The species name for a Pokémon
+    public var species: String {
+      get {
+        return resultMap["species"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "species")
+      }
+    }
+
+    /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var sprite: String {
+      get {
+        return resultMap["sprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "sprite")
+      }
+    }
+
+    /// The types for a Pokémon
+    public var types: [`Type`] {
+      get {
+        return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+      }
+      set {
+        resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+      }
+    }
+
+    /// Base stats for a Pokémon
+    public var baseStats: BaseStat {
+      get {
+        return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+      }
+    }
+
+    /// The total of all base stats for a Pokémon
+    public var baseStatsTotal: Int {
+      get {
+        return resultMap["baseStatsTotal"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+      }
+    }
+
+    /// The colour of a Pokémon as listed in the Pokedex
+    public var color: String {
+      get {
+        return resultMap["color"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "color")
+      }
+    }
+
+    /// The weight of a Pokémon in kilograms
+    public var weight: Double {
+      get {
+        return resultMap["weight"]! as! Double
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "weight")
+      }
+    }
+
+    /// The evolutions for a Pokémon, if any
+    public var evolutions: [Evolution]? {
+      get {
+        return (resultMap["evolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Evolution] in value.map { (value: ResultMap) -> Evolution in Evolution(unsafeResultMap: value) } }
+      }
+      set {
+        resultMap.updateValue(newValue.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, forKey: "evolutions")
+      }
+    }
+
+    /// The preevolutions for a Pokémon, if any
+    public var preevolutions: [Preevolution]? {
+      get {
+        return (resultMap["preevolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Preevolution] in value.map { (value: ResultMap) -> Preevolution in Preevolution(unsafeResultMap: value) } }
+      }
+      set {
+        resultMap.updateValue(newValue.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }, forKey: "preevolutions")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var fullDataFragment: FullDataFragment {
+        get {
+          return FullDataFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+        get {
+          return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
+    public struct EvYield: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["EvYields"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+        self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The HP EV yield of a pokémon
+      public var hp: Int {
+        get {
+          return resultMap["hp"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "hp")
+        }
+      }
+
+      /// The attack EV yield of a Pokémon
+      public var attack: Int {
+        get {
+          return resultMap["attack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "attack")
+        }
+      }
+
+      /// The defense EV yield of a Pokémon
+      public var defense: Int {
+        get {
+          return resultMap["defense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "defense")
+        }
+      }
+
+      /// The special attack EV yield of a Pokémon
+      public var specialattack: Int {
+        get {
+          return resultMap["specialattack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialattack")
+        }
+      }
+
+      /// The special defense EV yield of a Pokémon
+      public var specialdefense: Int {
+        get {
+          return resultMap["specialdefense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialdefense")
+        }
+      }
+
+      /// The speed EV yield of a Pokémon
+      public var speed: Int {
+        get {
+          return resultMap["speed"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "speed")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var evYieldsFragment: EvYieldsFragment {
+          get {
+            return EvYieldsFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+
+    public struct Gender: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Gender"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("female", type: .nonNull(.scalar(String.self))),
+          GraphQLField("male", type: .nonNull(.scalar(String.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(female: String, male: String) {
+        self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The percentage for female occurrences
+      public var female: String {
+        get {
+          return resultMap["female"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "female")
+        }
+      }
+
+      /// The percentage of male occurrences
+      public var male: String {
+        get {
+          return resultMap["male"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "male")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var genderFragment: GenderFragment {
+          get {
+            return GenderFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+
+    public struct `Type`: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["PokemonType"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+          GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(name: String, matchup: Matchup) {
+        self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The name of the typ
+      public var name: String {
+        get {
+          return resultMap["name"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "name")
+        }
+      }
+
+      /// The type matchup for this type
+      public var matchup: Matchup {
+        get {
+          return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var pokemonTypeFragment: PokemonTypeFragment {
+          get {
+            return PokemonTypeFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct Matchup: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeMatchup"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+            GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(attacking: Attacking, defending: Defending) {
+          self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The type matchups when attacking
+        public var attacking: Attacking {
+          get {
+            return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+          }
+        }
+
+        /// The type matchups when defending
+        public var defending: Defending {
+          get {
+            return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "defending")
+          }
+        }
+
+        public struct Attacking: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+            self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The types with 4x effectiveness
+          public var doubleEffectiveTypes: [String] {
+            get {
+              return resultMap["doubleEffectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+            }
+          }
+
+          /// The types with 0.25x effectiveness
+          public var doubleResistedTypes: [String] {
+            get {
+              return resultMap["doubleResistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+            }
+          }
+
+          /// The types with 2x effectiveness
+          public var effectiveTypes: [String] {
+            get {
+              return resultMap["effectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectiveTypes")
+            }
+          }
+
+          /// The types with 0x effectiveness
+          public var effectlessTypes: [String] {
+            get {
+              return resultMap["effectlessTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectlessTypes")
+            }
+          }
+
+          /// The types with 1x effectiveness
+          public var normalTypes: [String] {
+            get {
+              return resultMap["normalTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "normalTypes")
+            }
+          }
+
+          /// The types with 0.5x effectiveness
+          public var resistedTypes: [String] {
+            get {
+              return resultMap["resistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+        }
+
+        public struct Defending: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+            self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The types with 4x effectiveness
+          public var doubleEffectiveTypes: [String] {
+            get {
+              return resultMap["doubleEffectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+            }
+          }
+
+          /// The types with 0.25x effectiveness
+          public var doubleResistedTypes: [String] {
+            get {
+              return resultMap["doubleResistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+            }
+          }
+
+          /// The types with 2x effectiveness
+          public var effectiveTypes: [String] {
+            get {
+              return resultMap["effectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectiveTypes")
+            }
+          }
+
+          /// The types with 0x effectiveness
+          public var effectlessTypes: [String] {
+            get {
+              return resultMap["effectlessTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectlessTypes")
+            }
+          }
+
+          /// The types with 1x effectiveness
+          public var normalTypes: [String] {
+            get {
+              return resultMap["normalTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "normalTypes")
+            }
+          }
+
+          /// The types with 0.5x effectiveness
+          public var resistedTypes: [String] {
+            get {
+              return resultMap["resistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+        }
+      }
+    }
+
+    public struct BaseStat: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Stats"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+        self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The base HP stat of a pokémon
+      public var hp: Int {
+        get {
+          return resultMap["hp"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "hp")
+        }
+      }
+
+      /// The base attack stat of a Pokémon
+      public var attack: Int {
+        get {
+          return resultMap["attack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "attack")
+        }
+      }
+
+      /// The base defense stat of a Pokémon
+      public var defense: Int {
+        get {
+          return resultMap["defense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "defense")
+        }
+      }
+
+      /// The base special attack stat of a Pokémon
+      public var specialattack: Int {
+        get {
+          return resultMap["specialattack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialattack")
+        }
+      }
+
+      /// The base special defense stat of a Pokémon
+      public var specialdefense: Int {
+        get {
+          return resultMap["specialdefense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialdefense")
+        }
+      }
+
+      /// The base speed stat of a Pokémon
+      public var speed: Int {
+        get {
+          return resultMap["speed"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "speed")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var statsFragment: StatsFragment {
+          get {
+            return StatsFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+
+    public struct Evolution: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Pokemon"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+          GraphQLField("evolutionLevel", type: .scalar(String.self)),
+          GraphQLField("forme", type: .scalar(String.self)),
+          GraphQLField("formeLetter", type: .scalar(String.self)),
+          GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+          GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("species", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+          GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+          GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
+          GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The key of the Pokémon as stored in the API
+      public var key: PokemonEnum {
+        get {
+          return resultMap["key"]! as! PokemonEnum
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// EV yields for a Pokémon
+      public var evYields: EvYield {
+        get {
+          return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+        }
+      }
+
+      /// The evolution level, or special method, for a Pokémon
+      public var evolutionLevel: String? {
+        get {
+          return resultMap["evolutionLevel"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "evolutionLevel")
+        }
+      }
+
+      /// The form identifier of a Pokémon
+      public var forme: String? {
+        get {
+          return resultMap["forme"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "forme")
+        }
+      }
+
+      /// The single letter identifier of the form
+      public var formeLetter: String? {
+        get {
+          return resultMap["formeLetter"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "formeLetter")
+        }
+      }
+
+      /// The gender data for a Pokémon
+      public var gender: Gender {
+        get {
+          return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "gender")
+        }
+      }
+
+      /// The height of a Pokémon in meters
+      public var height: Double {
+        get {
+          return resultMap["height"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "height")
+        }
+      }
+
+      /// Whether the egg of a Pokémon is obtainable
+      public var isEggObtainable: Bool {
+        get {
+          return resultMap["isEggObtainable"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "isEggObtainable")
+        }
+      }
+
+      /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var backSprite: String {
+        get {
+          return resultMap["backSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "backSprite")
+        }
+      }
+
+      /// The dex number for a Pokémon
+      public var num: Int {
+        get {
+          return resultMap["num"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "num")
+        }
+      }
+
+      /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinyBackSprite: String {
+        get {
+          return resultMap["shinyBackSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+        }
+      }
+
+      /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinySprite: String {
+        get {
+          return resultMap["shinySprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinySprite")
+        }
+      }
+
+      /// The species name for a Pokémon
+      public var species: String {
+        get {
+          return resultMap["species"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "species")
+        }
+      }
+
+      /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var sprite: String {
+        get {
+          return resultMap["sprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sprite")
+        }
+      }
+
+      /// The types for a Pokémon
+      public var types: [`Type`] {
+        get {
+          return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+        }
+      }
+
+      /// Base stats for a Pokémon
+      public var baseStats: BaseStat {
+        get {
+          return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+        }
+      }
+
+      /// The total of all base stats for a Pokémon
+      public var baseStatsTotal: Int {
+        get {
+          return resultMap["baseStatsTotal"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+        }
+      }
+
+      /// The colour of a Pokémon as listed in the Pokedex
+      public var color: String {
+        get {
+          return resultMap["color"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "color")
+        }
+      }
+
+      /// The weight of a Pokémon in kilograms
+      public var weight: Double {
+        get {
+          return resultMap["weight"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "weight")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var fullDataFragment: FullDataFragment {
+          get {
+            return FullDataFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+          get {
+            return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct EvYield: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["EvYields"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The HP EV yield of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The attack EV yield of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The defense EV yield of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The special attack EV yield of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The special defense EV yield of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The speed EV yield of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var evYieldsFragment: EvYieldsFragment {
+            get {
+              return EvYieldsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct Gender: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Gender"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("female", type: .nonNull(.scalar(String.self))),
+            GraphQLField("male", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(female: String, male: String) {
+          self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The percentage for female occurrences
+        public var female: String {
+          get {
+            return resultMap["female"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "female")
+          }
+        }
+
+        /// The percentage of male occurrences
+        public var male: String {
+          get {
+            return resultMap["male"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "male")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var genderFragment: GenderFragment {
+            get {
+              return GenderFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct `Type`: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["PokemonType"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("name", type: .nonNull(.scalar(String.self))),
+            GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String, matchup: Matchup) {
+          self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The name of the typ
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type matchup for this type
+        public var matchup: Matchup {
+          get {
+            return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var pokemonTypeFragment: PokemonTypeFragment {
+            get {
+              return PokemonTypeFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Matchup: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeMatchup"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+              GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(attacking: Attacking, defending: Defending) {
+            self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The type matchups when attacking
+          public var attacking: Attacking {
+            get {
+              return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+            }
+          }
+
+          /// The type matchups when defending
+          public var defending: Defending {
+            get {
+              return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "defending")
+            }
+          }
+
+          public struct Attacking: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+
+          public struct Defending: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+        }
+      }
+
+      public struct BaseStat: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Stats"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The base HP stat of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The base attack stat of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The base defense stat of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The base special attack stat of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The base special defense stat of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The base speed stat of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var statsFragment: StatsFragment {
+            get {
+              return StatsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+    }
+
+    public struct Preevolution: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Pokemon"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+          GraphQLField("evolutionLevel", type: .scalar(String.self)),
+          GraphQLField("forme", type: .scalar(String.self)),
+          GraphQLField("formeLetter", type: .scalar(String.self)),
+          GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+          GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("species", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+          GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+          GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
+          GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The key of the Pokémon as stored in the API
+      public var key: PokemonEnum {
+        get {
+          return resultMap["key"]! as! PokemonEnum
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// EV yields for a Pokémon
+      public var evYields: EvYield {
+        get {
+          return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+        }
+      }
+
+      /// The evolution level, or special method, for a Pokémon
+      public var evolutionLevel: String? {
+        get {
+          return resultMap["evolutionLevel"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "evolutionLevel")
+        }
+      }
+
+      /// The form identifier of a Pokémon
+      public var forme: String? {
+        get {
+          return resultMap["forme"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "forme")
+        }
+      }
+
+      /// The single letter identifier of the form
+      public var formeLetter: String? {
+        get {
+          return resultMap["formeLetter"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "formeLetter")
+        }
+      }
+
+      /// The gender data for a Pokémon
+      public var gender: Gender {
+        get {
+          return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "gender")
+        }
+      }
+
+      /// The height of a Pokémon in meters
+      public var height: Double {
+        get {
+          return resultMap["height"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "height")
+        }
+      }
+
+      /// Whether the egg of a Pokémon is obtainable
+      public var isEggObtainable: Bool {
+        get {
+          return resultMap["isEggObtainable"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "isEggObtainable")
+        }
+      }
+
+      /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var backSprite: String {
+        get {
+          return resultMap["backSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "backSprite")
+        }
+      }
+
+      /// The dex number for a Pokémon
+      public var num: Int {
+        get {
+          return resultMap["num"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "num")
+        }
+      }
+
+      /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinyBackSprite: String {
+        get {
+          return resultMap["shinyBackSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+        }
+      }
+
+      /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinySprite: String {
+        get {
+          return resultMap["shinySprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinySprite")
+        }
+      }
+
+      /// The species name for a Pokémon
+      public var species: String {
+        get {
+          return resultMap["species"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "species")
+        }
+      }
+
+      /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var sprite: String {
+        get {
+          return resultMap["sprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sprite")
+        }
+      }
+
+      /// The types for a Pokémon
+      public var types: [`Type`] {
+        get {
+          return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+        }
+      }
+
+      /// Base stats for a Pokémon
+      public var baseStats: BaseStat {
+        get {
+          return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+        }
+      }
+
+      /// The total of all base stats for a Pokémon
+      public var baseStatsTotal: Int {
+        get {
+          return resultMap["baseStatsTotal"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+        }
+      }
+
+      /// The colour of a Pokémon as listed in the Pokedex
+      public var color: String {
+        get {
+          return resultMap["color"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "color")
+        }
+      }
+
+      /// The weight of a Pokémon in kilograms
+      public var weight: Double {
+        get {
+          return resultMap["weight"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "weight")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var fullDataFragment: FullDataFragment {
+          get {
+            return FullDataFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+          get {
+            return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct EvYield: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["EvYields"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The HP EV yield of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The attack EV yield of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The defense EV yield of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The special attack EV yield of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The special defense EV yield of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The speed EV yield of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var evYieldsFragment: EvYieldsFragment {
+            get {
+              return EvYieldsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct Gender: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Gender"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("female", type: .nonNull(.scalar(String.self))),
+            GraphQLField("male", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(female: String, male: String) {
+          self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The percentage for female occurrences
+        public var female: String {
+          get {
+            return resultMap["female"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "female")
+          }
+        }
+
+        /// The percentage of male occurrences
+        public var male: String {
+          get {
+            return resultMap["male"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "male")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var genderFragment: GenderFragment {
+            get {
+              return GenderFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct `Type`: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["PokemonType"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("name", type: .nonNull(.scalar(String.self))),
+            GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String, matchup: Matchup) {
+          self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The name of the typ
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type matchup for this type
+        public var matchup: Matchup {
+          get {
+            return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var pokemonTypeFragment: PokemonTypeFragment {
+            get {
+              return PokemonTypeFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Matchup: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeMatchup"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+              GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(attacking: Attacking, defending: Defending) {
+            self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The type matchups when attacking
+          public var attacking: Attacking {
+            get {
+              return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+            }
+          }
+
+          /// The type matchups when defending
+          public var defending: Defending {
+            get {
+              return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "defending")
+            }
+          }
+
+          public struct Attacking: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+
+          public struct Defending: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+        }
+      }
+
+      public struct BaseStat: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Stats"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The base HP stat of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The base attack stat of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The base defense stat of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The base special attack stat of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The base special defense stat of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The base speed stat of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var statsFragment: StatsFragment {
+            get {
+              return StatsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public struct Preevolution: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Pokemon"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+        GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+        GraphQLField("evolutionLevel", type: .scalar(String.self)),
+        GraphQLField("forme", type: .scalar(String.self)),
+        GraphQLField("formeLetter", type: .scalar(String.self)),
+        GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+        GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("species", type: .nonNull(.scalar(String.self))),
+        GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+        GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+        GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+        GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("color", type: .nonNull(.scalar(String.self))),
+        GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+        GraphQLField("evolutions", type: .list(.nonNull(.object(Evolution.selections)))),
+        GraphQLField("preevolutions", type: .list(.nonNull(.object(Preevolution.selections)))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double, evolutions: [Evolution]? = nil, preevolutions: [Preevolution]? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight, "evolutions": evolutions.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, "preevolutions": preevolutions.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    /// The key of the Pokémon as stored in the API
+    public var key: PokemonEnum {
+      get {
+        return resultMap["key"]! as! PokemonEnum
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "key")
+      }
+    }
+
+    /// EV yields for a Pokémon
+    public var evYields: EvYield {
+      get {
+        return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+      }
+    }
+
+    /// The evolution level, or special method, for a Pokémon
+    public var evolutionLevel: String? {
+      get {
+        return resultMap["evolutionLevel"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "evolutionLevel")
+      }
+    }
+
+    /// The form identifier of a Pokémon
+    public var forme: String? {
+      get {
+        return resultMap["forme"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "forme")
+      }
+    }
+
+    /// The single letter identifier of the form
+    public var formeLetter: String? {
+      get {
+        return resultMap["formeLetter"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "formeLetter")
+      }
+    }
+
+    /// The gender data for a Pokémon
+    public var gender: Gender {
+      get {
+        return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "gender")
+      }
+    }
+
+    /// The height of a Pokémon in meters
+    public var height: Double {
+      get {
+        return resultMap["height"]! as! Double
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "height")
+      }
+    }
+
+    /// Whether the egg of a Pokémon is obtainable
+    public var isEggObtainable: Bool {
+      get {
+        return resultMap["isEggObtainable"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "isEggObtainable")
+      }
+    }
+
+    /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var backSprite: String {
+      get {
+        return resultMap["backSprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "backSprite")
+      }
+    }
+
+    /// The dex number for a Pokémon
+    public var num: Int {
+      get {
+        return resultMap["num"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "num")
+      }
+    }
+
+    /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var shinyBackSprite: String {
+      get {
+        return resultMap["shinyBackSprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+      }
+    }
+
+    /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var shinySprite: String {
+      get {
+        return resultMap["shinySprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "shinySprite")
+      }
+    }
+
+    /// The species name for a Pokémon
+    public var species: String {
+      get {
+        return resultMap["species"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "species")
+      }
+    }
+
+    /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+    public var sprite: String {
+      get {
+        return resultMap["sprite"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "sprite")
+      }
+    }
+
+    /// The types for a Pokémon
+    public var types: [`Type`] {
+      get {
+        return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+      }
+      set {
+        resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+      }
+    }
+
+    /// Base stats for a Pokémon
+    public var baseStats: BaseStat {
+      get {
+        return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+      }
+      set {
+        resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+      }
+    }
+
+    /// The total of all base stats for a Pokémon
+    public var baseStatsTotal: Int {
+      get {
+        return resultMap["baseStatsTotal"]! as! Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+      }
+    }
+
+    /// The colour of a Pokémon as listed in the Pokedex
+    public var color: String {
+      get {
+        return resultMap["color"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "color")
+      }
+    }
+
+    /// The weight of a Pokémon in kilograms
+    public var weight: Double {
+      get {
+        return resultMap["weight"]! as! Double
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "weight")
+      }
+    }
+
+    /// The evolutions for a Pokémon, if any
+    public var evolutions: [Evolution]? {
+      get {
+        return (resultMap["evolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Evolution] in value.map { (value: ResultMap) -> Evolution in Evolution(unsafeResultMap: value) } }
+      }
+      set {
+        resultMap.updateValue(newValue.flatMap { (value: [Evolution]) -> [ResultMap] in value.map { (value: Evolution) -> ResultMap in value.resultMap } }, forKey: "evolutions")
+      }
+    }
+
+    /// The preevolutions for a Pokémon, if any
+    public var preevolutions: [Preevolution]? {
+      get {
+        return (resultMap["preevolutions"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Preevolution] in value.map { (value: ResultMap) -> Preevolution in Preevolution(unsafeResultMap: value) } }
+      }
+      set {
+        resultMap.updateValue(newValue.flatMap { (value: [Preevolution]) -> [ResultMap] in value.map { (value: Preevolution) -> ResultMap in value.resultMap } }, forKey: "preevolutions")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var fullDataFragment: FullDataFragment {
+        get {
+          return FullDataFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+        get {
+          return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+
+    public struct EvYield: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["EvYields"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+        self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The HP EV yield of a pokémon
+      public var hp: Int {
+        get {
+          return resultMap["hp"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "hp")
+        }
+      }
+
+      /// The attack EV yield of a Pokémon
+      public var attack: Int {
+        get {
+          return resultMap["attack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "attack")
+        }
+      }
+
+      /// The defense EV yield of a Pokémon
+      public var defense: Int {
+        get {
+          return resultMap["defense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "defense")
+        }
+      }
+
+      /// The special attack EV yield of a Pokémon
+      public var specialattack: Int {
+        get {
+          return resultMap["specialattack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialattack")
+        }
+      }
+
+      /// The special defense EV yield of a Pokémon
+      public var specialdefense: Int {
+        get {
+          return resultMap["specialdefense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialdefense")
+        }
+      }
+
+      /// The speed EV yield of a Pokémon
+      public var speed: Int {
+        get {
+          return resultMap["speed"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "speed")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var evYieldsFragment: EvYieldsFragment {
+          get {
+            return EvYieldsFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+
+    public struct Gender: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Gender"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("female", type: .nonNull(.scalar(String.self))),
+          GraphQLField("male", type: .nonNull(.scalar(String.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(female: String, male: String) {
+        self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The percentage for female occurrences
+      public var female: String {
+        get {
+          return resultMap["female"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "female")
+        }
+      }
+
+      /// The percentage of male occurrences
+      public var male: String {
+        get {
+          return resultMap["male"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "male")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var genderFragment: GenderFragment {
+          get {
+            return GenderFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+
+    public struct `Type`: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["PokemonType"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+          GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(name: String, matchup: Matchup) {
+        self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The name of the typ
+      public var name: String {
+        get {
+          return resultMap["name"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "name")
+        }
+      }
+
+      /// The type matchup for this type
+      public var matchup: Matchup {
+        get {
+          return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var pokemonTypeFragment: PokemonTypeFragment {
+          get {
+            return PokemonTypeFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct Matchup: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["TypeMatchup"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+            GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(attacking: Attacking, defending: Defending) {
+          self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The type matchups when attacking
+        public var attacking: Attacking {
+          get {
+            return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+          }
+        }
+
+        /// The type matchups when defending
+        public var defending: Defending {
+          get {
+            return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "defending")
+          }
+        }
+
+        public struct Attacking: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+            self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The types with 4x effectiveness
+          public var doubleEffectiveTypes: [String] {
+            get {
+              return resultMap["doubleEffectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+            }
+          }
+
+          /// The types with 0.25x effectiveness
+          public var doubleResistedTypes: [String] {
+            get {
+              return resultMap["doubleResistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+            }
+          }
+
+          /// The types with 2x effectiveness
+          public var effectiveTypes: [String] {
+            get {
+              return resultMap["effectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectiveTypes")
+            }
+          }
+
+          /// The types with 0x effectiveness
+          public var effectlessTypes: [String] {
+            get {
+              return resultMap["effectlessTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectlessTypes")
+            }
+          }
+
+          /// The types with 1x effectiveness
+          public var normalTypes: [String] {
+            get {
+              return resultMap["normalTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "normalTypes")
+            }
+          }
+
+          /// The types with 0.5x effectiveness
+          public var resistedTypes: [String] {
+            get {
+              return resultMap["resistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+        }
+
+        public struct Defending: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+            self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The types with 4x effectiveness
+          public var doubleEffectiveTypes: [String] {
+            get {
+              return resultMap["doubleEffectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+            }
+          }
+
+          /// The types with 0.25x effectiveness
+          public var doubleResistedTypes: [String] {
+            get {
+              return resultMap["doubleResistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+            }
+          }
+
+          /// The types with 2x effectiveness
+          public var effectiveTypes: [String] {
+            get {
+              return resultMap["effectiveTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectiveTypes")
+            }
+          }
+
+          /// The types with 0x effectiveness
+          public var effectlessTypes: [String] {
+            get {
+              return resultMap["effectlessTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "effectlessTypes")
+            }
+          }
+
+          /// The types with 1x effectiveness
+          public var normalTypes: [String] {
+            get {
+              return resultMap["normalTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "normalTypes")
+            }
+          }
+
+          /// The types with 0.5x effectiveness
+          public var resistedTypes: [String] {
+            get {
+              return resultMap["resistedTypes"]! as! [String]
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "resistedTypes")
+            }
+          }
+        }
+      }
+    }
+
+    public struct BaseStat: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Stats"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+        self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The base HP stat of a pokémon
+      public var hp: Int {
+        get {
+          return resultMap["hp"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "hp")
+        }
+      }
+
+      /// The base attack stat of a Pokémon
+      public var attack: Int {
+        get {
+          return resultMap["attack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "attack")
+        }
+      }
+
+      /// The base defense stat of a Pokémon
+      public var defense: Int {
+        get {
+          return resultMap["defense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "defense")
+        }
+      }
+
+      /// The base special attack stat of a Pokémon
+      public var specialattack: Int {
+        get {
+          return resultMap["specialattack"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialattack")
+        }
+      }
+
+      /// The base special defense stat of a Pokémon
+      public var specialdefense: Int {
+        get {
+          return resultMap["specialdefense"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "specialdefense")
+        }
+      }
+
+      /// The base speed stat of a Pokémon
+      public var speed: Int {
+        get {
+          return resultMap["speed"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "speed")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var statsFragment: StatsFragment {
+          get {
+            return StatsFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+
+    public struct Evolution: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Pokemon"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+          GraphQLField("evolutionLevel", type: .scalar(String.self)),
+          GraphQLField("forme", type: .scalar(String.self)),
+          GraphQLField("formeLetter", type: .scalar(String.self)),
+          GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+          GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("species", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+          GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+          GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
+          GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The key of the Pokémon as stored in the API
+      public var key: PokemonEnum {
+        get {
+          return resultMap["key"]! as! PokemonEnum
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// EV yields for a Pokémon
+      public var evYields: EvYield {
+        get {
+          return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+        }
+      }
+
+      /// The evolution level, or special method, for a Pokémon
+      public var evolutionLevel: String? {
+        get {
+          return resultMap["evolutionLevel"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "evolutionLevel")
+        }
+      }
+
+      /// The form identifier of a Pokémon
+      public var forme: String? {
+        get {
+          return resultMap["forme"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "forme")
+        }
+      }
+
+      /// The single letter identifier of the form
+      public var formeLetter: String? {
+        get {
+          return resultMap["formeLetter"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "formeLetter")
+        }
+      }
+
+      /// The gender data for a Pokémon
+      public var gender: Gender {
+        get {
+          return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "gender")
+        }
+      }
+
+      /// The height of a Pokémon in meters
+      public var height: Double {
+        get {
+          return resultMap["height"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "height")
+        }
+      }
+
+      /// Whether the egg of a Pokémon is obtainable
+      public var isEggObtainable: Bool {
+        get {
+          return resultMap["isEggObtainable"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "isEggObtainable")
+        }
+      }
+
+      /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var backSprite: String {
+        get {
+          return resultMap["backSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "backSprite")
+        }
+      }
+
+      /// The dex number for a Pokémon
+      public var num: Int {
+        get {
+          return resultMap["num"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "num")
+        }
+      }
+
+      /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinyBackSprite: String {
+        get {
+          return resultMap["shinyBackSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+        }
+      }
+
+      /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinySprite: String {
+        get {
+          return resultMap["shinySprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinySprite")
+        }
+      }
+
+      /// The species name for a Pokémon
+      public var species: String {
+        get {
+          return resultMap["species"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "species")
+        }
+      }
+
+      /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var sprite: String {
+        get {
+          return resultMap["sprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sprite")
+        }
+      }
+
+      /// The types for a Pokémon
+      public var types: [`Type`] {
+        get {
+          return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+        }
+      }
+
+      /// Base stats for a Pokémon
+      public var baseStats: BaseStat {
+        get {
+          return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+        }
+      }
+
+      /// The total of all base stats for a Pokémon
+      public var baseStatsTotal: Int {
+        get {
+          return resultMap["baseStatsTotal"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+        }
+      }
+
+      /// The colour of a Pokémon as listed in the Pokedex
+      public var color: String {
+        get {
+          return resultMap["color"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "color")
+        }
+      }
+
+      /// The weight of a Pokémon in kilograms
+      public var weight: Double {
+        get {
+          return resultMap["weight"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "weight")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var fullDataFragment: FullDataFragment {
+          get {
+            return FullDataFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+          get {
+            return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct EvYield: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["EvYields"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The HP EV yield of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The attack EV yield of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The defense EV yield of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The special attack EV yield of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The special defense EV yield of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The speed EV yield of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var evYieldsFragment: EvYieldsFragment {
+            get {
+              return EvYieldsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct Gender: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Gender"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("female", type: .nonNull(.scalar(String.self))),
+            GraphQLField("male", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(female: String, male: String) {
+          self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The percentage for female occurrences
+        public var female: String {
+          get {
+            return resultMap["female"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "female")
+          }
+        }
+
+        /// The percentage of male occurrences
+        public var male: String {
+          get {
+            return resultMap["male"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "male")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var genderFragment: GenderFragment {
+            get {
+              return GenderFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct `Type`: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["PokemonType"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("name", type: .nonNull(.scalar(String.self))),
+            GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String, matchup: Matchup) {
+          self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The name of the typ
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type matchup for this type
+        public var matchup: Matchup {
+          get {
+            return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var pokemonTypeFragment: PokemonTypeFragment {
+            get {
+              return PokemonTypeFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Matchup: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeMatchup"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+              GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(attacking: Attacking, defending: Defending) {
+            self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The type matchups when attacking
+          public var attacking: Attacking {
+            get {
+              return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+            }
+          }
+
+          /// The type matchups when defending
+          public var defending: Defending {
+            get {
+              return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "defending")
+            }
+          }
+
+          public struct Attacking: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+
+          public struct Defending: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+        }
+      }
+
+      public struct BaseStat: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Stats"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The base HP stat of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The base attack stat of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The base defense stat of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The base special attack stat of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The base special defense stat of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The base speed stat of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var statsFragment: StatsFragment {
+            get {
+              return StatsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+    }
+
+    public struct Preevolution: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Pokemon"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("key", type: .nonNull(.scalar(PokemonEnum.self))),
+          GraphQLField("evYields", type: .nonNull(.object(EvYield.selections))),
+          GraphQLField("evolutionLevel", type: .scalar(String.self)),
+          GraphQLField("forme", type: .scalar(String.self)),
+          GraphQLField("formeLetter", type: .scalar(String.self)),
+          GraphQLField("gender", type: .nonNull(.object(Gender.selections))),
+          GraphQLField("height", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("isEggObtainable", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("backSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("num", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("shinyBackSprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("shinySprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("species", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
+          GraphQLField("baseStats", type: .nonNull(.object(BaseStat.selections))),
+          GraphQLField("baseStatsTotal", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
+          GraphQLField("weight", type: .nonNull(.scalar(Double.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(key: PokemonEnum, evYields: EvYield, evolutionLevel: String? = nil, forme: String? = nil, formeLetter: String? = nil, gender: Gender, height: Double, isEggObtainable: Bool, backSprite: String, num: Int, shinyBackSprite: String, shinySprite: String, species: String, sprite: String, types: [`Type`], baseStats: BaseStat, baseStatsTotal: Int, color: String, weight: Double) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "evYields": evYields.resultMap, "evolutionLevel": evolutionLevel, "forme": forme, "formeLetter": formeLetter, "gender": gender.resultMap, "height": height, "isEggObtainable": isEggObtainable, "backSprite": backSprite, "num": num, "shinyBackSprite": shinyBackSprite, "shinySprite": shinySprite, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }, "baseStats": baseStats.resultMap, "baseStatsTotal": baseStatsTotal, "color": color, "weight": weight])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The key of the Pokémon as stored in the API
+      public var key: PokemonEnum {
+        get {
+          return resultMap["key"]! as! PokemonEnum
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "key")
+        }
+      }
+
+      /// EV yields for a Pokémon
+      public var evYields: EvYield {
+        get {
+          return EvYield(unsafeResultMap: resultMap["evYields"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "evYields")
+        }
+      }
+
+      /// The evolution level, or special method, for a Pokémon
+      public var evolutionLevel: String? {
+        get {
+          return resultMap["evolutionLevel"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "evolutionLevel")
+        }
+      }
+
+      /// The form identifier of a Pokémon
+      public var forme: String? {
+        get {
+          return resultMap["forme"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "forme")
+        }
+      }
+
+      /// The single letter identifier of the form
+      public var formeLetter: String? {
+        get {
+          return resultMap["formeLetter"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "formeLetter")
+        }
+      }
+
+      /// The gender data for a Pokémon
+      public var gender: Gender {
+        get {
+          return Gender(unsafeResultMap: resultMap["gender"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "gender")
+        }
+      }
+
+      /// The height of a Pokémon in meters
+      public var height: Double {
+        get {
+          return resultMap["height"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "height")
+        }
+      }
+
+      /// Whether the egg of a Pokémon is obtainable
+      public var isEggObtainable: Bool {
+        get {
+          return resultMap["isEggObtainable"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "isEggObtainable")
+        }
+      }
+
+      /// The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var backSprite: String {
+        get {
+          return resultMap["backSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "backSprite")
+        }
+      }
+
+      /// The dex number for a Pokémon
+      public var num: Int {
+        get {
+          return resultMap["num"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "num")
+        }
+      }
+
+      /// The shiny back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinyBackSprite: String {
+        get {
+          return resultMap["shinyBackSprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinyBackSprite")
+        }
+      }
+
+      /// The shiny sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var shinySprite: String {
+        get {
+          return resultMap["shinySprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "shinySprite")
+        }
+      }
+
+      /// The species name for a Pokémon
+      public var species: String {
+        get {
+          return resultMap["species"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "species")
+        }
+      }
+
+      /// The sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive
+      public var sprite: String {
+        get {
+          return resultMap["sprite"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sprite")
+        }
+      }
+
+      /// The types for a Pokémon
+      public var types: [`Type`] {
+        get {
+          return (resultMap["types"] as! [ResultMap]).map { (value: ResultMap) -> `Type` in `Type`(unsafeResultMap: value) }
+        }
+        set {
+          resultMap.updateValue(newValue.map { (value: `Type`) -> ResultMap in value.resultMap }, forKey: "types")
+        }
+      }
+
+      /// Base stats for a Pokémon
+      public var baseStats: BaseStat {
+        get {
+          return BaseStat(unsafeResultMap: resultMap["baseStats"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "baseStats")
+        }
+      }
+
+      /// The total of all base stats for a Pokémon
+      public var baseStatsTotal: Int {
+        get {
+          return resultMap["baseStatsTotal"]! as! Int
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "baseStatsTotal")
+        }
+      }
+
+      /// The colour of a Pokémon as listed in the Pokedex
+      public var color: String {
+        get {
+          return resultMap["color"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "color")
+        }
+      }
+
+      /// The weight of a Pokémon in kilograms
+      public var weight: Double {
+        get {
+          return resultMap["weight"]! as! Double
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "weight")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var fullDataFragment: FullDataFragment {
+          get {
+            return FullDataFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public var fullDataFragmentWithoutNested: FullDataFragmentWithoutNested {
+          get {
+            return FullDataFragmentWithoutNested(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct EvYield: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["EvYields"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "EvYields", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The HP EV yield of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The attack EV yield of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The defense EV yield of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The special attack EV yield of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The special defense EV yield of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The speed EV yield of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var evYieldsFragment: EvYieldsFragment {
+            get {
+              return EvYieldsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct Gender: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Gender"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("female", type: .nonNull(.scalar(String.self))),
+            GraphQLField("male", type: .nonNull(.scalar(String.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(female: String, male: String) {
+          self.init(unsafeResultMap: ["__typename": "Gender", "female": female, "male": male])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The percentage for female occurrences
+        public var female: String {
+          get {
+            return resultMap["female"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "female")
+          }
+        }
+
+        /// The percentage of male occurrences
+        public var male: String {
+          get {
+            return resultMap["male"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "male")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var genderFragment: GenderFragment {
+            get {
+              return GenderFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+      }
+
+      public struct `Type`: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["PokemonType"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("name", type: .nonNull(.scalar(String.self))),
+            GraphQLField("matchup", type: .nonNull(.object(Matchup.selections))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(name: String, matchup: Matchup) {
+          self.init(unsafeResultMap: ["__typename": "PokemonType", "name": name, "matchup": matchup.resultMap])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The name of the typ
+        public var name: String {
+          get {
+            return resultMap["name"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type matchup for this type
+        public var matchup: Matchup {
+          get {
+            return Matchup(unsafeResultMap: resultMap["matchup"]! as! ResultMap)
+          }
+          set {
+            resultMap.updateValue(newValue.resultMap, forKey: "matchup")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var pokemonTypeFragment: PokemonTypeFragment {
+            get {
+              return PokemonTypeFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Matchup: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["TypeMatchup"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("attacking", type: .nonNull(.object(Attacking.selections))),
+              GraphQLField("defending", type: .nonNull(.object(Defending.selections))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(attacking: Attacking, defending: Defending) {
+            self.init(unsafeResultMap: ["__typename": "TypeMatchup", "attacking": attacking.resultMap, "defending": defending.resultMap])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The type matchups when attacking
+          public var attacking: Attacking {
+            get {
+              return Attacking(unsafeResultMap: resultMap["attacking"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "attacking")
+            }
+          }
+
+          /// The type matchups when defending
+          public var defending: Defending {
+            get {
+              return Defending(unsafeResultMap: resultMap["defending"]! as! ResultMap)
+            }
+            set {
+              resultMap.updateValue(newValue.resultMap, forKey: "defending")
+            }
+          }
+
+          public struct Attacking: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+
+          public struct Defending: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["TypeEffectiveness"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("doubleEffectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("doubleResistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectiveTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("effectlessTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("normalTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+                GraphQLField("resistedTypes", type: .nonNull(.list(.nonNull(.scalar(String.self))))),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(doubleEffectiveTypes: [String], doubleResistedTypes: [String], effectiveTypes: [String], effectlessTypes: [String], normalTypes: [String], resistedTypes: [String]) {
+              self.init(unsafeResultMap: ["__typename": "TypeEffectiveness", "doubleEffectiveTypes": doubleEffectiveTypes, "doubleResistedTypes": doubleResistedTypes, "effectiveTypes": effectiveTypes, "effectlessTypes": effectlessTypes, "normalTypes": normalTypes, "resistedTypes": resistedTypes])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// The types with 4x effectiveness
+            public var doubleEffectiveTypes: [String] {
+              get {
+                return resultMap["doubleEffectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleEffectiveTypes")
+              }
+            }
+
+            /// The types with 0.25x effectiveness
+            public var doubleResistedTypes: [String] {
+              get {
+                return resultMap["doubleResistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "doubleResistedTypes")
+              }
+            }
+
+            /// The types with 2x effectiveness
+            public var effectiveTypes: [String] {
+              get {
+                return resultMap["effectiveTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectiveTypes")
+              }
+            }
+
+            /// The types with 0x effectiveness
+            public var effectlessTypes: [String] {
+              get {
+                return resultMap["effectlessTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "effectlessTypes")
+              }
+            }
+
+            /// The types with 1x effectiveness
+            public var normalTypes: [String] {
+              get {
+                return resultMap["normalTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "normalTypes")
+              }
+            }
+
+            /// The types with 0.5x effectiveness
+            public var resistedTypes: [String] {
+              get {
+                return resultMap["resistedTypes"]! as! [String]
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "resistedTypes")
+              }
+            }
+          }
+        }
+      }
+
+      public struct BaseStat: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Stats"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("hp", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("attack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("defense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialattack", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("specialdefense", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("speed", type: .nonNull(.scalar(Int.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(hp: Int, attack: Int, defense: Int, specialattack: Int, specialdefense: Int, speed: Int) {
+          self.init(unsafeResultMap: ["__typename": "Stats", "hp": hp, "attack": attack, "defense": defense, "specialattack": specialattack, "specialdefense": specialdefense, "speed": speed])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The base HP stat of a pokémon
+        public var hp: Int {
+          get {
+            return resultMap["hp"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "hp")
+          }
+        }
+
+        /// The base attack stat of a Pokémon
+        public var attack: Int {
+          get {
+            return resultMap["attack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "attack")
+          }
+        }
+
+        /// The base defense stat of a Pokémon
+        public var defense: Int {
+          get {
+            return resultMap["defense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "defense")
+          }
+        }
+
+        /// The base special attack stat of a Pokémon
+        public var specialattack: Int {
+          get {
+            return resultMap["specialattack"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialattack")
+          }
+        }
+
+        /// The base special defense stat of a Pokémon
+        public var specialdefense: Int {
+          get {
+            return resultMap["specialdefense"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "specialdefense")
+          }
+        }
+
+        /// The base speed stat of a Pokémon
+        public var speed: Int {
+          get {
+            return resultMap["speed"]! as! Int
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "speed")
+          }
+        }
+
+        public var fragments: Fragments {
+          get {
+            return Fragments(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+
+        public struct Fragments {
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public var statsFragment: StatsFragment {
+            get {
+              return StatsFragment(unsafeResultMap: resultMap)
+            }
+            set {
+              resultMap += newValue.resultMap
+            }
+          }
         }
       }
     }

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-typealias Pokemon = AllPokemonQuery.Data.GetAllPokemon
+typealias PokemonItem = AllPokemonQuery.Data.GetAllPokemon
 
 class PokemonPaginatedItemProvider: ObservableObject {
     @Published var showLoadingView: Bool = true
-    private(set) var items: [Pokemon] = []
+    private(set) var items: [PokemonItem] = []
     private(set) var pageSize: Int
     private(set) var startingIndex: Int
     private(set) var triggerIndex: Int?
@@ -26,7 +26,7 @@ class PokemonPaginatedItemProvider: ObservableObject {
     private(set) var hasPaginated = false
     private var paginationQueue = DispatchQueue(label: "PokemonPaginatedItemProvider-\(UUID().uuidString)", qos: .userInitiated)
 
-    init(items: [Pokemon],
+    init(items: [PokemonItem],
          size: Int,
          triggerIndex: Int? = nil,
          startingIndex: Int? = nil) {
@@ -96,7 +96,7 @@ struct PokemonListingItem: Identifiable, Hashable {
 }
 
 extension AllPokemonQuery.Data {
-    var items: [Pokemon] {
+    var items: [PokemonItem] {
         getAllPokemon.compactMap { $0 }
     }
 

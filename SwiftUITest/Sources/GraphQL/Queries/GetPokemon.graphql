@@ -1,0 +1,115 @@
+query GetPokemon(
+    $pokemon: PokemonEnum!
+    $offsetFlavorTexts: Int
+    $takeFlavorTexts: Int
+    $reverseFlavorTexts: Boolean
+) {
+    getPokemon(
+        pokemon: $pokemon
+        offsetFlavorTexts: $offsetFlavorTexts
+        takeFlavorTexts: $takeFlavorTexts
+        reverseFlavorTexts: $reverseFlavorTexts
+    ) {
+        ...FullData
+    }
+}
+fragment EvYieldsFragment on EvYields {
+    hp
+    attack
+    defense
+    specialattack
+    specialdefense
+    speed
+}
+
+fragment GenderFragment on Gender {
+    female
+    male
+}
+
+fragment PokemonTypeFragment on PokemonType {
+    name
+    matchup {
+        attacking {
+            doubleEffectiveTypes
+            doubleResistedTypes
+            effectiveTypes
+            effectlessTypes
+            normalTypes
+            resistedTypes
+        }
+        defending {
+            doubleEffectiveTypes
+            doubleResistedTypes
+            effectiveTypes
+            effectlessTypes
+            normalTypes
+            resistedTypes
+        }
+    }
+}
+
+fragment StatsFragment on Stats {
+    hp
+    attack
+    defense
+    specialattack
+    specialdefense
+    speed
+}
+
+fragment FullDataFragmentWithoutNested on Pokemon {
+    key
+    evYields {
+        ...EvYieldsFragment
+    }
+    evolutionLevel
+    forme
+    formeLetter
+    gender {
+        ...GenderFragment
+    }
+    height
+    isEggObtainable
+    backSprite
+    num
+    shinyBackSprite
+    shinySprite
+    species
+    sprite
+    types {
+        ...PokemonTypeFragment
+    }
+    baseStats {
+        ...StatsFragment
+    }
+    baseStatsTotal
+    color
+    weight
+}
+
+fragment FullDataFragment on Pokemon {
+    ...FullDataFragmentWithoutNested
+}
+
+fragment FullData on Pokemon {
+    ...FullDataFragment
+    evolutions {
+        ...FullDataFragment
+        evolutions {
+            ...FullDataFragment
+        }
+        preevolutions {
+            ...FullDataFragment
+        }
+    }
+    preevolutions {
+        ...FullDataFragment
+        evolutions {
+            ...FullDataFragment
+        }
+        preevolutions {
+            ...FullDataFragment
+        }
+    }
+}

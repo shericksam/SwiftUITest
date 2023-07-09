@@ -1,0 +1,19 @@
+query AllPokemon($offset: Int = 89) {
+    getAllPokemon(offset: $offset) {
+        ...LightDataFragmentWithoutNested
+    }
+}
+
+fragment LightDataFragmentWithoutNested on Pokemon {
+    key
+    num
+    species
+    sprite
+    types {
+        ...PokemonLightTypeFragment
+    }
+}
+
+fragment PokemonLightTypeFragment on PokemonType {
+    name
+}

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 typealias PokemonFragmentItem = AllPokemonQuery.Data.GetAllPokemon
 
@@ -18,6 +19,8 @@ class PokemonPaginatedItemProvider: ObservableObject {
     private let constantSkipCAP: Int = 89
     private var network: ApolloServiceClientProvider
     private var queryHolder: QueryHolder<AllPokemonQuery>
+    private var viewContext: NSManagedObjectContext
+    let repository: PokemonRepository
     private(set) var isPaginating = false {
         didSet {
             DispatchQueue.main.async { [weak self] in
@@ -33,7 +36,9 @@ class PokemonPaginatedItemProvider: ObservableObject {
          size: Int,
          triggerIndex: Int? = nil,
          startingIndex: Int? = nil,
-         network: ApolloServiceClientProvider = Dependencies.serviceClient) {
+         network: ApolloServiceClientProvider = Dependencies.serviceClient,
+         viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext,
+         repository: PokemonRepository = Dependencies.pokemonRepository) {
         self.items = items
         self.pageSize = size
         self.triggerIndex = triggerIndex
@@ -43,6 +48,8 @@ class PokemonPaginatedItemProvider: ObservableObject {
         self.queryHolder = QueryHolder(
             query: AllPokemonQuery(offset: constantSkipCAP)
         )
+        self.viewContext = viewContext
+        self.repository = repository
         self.paginate(with: queryHolder)
     }
 
@@ -61,6 +68,7 @@ class PokemonPaginatedItemProvider: ObservableObject {
                                                    startingIndex: fragment.startingIndex)
                         self.isPaginating = false
                         let items = fragment.convertToListing()
+                        self.saveDataFromAPI(items.map({ $0.listing }))
                         self.items.append(contentsOf: items)
                     case .failure:
                         self.isPaginating = false
@@ -87,6 +95,34 @@ class PokemonPaginatedItemProvider: ObservableObject {
         self.pageSize = size
         self.triggerIndex = triggerIndex
         self.startingIndex = startingIndex ?? items.count
+    }
+
+    private func saveDataFromAPI(_ items: [PokemonModel]) {
+        Task {
+            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            privateContext.parent = viewContext
+            await privateContext.perform {
+                Task {
+                    for data in items {
+                        let result = await self.repository.createPokemon(data)
+                    }
+
+                    do {
+                        try await privateContext.save()
+
+                        self.viewContext.performAndWait {
+                            do {
+                                try self.viewContext.save()
+                            } catch {
+                                print("Error al guardar en el contexto principal: \(error)")
+                            }
+                        }
+                    } catch {
+                        print("Error al guardar en el contexto privado: \(error)")
+                    }
+                }
+            }
+        }
     }
 }
 

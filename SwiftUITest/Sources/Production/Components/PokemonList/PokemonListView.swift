@@ -31,9 +31,9 @@ struct PokemonListView: View {
                         }
                     }
                 }
+                .navigationTitle("pokedex")
+                .navigationViewStyle(StackNavigationViewStyle())
             }
-            .navigationTitle("pokedex")
-            .navigationViewStyle(StackNavigationViewStyle())
             NetworkStatusView()
         }
     }

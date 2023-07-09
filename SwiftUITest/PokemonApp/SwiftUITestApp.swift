@@ -16,7 +16,6 @@ struct SwiftUITestApp: App {
         WindowGroup {
             PokemonListView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.network, Dependencies.serviceClient)
                 .environmentObject(viewModel)
                 .onAppear {
                     viewModel.setup()

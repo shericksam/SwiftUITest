@@ -31,10 +31,6 @@ struct NetworkChecker {
         let needsConnection = flags.contains(.connectionRequired)
 
         let isConnected = isReachable && !needsConnection
-        if isConnected {
-            NotificationCenter.default.post(name: .reachabilityChanged, object: nil)
-        }
-
         return isConnected
     }
 }

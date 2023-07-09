@@ -10,13 +10,13 @@ import SwiftUI
 
 struct LoadingView: View {
     var body: some View {
-        VStack {
-            Color.black.opacity(0.4)
+        ZStack {
+            Color.black.opacity(0.2)
 
             ActivityIndicator(style: .large)
                 .foregroundColor(.white)
                 .padding()
-                .background(Color.black.opacity(0.8))
+                .background(Color.black.opacity(0.2))
                 .cornerRadius(10)
         }
         .ignoresSafeArea()

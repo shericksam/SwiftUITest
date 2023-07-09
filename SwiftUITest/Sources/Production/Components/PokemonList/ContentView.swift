@@ -9,7 +9,6 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -34,31 +33,29 @@ struct ContentView: View {
         )
     }
     var body: some View {
-        ZStack {
-            NavigationView {
-                ZStack {
-                    if loadingState == .loaded {
-                        result?.data
-                    }
-                    if loadingState == .loading {
-                        LoadingView()
-                    }
-                    if loadingState == .error {
-                        ErrorView(errorMessage: errorMessage)
-                    }
+        NavigationView {
+            ZStack {
+                NetworkStatusView()
+                if loadingState == .loaded {
+                    result?.data
                 }
-                .environmentObject(queryHolder)
-                .onReceive(queryHolder.$query) { query in
-                    executeQuery(query)
+                if loadingState == .loading {
+                    LoadingView()
+                }
+                if loadingState == .error {
+                    ErrorView(errorMessage: errorMessage, retryAction: retry)
                 }
             }
-            VStack {
-                Spacer()
-                NetworkStatusView()
+            .environmentObject(queryHolder)
+            .onReceive(queryHolder.$query) { query in
+                executeQuery(query)
             }
         }
     }
 
+    private func retry() {
+        executeQuery(queryHolder.query)
+    }
     private func addItem() {
         withAnimation {
             let newItem = Item(context: viewContext)

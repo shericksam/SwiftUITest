@@ -27,7 +27,9 @@ class ExplorerApolloServiceClientProvider: ApolloServiceClientProvider {
     private var cachedApolloClient: ApolloClient?
     private var cachedApolloClientURL: URL?
 
-    init() { }
+    init() {
+        ActiveServerUrl.set()
+    }
 
     func fetch<Query>(query: Query,
                       queue: DispatchQueue = .main,

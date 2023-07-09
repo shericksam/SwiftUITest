@@ -1,5 +1,5 @@
-query AllPokemon($offset: Int = 89) {
-    getAllPokemon(offset: $offset) {
+query AllPokemon($offset: Int = 89, $take: Int) {
+    getAllPokemon(offset: $offset, take: $take) {
         ...LightDataFragmentWithoutNested
     }
 }

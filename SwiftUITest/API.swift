@@ -6999,8 +6999,8 @@ public final class AllPokemonQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
     """
-    query AllPokemon($offset: Int = 89) {
-      getAllPokemon(offset: $offset) {
+    query AllPokemon($offset: Int = 89, $take: Int) {
+      getAllPokemon(offset: $offset, take: $take) {
         __typename
         ...LightDataFragmentWithoutNested
       }
@@ -7009,7 +7009,7 @@ public final class AllPokemonQuery: GraphQLQuery {
 
   public let operationName: String = "AllPokemon"
 
-  public let operationIdentifier: String? = "5a3a2598869ecb24b4d9bf6b42b3bdcbac50e1e214c58befc406a55afa447190"
+  public let operationIdentifier: String? = "c7f2e034f40f8127ccaa8faabb58ab0948411667e07d0ec6311cf33ff5b2b847"
 
   public var queryDocument: String {
     var document: String = operationDefinition
@@ -7019,13 +7019,15 @@ public final class AllPokemonQuery: GraphQLQuery {
   }
 
   public var offset: Int?
+  public var take: Int?
 
-  public init(offset: Int? = nil) {
+  public init(offset: Int? = nil, take: Int? = nil) {
     self.offset = offset
+    self.take = take
   }
 
   public var variables: GraphQLMap? {
-    return ["offset": offset]
+    return ["offset": offset, "take": take]
   }
 
   public struct Data: GraphQLSelectionSet {
@@ -7033,7 +7035,7 @@ public final class AllPokemonQuery: GraphQLQuery {
 
     public static var selections: [GraphQLSelection] {
       return [
-        GraphQLField("getAllPokemon", arguments: ["offset": GraphQLVariable("offset")], type: .nonNull(.list(.nonNull(.object(GetAllPokemon.selections))))),
+        GraphQLField("getAllPokemon", arguments: ["offset": GraphQLVariable("offset"), "take": GraphQLVariable("take")], type: .nonNull(.list(.nonNull(.object(GetAllPokemon.selections))))),
       ]
     }
 

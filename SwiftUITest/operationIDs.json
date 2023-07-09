@@ -1,7 +1,7 @@
 {
-  "5a3a2598869ecb24b4d9bf6b42b3bdcbac50e1e214c58befc406a55afa447190": {
+  "c7f2e034f40f8127ccaa8faabb58ab0948411667e07d0ec6311cf33ff5b2b847": {
     "name": "AllPokemon",
-    "source": "query AllPokemon($offset: Int = 89) {\n  getAllPokemon(offset: $offset) {\n    __typename\n    ...LightDataFragmentWithoutNested\n  }\n}\nfragment LightDataFragmentWithoutNested on Pokemon {\n  __typename\n  key\n  num\n  species\n  sprite\n  types {\n    __typename\n    ...PokemonLightTypeFragment\n  }\n}\nfragment PokemonLightTypeFragment on PokemonType {\n  __typename\n  name\n}"
+    "source": "query AllPokemon($offset: Int = 89, $take: Int) {\n  getAllPokemon(offset: $offset, take: $take) {\n    __typename\n    ...LightDataFragmentWithoutNested\n  }\n}\nfragment LightDataFragmentWithoutNested on Pokemon {\n  __typename\n  key\n  num\n  species\n  sprite\n  types {\n    __typename\n    ...PokemonLightTypeFragment\n  }\n}\nfragment PokemonLightTypeFragment on PokemonType {\n  __typename\n  name\n}"
   },
   "91d594d10ee5c40e56879e884a4cc8c92c3602c5dead5d8f99b49e83eda5dd36": {
     "name": "GetPokemon",

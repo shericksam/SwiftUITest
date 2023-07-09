@@ -11,10 +11,13 @@ typealias PokemonFragmentItem = AllPokemonQuery.Data.GetAllPokemon
 
 class PokemonPaginatedItemProvider: ObservableObject {
     @Published var showLoadingView: Bool = true
-    private(set) var items: [PokemonFragmentItem] = []
+    private(set) var items: [PokemonListingItem] = []
     private(set) var pageSize: Int
     private(set) var startingIndex: Int
     private(set) var triggerIndex: Int?
+    private let constantSkipCAP: Int = 89
+    private var network: ApolloServiceClientProvider
+    private var queryHolder: QueryHolder<AllPokemonQuery>
     private(set) var isPaginating = false {
         didSet {
             DispatchQueue.main.async { [weak self] in
@@ -26,18 +29,26 @@ class PokemonPaginatedItemProvider: ObservableObject {
     private(set) var hasPaginated = false
     private var paginationQueue = DispatchQueue(label: "PokemonPaginatedItemProvider-\(UUID().uuidString)", qos: .userInitiated)
 
-    init(items: [PokemonFragmentItem],
+    init(items: [PokemonListingItem],
          size: Int,
          triggerIndex: Int? = nil,
-         startingIndex: Int? = nil) {
+         startingIndex: Int? = nil,
+         network: ApolloServiceClientProvider = Dependencies.serviceClient) {
         self.items = items
         self.pageSize = size
         self.triggerIndex = triggerIndex
         self.startingIndex = startingIndex ?? items.count
+        self.network = network
         self.showLoadingView = items.count < pageSize ? false : true
+        self.queryHolder = QueryHolder(
+            query: AllPokemonQuery(offset: constantSkipCAP)
+        )
+        self.paginate(with: queryHolder)
     }
 
-    private func paginate(with queryHolder: QueryHolder<AllPokemonQuery>, network: ApolloServiceClientProvider) {
+    private func paginate(with queryHolder: QueryHolder<AllPokemonQuery>) {
+        queryHolder.query.offset = constantSkipCAP + items.count
+        queryHolder.query.take = pageSize
         queryHolder.query.execute(serviceClient: network) { [weak self] result in
             self?.paginationQueue.async {
                 DispatchQueue.main.async {
@@ -49,7 +60,7 @@ class PokemonPaginatedItemProvider: ObservableObject {
                                                    triggerIndex: fragment.triggerIndex,
                                                    startingIndex: fragment.startingIndex)
                         self.isPaginating = false
-                        let items = fragment.getAllPokemon
+                        let items = fragment.convertToListing()
                         self.items.append(contentsOf: items)
                     case .failure:
                         self.isPaginating = false
@@ -59,15 +70,13 @@ class PokemonPaginatedItemProvider: ObservableObject {
         }
     }
 
-    func fetchNextPageIfNeeded(for item: PokemonListingItem,
-                               queryHolder: QueryHolder<AllPokemonQuery>,
-                               network: ApolloServiceClientProvider) {
+    func fetchNextPageIfNeeded(for item: PokemonListingItem) {
         paginationQueue.async { [weak self] in
             guard let self else { return }
             if let triggerIndex = self.triggerIndex, !self.isPaginating, item.index > triggerIndex {
                 self.isPaginating.toggle()
                 self.hasPaginated = true
-                self.paginate(with: queryHolder, network: network)
+                self.paginate(with: self.queryHolder)
             }
         }
     }
@@ -84,7 +93,7 @@ class PokemonPaginatedItemProvider: ObservableObject {
 struct PokemonListingItem: Identifiable, Hashable {
     let id = UUID().uuidString
     let index: Int
-    let listing: AllPokemonQuery.Data
+    let listing: PokemonModel
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -109,6 +118,6 @@ extension AllPokemonQuery.Data {
     }
 
     var triggerIndex: Int? {
-        0
+        getAllPokemon[getAllPokemon.endIndex - 1].num - 1
     }
 }

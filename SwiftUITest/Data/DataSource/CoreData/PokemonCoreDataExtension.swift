@@ -86,7 +86,7 @@ extension Pokemon: FragmentUpdatable {
         }
 
         if let evolutionsUnwrapped = model.evolutions {
-            var pkmnSet = NSSet()
+            let pkmnSet = NSSet()
             for pkmn in evolutionsUnwrapped {
                 let pkmnCoreObject = Pokemon(context: viewContext)
                 pkmnCoreObject.update(with: pkmn, viewContext)
@@ -106,7 +106,7 @@ extension Pokemon: FragmentUpdatable {
         }
 
         if let preevolutionsUnwrapped = model.evolutions {
-            var pkmnSet = NSSet()
+            let pkmnSet = NSSet()
             for pkmn in preevolutionsUnwrapped {
                 let pkmnCoreObject = Pokemon(context: viewContext)
                 pkmnCoreObject.update(with: pkmn, viewContext)
@@ -116,7 +116,7 @@ extension Pokemon: FragmentUpdatable {
         }
 
         if let typesUnwrapped = model.types {
-            var typesSet = NSSet()
+            let typesSet = NSSet()
             for type in typesUnwrapped {
                 let typeCoreObject = PokemonType(context: viewContext)
                 typeCoreObject.update(with: type, viewContext)

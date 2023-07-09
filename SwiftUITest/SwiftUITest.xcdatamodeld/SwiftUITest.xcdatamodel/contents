@@ -37,10 +37,21 @@
         <relationship name="gender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Gender"/>
         <relationship name="preevolutions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon"/>
         <relationship name="types" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PokemonType"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="num"/>
+                <constraint value="key"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="PokemonType" representedClassName="PokemonType" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="matchup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TypeMatchup"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Stats" representedClassName="Stats" syncable="YES" codeGenerationType="class">
         <attribute name="attack" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

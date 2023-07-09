@@ -44,13 +44,11 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
 
     func create(pokemon: PokemonModel) throws -> () {
         do {
-            if let previous = try getEntityById(pokemon.num) {
-                previous.update(with: pokemon, container.viewContext)
-            } else {
+            if try getEntityById(pokemon.num) == nil {
                 let todoCoreDataEntity = Pokemon(context: container.viewContext)
                 todoCoreDataEntity.update(with: pokemon, container.viewContext)
+                saveContext()
             }
-//            saveContext()
         } catch  {
             print(error)
         }

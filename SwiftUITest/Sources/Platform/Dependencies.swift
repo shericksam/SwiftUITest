@@ -11,6 +11,8 @@ import Foundation
 public class Dependencies {
     public private(set) static var serviceClient: ApolloServiceClientProvider = BaseApolloServiceClientProvider.shared
     public private(set) static var serverUrlProvider: ServerURLProvider = DefaultServerURL()
+    private(set) static var pokemonProvider = PokemonPaginatedItemProvider(items: [], size: 20)
+    
 
     public static func install(serverUrlProvider: ServerURLProvider,
                                serviceClient: ApolloServiceClientProvider) {
@@ -37,7 +39,9 @@ private class BaseApolloServiceClientProvider: ApolloServiceClientProvider {
     private var cachedApolloClient: ApolloClient?
     private var cachedApolloClientURL: URL?
 
-    init() { }
+    init() {
+        ActiveServerUrl.set()
+    }
 
     func cancelAllOperations() { }
 

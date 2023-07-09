@@ -9,64 +9,38 @@ import SwiftUI
 import CoreData
 
 struct PokemonListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject private var queryHolder: QueryHolder<AllPokemonQuery>
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Pokemon.num, ascending: true)],
-        animation: .default)
-    private var pokemon: FetchedResults<Pokemon>
     @StateObject private var viewModel = PokemonListViewModel()
+    @ObservedObject var provider: PokemonPaginatedItemProvider
 
-    public init() {
-        self.queryHolder = QueryHolder(
-            query: AllPokemonQuery(offset: 89)
-        )
-    }
     var body: some View {
-        NavigationView {
-            ZStack {
-                NetworkStatusView()
+        VStack {
+            NavigationView {
                 List {
-                    ForEach(pokemon) { pokemonItem in
+                    ForEach(provider.items) { pokemonItem in
                         NavigationLink {
-                            Text("Item at \(pokemonItem.num)")
+                            Text("Item at \(pokemonItem.listing.num)")
                         } label: {
-                            Text("Item at \(pokemonItem.key ?? "")")
+                            VStack {
+                                Text("Num at \(pokemonItem.listing.num)")
+                                Text("Key at \(pokemonItem.listing.key ?? "")")
+                                Text("Species at \(pokemonItem.listing.species ?? "")")
+                            }
+                        }
+                        .onAppear {
+                            provider.fetchNextPageIfNeeded(for: pokemonItem)
                         }
                     }
                 }
-                if viewModel.loadingState == .loading {
-                    LoadingView()
-                }
-                if viewModel.loadingState == .error {
-                    ErrorView(errorMessage: viewModel.errorMessage, retryAction: { viewModel.retry(queryHolder.query) })
-                }
             }
-            .environmentObject(queryHolder)
-            .onReceive(queryHolder.$query) { query in
-                viewModel.executeQuery(query)
-            }
+            .navigationTitle("pokedex")
+            .navigationViewStyle(StackNavigationViewStyle())
+            NetworkStatusView()
         }
     }
 }
 
 struct PokemonListView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListView()
+        PokemonListView(provider: PokemonPaginatedItemProvider(items: [], size: 20))
     }
 }
-
-//            List {
-
-//            }
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addItem) {
-//                        Label("Add Item", systemImage: "plus")
-//                    }
-//                }
-//            }
-//            Text("Select an item")

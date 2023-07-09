@@ -37,7 +37,7 @@
 		D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */; };
 		D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */; };
 		D57333EB2A57C04C004FB8DA /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333EA2A57C04C004FB8DA /* LoadingState.swift */; };
-		D57333EF2A57CBFF004FB8DA /* AllPokemonQuery.graphql in Sources */ = {isa = PBXBuildFile; fileRef = D57333EE2A57CBFF004FB8DA /* AllPokemonQuery.graphql */; };
+		D57333EF2A57CBFF004FB8DA /* GetAllPokemonQuery.graphql in Sources */ = {isa = PBXBuildFile; fileRef = D57333EE2A57CBFF004FB8DA /* GetAllPokemonQuery.graphql */; };
 		D57333F22A57CCD0004FB8DA /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333F12A57CCD0004FB8DA /* API.swift */; };
 		D57333F42A57CDA3004FB8DA /* QueryHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333F32A57CDA3004FB8DA /* QueryHolder.swift */; };
 		D57333FB2A57CF29004FB8DA /* PokemonItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333FA2A57CF29004FB8DA /* PokemonItemView.swift */; };
@@ -117,7 +117,7 @@
 		D57333E52A57BED3004FB8DA /* AuthenticationInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationInterceptor.swift; sourceTree = "<group>"; };
 		D57333E82A57BF2E004FB8DA /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		D57333EA2A57C04C004FB8DA /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
-		D57333EE2A57CBFF004FB8DA /* AllPokemonQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AllPokemonQuery.graphql; sourceTree = "<group>"; };
+		D57333EE2A57CBFF004FB8DA /* GetAllPokemonQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetAllPokemonQuery.graphql; sourceTree = "<group>"; };
 		D57333F12A57CCD0004FB8DA /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = API.swift; path = SwiftUITest/API.swift; sourceTree = SOURCE_ROOT; };
 		D57333F32A57CDA3004FB8DA /* QueryHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHolder.swift; sourceTree = "<group>"; };
 		D57333FA2A57CF29004FB8DA /* PokemonItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonItemView.swift; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 		D50391EA2A5A66140041378C /* Queries */ = {
 			isa = PBXGroup;
 			children = (
-				D57333EE2A57CBFF004FB8DA /* AllPokemonQuery.graphql */,
+				D57333EE2A57CBFF004FB8DA /* GetAllPokemonQuery.graphql */,
 				D50391EB2A5A66200041378C /* GetPokemon.graphql */,
 			);
 			path = Queries;
@@ -646,7 +646,7 @@
 				D59F54D32A5A99300039B364 /* FragmentUpdatable.swift in Sources */,
 				D50CA7B92A5A46CE001E2B64 /* NetworkStatusView.swift in Sources */,
 				D57334052A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift in Sources */,
-				D57333EF2A57CBFF004FB8DA /* AllPokemonQuery.graphql in Sources */,
+				D57333EF2A57CBFF004FB8DA /* GetAllPokemonQuery.graphql in Sources */,
 				D57333972A57A725004FB8DA /* SwiftUITestApp.swift in Sources */,
 				D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */,
 				D59F54C72A5A8A110039B364 /* DataSourceGenericError.swift in Sources */,

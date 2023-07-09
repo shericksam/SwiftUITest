@@ -26,6 +26,7 @@ struct ContentView: View {
         }
     }
     @State private var result: GraphQLCachingQueryResult<AllPokemonQuery.Data>?
+    @State private var errorMessage: String?
 
     public init() {
         self.queryHolder = QueryHolder(
@@ -33,40 +34,28 @@ struct ContentView: View {
         )
     }
     var body: some View {
-        NavigationView {
-            HStack {
-                if loadingState == .loaded {
-                    result?.data
+        ZStack {
+            NavigationView {
+                ZStack {
+                    if loadingState == .loaded {
+                        result?.data
+                    }
+                    if loadingState == .loading {
+                        LoadingView()
+                    }
+                    if loadingState == .error {
+                        ErrorView(errorMessage: errorMessage)
+                    }
                 }
-                if loadingState == .loading {
-                    Text("loading")
+                .environmentObject(queryHolder)
+                .onReceive(queryHolder.$query) { query in
+                    executeQuery(query)
                 }
             }
-            .environmentObject(queryHolder)
-            .onReceive(queryHolder.$query) { query in
-                executeQuery(query)
+            VStack {
+                Spacer()
+                NetworkStatusView()
             }
-//            List {
-//                ForEach(items) { item in
-//                    NavigationLink {
-//                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-//                    } label: {
-//                        Text(item.timestamp!, formatter: itemFormatter)
-//                    }
-//                }
-//                .onDelete(perform: deleteItems)
-//            }
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addItem) {
-//                        Label("Add Item", systemImage: "plus")
-//                    }
-//                }
-//            }
-//            Text("Select an item")
         }
     }
 
@@ -111,6 +100,7 @@ struct ContentView: View {
                     self.result = result
                 case .failure(let error):
                     loadingState = .error
+                    errorMessage = error.errorDescription
                 }
             }
     }
@@ -128,3 +118,25 @@ struct ContentView_Previews: PreviewProvider {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
+
+//            List {
+//                ForEach(items) { item in
+//                    NavigationLink {
+//                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+//                    } label: {
+//                        Text(item.timestamp!, formatter: itemFormatter)
+//                    }
+//                }
+//                .onDelete(perform: deleteItems)
+//            }
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    EditButton()
+//                }
+//                ToolbarItem {
+//                    Button(action: addItem) {
+//                        Label("Add Item", systemImage: "plus")
+//                    }
+//                }
+//            }
+//            Text("Select an item")

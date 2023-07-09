@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D50CA7B62A5A45FC001E2B64 /* NetworkChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50CA7B52A5A45FC001E2B64 /* NetworkChecker.swift */; };
+		D50CA7B92A5A46CE001E2B64 /* NetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50CA7B82A5A46CE001E2B64 /* NetworkStatusView.swift */; };
+		D50CA7BD2A5A4A12001E2B64 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D50CA7BF2A5A4A12001E2B64 /* Localizable.strings */; };
+		D50CA7C22A5A4AE7001E2B64 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50CA7C12A5A4AE7001E2B64 /* LoadingView.swift */; };
+		D50CA7C42A5A4DA3001E2B64 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50CA7C32A5A4DA3001E2B64 /* ErrorView.swift */; };
 		D57333972A57A725004FB8DA /* SwiftUITestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333962A57A725004FB8DA /* SwiftUITestApp.swift */; };
 		D57333992A57A725004FB8DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57333982A57A725004FB8DA /* ContentView.swift */; };
 		D573339B2A57A728004FB8DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D573339A2A57A728004FB8DA /* Assets.xcassets */; };
@@ -60,6 +65,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D50CA7B52A5A45FC001E2B64 /* NetworkChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkChecker.swift; sourceTree = "<group>"; };
+		D50CA7B82A5A46CE001E2B64 /* NetworkStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatusView.swift; sourceTree = "<group>"; };
+		D50CA7BE2A5A4A12001E2B64 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D50CA7C02A5A4A4A001E2B64 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D50CA7C12A5A4AE7001E2B64 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		D50CA7C32A5A4DA3001E2B64 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		D57333932A57A725004FB8DA /* SwiftUITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D57333962A57A725004FB8DA /* SwiftUITestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestApp.swift; sourceTree = "<group>"; };
 		D57333982A57A725004FB8DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -123,6 +134,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D50CA7B72A5A46B8001E2B64 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				D50CA7B82A5A46CE001E2B64 /* NetworkStatusView.swift */,
+				D50CA7C12A5A4AE7001E2B64 /* LoadingView.swift */,
+				D50CA7C32A5A4DA3001E2B64 /* ErrorView.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		D50CA7BA2A5A49E9001E2B64 /* Localizable */ = {
+			isa = PBXGroup;
+			children = (
+				D50CA7BF2A5A4A12001E2B64 /* Localizable.strings */,
+			);
+			path = Localizable;
+			sourceTree = "<group>";
+		};
 		D573338A2A57A725004FB8DA = {
 			isa = PBXGroup;
 			children = (
@@ -217,12 +246,14 @@
 		D57333D12A57BB49004FB8DA /* Platform */ = {
 			isa = PBXGroup;
 			children = (
+				D50CA7BA2A5A49E9001E2B64 /* Localizable */,
 				D57333D92A57BBF0004FB8DA /* Dependencies.swift */,
 				D57333E72A57BF18004FB8DA /* Extensions */,
 				D57333EA2A57C04C004FB8DA /* LoadingState.swift */,
 				D57333D22A57BB54004FB8DA /* Network */,
 				D57333F52A57CE00004FB8DA /* Providers */,
 				D57333F32A57CDA3004FB8DA /* QueryHolder.swift */,
+				D50CA7B52A5A45FC001E2B64 /* NetworkChecker.swift */,
 			);
 			path = Platform;
 			sourceTree = "<group>";
@@ -276,6 +307,7 @@
 		D57333F92A57CF0A004FB8DA /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D50CA7B72A5A46B8001E2B64 /* Network */,
 				D57334032A57E682004FB8DA /* PokemonList */,
 			);
 			path = Components;
@@ -390,6 +422,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"es-419",
 			);
 			mainGroup = D573338A2A57A725004FB8DA;
 			packageReferences = (
@@ -411,6 +444,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D50CA7BD2A5A4A12001E2B64 /* Localizable.strings in Resources */,
 				D573339E2A57A728004FB8DA /* Preview Assets.xcassets in Resources */,
 				D57334002A57DA85004FB8DA /* schema.graphqls in Resources */,
 				D57334022A57DA8D004FB8DA /* introspection_response.json in Resources */,
@@ -465,10 +499,13 @@
 				D57333FE2A57D3C7004FB8DA /* PokemonAppViewModel.swift in Sources */,
 				D57333DE2A57BCF8004FB8DA /* Result.swift in Sources */,
 				D57333A02A57A728004FB8DA /* Persistence.swift in Sources */,
+				D50CA7C42A5A4DA3001E2B64 /* ErrorView.swift in Sources */,
+				D50CA7C22A5A4AE7001E2B64 /* LoadingView.swift in Sources */,
 				D57333CF2A57BA63004FB8DA /* ApolloServiceClientProvider.swift in Sources */,
 				D57333CD2A57BA30004FB8DA /* ExplorerApolloServiceClientProvider.swift in Sources */,
 				D57333E42A57BE79004FB8DA /* ExplorerApolloNetworkStack.swift in Sources */,
 				D57333E92A57BF2E004FB8DA /* ArrayExtensions.swift in Sources */,
+				D50CA7B92A5A46CE001E2B64 /* NetworkStatusView.swift in Sources */,
 				D57334052A57E6AE004FB8DA /* PokemonPaginatedItemProvider.swift in Sources */,
 				D57333992A57A725004FB8DA /* ContentView.swift in Sources */,
 				D57333EF2A57CBFF004FB8DA /* AllPokemonQuery.graphql in Sources */,
@@ -476,6 +513,7 @@
 				D57333E62A57BED3004FB8DA /* AuthenticationInterceptor.swift in Sources */,
 				D57333DA2A57BBF0004FB8DA /* Dependencies.swift in Sources */,
 				D57333F22A57CCD0004FB8DA /* API.swift in Sources */,
+				D50CA7B62A5A45FC001E2B64 /* NetworkChecker.swift in Sources */,
 				D57333EB2A57C04C004FB8DA /* LoadingState.swift in Sources */,
 				D57333CB2A57B94B004FB8DA /* ExplorerURLProvider.swift in Sources */,
 				D57333A32A57A728004FB8DA /* SwiftUITest.xcdatamodeld in Sources */,
@@ -520,11 +558,24 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		D50CA7BF2A5A4A12001E2B64 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D50CA7BE2A5A4A12001E2B64 /* en */,
+				D50CA7C02A5A4A4A001E2B64 /* es-419 */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		D57333BA2A57A729004FB8DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -585,6 +636,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

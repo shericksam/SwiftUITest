@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  SwiftUITest
+
+  Created by Erick Samuel Guerrero Arreola on 08/07/23.
+  
+*/
+"offline-mode" = "Offline mode";
+"try-again" = "Try again";
+"error-message" = "An error occurred. Please try again later.";

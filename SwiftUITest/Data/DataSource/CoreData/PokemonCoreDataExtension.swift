@@ -117,8 +117,11 @@ extension Pokemon: FragmentUpdatable {
                 typeCoreObject.update(with: type, viewContext)
                 do {
                     try typeCoreObject.validateForInsert()
+                    try typeCoreObject.validateForUpdate()
                     self.addToTypes(typeCoreObject)
-                } catch  { }
+                } catch  {
+                    print("model.types erro", error.localizedDescription)
+                }
             }
         }
     }

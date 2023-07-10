@@ -67,7 +67,10 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
                     pkmnCoreDataEntity.update(with: data, context)
 
                     try pkmnCoreDataEntity.validateForInsert()
-                } catch { }
+                    try pkmnCoreDataEntity.validateForUpdate()
+                } catch {
+                    print("pkmnCoreDataEntity", error.localizedDescription)
+                }
             }
             do {
                 try context.save()

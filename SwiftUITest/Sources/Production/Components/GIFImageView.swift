@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-struct GIFImageView: UIViewRepresentable {
+struct GIFImageViewRep: UIViewRepresentable {
     let gifURL: URL
 
     func makeUIView(context: Context) -> UIImageView {
@@ -43,5 +43,44 @@ extension UIImage {
         }
 
         return UIImage.animatedImage(with: images, duration: 0.0)
+    }
+}
+
+struct GIFImageView: View {
+    @State private var imageData: Data?
+
+    let gifURL: URL
+    let defaultImage: UIImage? = UIImage(named: "error404")
+
+    var body: some View {
+        Group {
+            if let imageData = imageData,
+               let gifImage = UIImage.gif(data: imageData) {
+                Image(uiImage: gifImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } else if let defaultImage = defaultImage {
+                Image(uiImage: defaultImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } else {
+                Color.gray
+            }
+        }
+        .onAppear {
+            loadImage()
+        }
+    }
+
+    private func loadImage() {
+        DispatchQueue.global().async {
+            guard let imageData = try? Data(contentsOf: gifURL) else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.imageData = imageData
+            }
+        }
     }
 }

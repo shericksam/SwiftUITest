@@ -16,8 +16,8 @@ struct PokemonItemView: View {
         HStack {
             if let gifURL = URL(string: pokemon.sprite ?? "") {
                 GIFImageView(gifURL: gifURL)
-                    .frame(width: 30, height: 30)
-                    .scaledToFit() 
+                    .frame(width: 60, height: 60)
+                    .scaledToFit()
             }
             Spacer()
             VStack {
@@ -26,7 +26,17 @@ struct PokemonItemView: View {
                 if let types = pokemon.types {
                     HStack {
                         ForEach(types) { type in
-                            Text(type.name ?? "no-name")
+                            if let typeName = type.name {
+                                Text(typeName)
+                                    .font(.subheadline)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 5)
+                                    .padding(.vertical, 2)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(PokemonColors.getColor(for: typeName))
+                                    )
+                            }
                         }
                     }
                 }
@@ -36,7 +46,7 @@ struct PokemonItemView: View {
     }
 }
 
-
+ 
 struct PokemonItemView_Previews: PreviewProvider {
     static var previewData = LightDataFragmentWithoutNested(key: .bulbasaur, num: 1, species: "bulbasaur", sprite: "https://play.pokemonshowdown.com/sprites/ani/bulbasaur.gif", types: [.init(name: "Grass")])
     static var previews: some View {

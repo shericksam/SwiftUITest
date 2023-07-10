@@ -50,6 +50,7 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
         do {
             let todoCoreDataEntity = Pokemon(context: container.viewContext)
             todoCoreDataEntity.update(with: pokemon, container.viewContext)
+            addEvolution(model: pokemon)
             try todoCoreDataEntity.validateForInsert()
             try todoCoreDataEntity.validateForUpdate()
             saveContext()
@@ -118,4 +119,50 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
         }
     }
 
+    private func addEvolution(model: PokemonModel) {
+        if let evolutionsUnwrapped = model.evolutions {
+            for pkmn in evolutionsUnwrapped {
+                do {
+                    guard let key1 = model.key, let key2 = pkmn.key else { return }
+                    let pkmn1 = try getEntityById(key1)
+                    let pkmn2 = try getEntityById(key2)
+
+
+                    let evolution = PokemonEvolution(context: container.viewContext)
+                    evolution.pokemon = pkmn1
+                    evolution.evolution = pkmn2
+
+                    pkmn1?.evolutions = pkmn1?.evolutions ?? NSSet()
+                    pkmn1?.addToEvolutions(evolution)
+
+                    try evolution.validateForInsert()
+                    try evolution.validateForUpdate()
+                } catch  {
+                    print("model.evolutions erro", error.localizedDescription)
+                }
+            }
+        }
+        if let preevolutionsUnwrapped = model.preevolutions {
+            for pkmn in preevolutionsUnwrapped {
+                do {
+                    guard let key1 = model.key, let key2 = pkmn.key else { return }
+                    let pkmn1 = try getEntityById(key1)
+                    let pkmn2 = try getEntityById(key2)
+
+
+                    let evolution = PokemonEvolution(context: container.viewContext)
+                    evolution.pokemon = pkmn1
+                    evolution.evolution = pkmn2
+
+                    pkmn1?.preevolutions = pkmn1?.preevolutions ?? NSSet()
+                    pkmn1?.addToPreevolutions(evolution)
+
+                    try evolution.validateForInsert()
+                    try evolution.validateForUpdate()
+                } catch  {
+                    print("model.preevolutions erro", error.localizedDescription)
+                }
+            }
+        }
+    }
 }

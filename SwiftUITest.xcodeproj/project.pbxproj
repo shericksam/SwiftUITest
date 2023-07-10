@@ -73,6 +73,7 @@
 		D59F54EB2A5BACAD0039B364 /* ColorConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54EA2A5BACAD0039B364 /* ColorConverter.swift */; };
 		D59F54ED2A5BB8C10039B364 /* BaseStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54EC2A5BB8C10039B364 /* BaseStatsView.swift */; };
 		D59F54EF2A5BBA420039B364 /* EvolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54EE2A5BBA420039B364 /* EvolutionView.swift */; };
+		D59F54F12A5BBC460039B364 /* EVYieldRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54F02A5BBC460039B364 /* EVYieldRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +164,7 @@
 		D59F54EA2A5BACAD0039B364 /* ColorConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorConverter.swift; sourceTree = "<group>"; };
 		D59F54EC2A5BB8C10039B364 /* BaseStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStatsView.swift; sourceTree = "<group>"; };
 		D59F54EE2A5BBA420039B364 /* EvolutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionView.swift; sourceTree = "<group>"; };
+		D59F54F02A5BBC460039B364 /* EVYieldRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVYieldRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -510,6 +512,7 @@
 				D59F54E82A5BA94F0039B364 /* PokemonDetailView.swift */,
 				D59F54EC2A5BB8C10039B364 /* BaseStatsView.swift */,
 				D59F54EE2A5BBA420039B364 /* EvolutionView.swift */,
+				D59F54F02A5BBC460039B364 /* EVYieldRow.swift */,
 			);
 			path = PokemonDetail;
 			sourceTree = "<group>";
@@ -725,6 +728,7 @@
 				D59F54AC2A5A842F0039B364 /* PokemonCoreDataSourceImpl.swift in Sources */,
 				D57333F42A57CDA3004FB8DA /* QueryHolder.swift in Sources */,
 				D57333D82A57BBC8004FB8DA /* NetworkEnvironment.swift in Sources */,
+				D59F54F12A5BBC460039B364 /* EVYieldRow.swift in Sources */,
 				D59F54EB2A5BACAD0039B364 /* ColorConverter.swift in Sources */,
 				D57333FB2A57CF29004FB8DA /* PokemonItemView.swift in Sources */,
 				D57333DC2A57BCC6004FB8DA /* ComponentNetwork.swift in Sources */,

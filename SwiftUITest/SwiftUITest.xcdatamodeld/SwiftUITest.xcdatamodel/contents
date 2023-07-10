@@ -32,15 +32,24 @@
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="baseStats" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stats"/>
-        <relationship name="evolutions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon"/>
+        <relationship name="evolutions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PokemonEvolution"/>
         <relationship name="evYields" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EvYields"/>
         <relationship name="gender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Gender"/>
-        <relationship name="preevolutions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon"/>
+        <relationship name="preevolutions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PokemonEvolution"/>
         <relationship name="types" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PokemonType" inverseName="pokemons" inverseEntity="PokemonType"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="num"/>
                 <constraint value="key"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="PokemonEvolution" representedClassName="PokemonEvolution" syncable="YES" codeGenerationType="class">
+        <relationship name="evolution" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon"/>
+        <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="evolution"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>

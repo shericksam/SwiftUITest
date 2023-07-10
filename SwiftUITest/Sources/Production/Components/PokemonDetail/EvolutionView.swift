@@ -12,12 +12,12 @@ struct EvolutionView: View {
 
     var body: some View {
         HStack {
-            if let sprite = evolution.sprite {
-                Image(sprite)
-                    .resizable()
+            if let sprite = evolution.sprite, let url = URL(string: sprite) {
+                GIFImageViewRep(gifURL: url)
                     .frame(width: 40, height: 40)
+                    .aspectRatio(contentMode: .fit)
             }
-
+            Spacer()
             Text(evolution.species ?? "")
 
             if let evolutionLevel = evolution.evolutionLevel {
@@ -25,6 +25,7 @@ struct EvolutionView: View {
                     .foregroundColor(.gray)
             }
         }
+        .padding()
         .padding(.vertical, 4)
     }
 }

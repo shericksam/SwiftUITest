@@ -34,57 +34,68 @@ struct PokemonModel: Identifiable {
     var preevolutions: [PokemonModel]?
     var types: [PokemonTypeModel]?
 
-    init(
-        backSprite: String?,
-        baseStatsTotal: Int = 0,
-        bulbapediaPage: String?,
-        color: String?,
-        evolutionLevel: String?,
-        forme: String?,
-        formeLetter: String?,
-        height: Float = 0,
-        isEggObtainable: Bool = false,
-        key: String?,
-        legendary: Bool = false,
-        num: Int,
-        shinyBackSprite: String?,
-        shinySprite: String?,
-        species: String?,
-        sprite: String?,
-        timestamp: Date?,
-        weight: Float = 0,
-        baseStats: StatsModel?,
-        evolutions: [PokemonModel]?,
-        evYields: EvYieldsModel?,
-        gender: GenderModel?,
-        preevolutions: [PokemonModel]?,
-        types: [PokemonTypeModel]?) {
-            self.backSprite = backSprite
-            self.baseStatsTotal = baseStatsTotal
-            self.bulbapediaPage = bulbapediaPage
-            self.color = color
-            self.evolutionLevel = evolutionLevel
-            self.forme = forme
-            self.formeLetter = formeLetter
-            self.height = height
-            self.isEggObtainable = isEggObtainable
-            self.key = key
-            self.legendary = legendary
-            self.num = num
-            self.shinyBackSprite = shinyBackSprite
-            self.shinySprite = shinySprite
-            self.species = species
-            self.sprite = sprite
-            self.timestamp = timestamp
-            self.weight = weight
-            self.baseStats = baseStats
-            self.evolutions = evolutions
-            self.evYields = evYields
-            self.gender = gender
-            self.preevolutions = preevolutions
-            self.types = types
+    init(backSprite: String?,
+         baseStatsTotal: Int = 0,
+         bulbapediaPage: String?,
+         color: String?,
+         evolutionLevel: String?,
+         forme: String?,
+         formeLetter: String?,
+         height: Float = 0,
+         isEggObtainable: Bool = false,
+         key: String?,
+         legendary: Bool = false,
+         num: Int,
+         shinyBackSprite: String?,
+         shinySprite: String?,
+         species: String?,
+         sprite: String?,
+         timestamp: Date?,
+         weight: Float = 0,
+         baseStats: StatsModel?,
+         evolutions: [PokemonModel]?,
+         evYields: EvYieldsModel?,
+         gender: GenderModel?,
+         preevolutions: [PokemonModel]?,
+         types: [PokemonTypeModel]?) {
+        self.backSprite = backSprite
+        self.baseStatsTotal = baseStatsTotal
+        self.bulbapediaPage = bulbapediaPage
+        self.color = color
+        self.evolutionLevel = evolutionLevel
+        self.forme = forme
+        self.formeLetter = formeLetter
+        self.height = height
+        self.isEggObtainable = isEggObtainable
+        self.key = key
+        self.legendary = legendary
+        self.num = num
+        self.shinyBackSprite = shinyBackSprite
+        self.shinySprite = shinySprite
+        self.species = species
+        self.sprite = sprite
+        self.timestamp = timestamp
+        self.weight = weight
+        self.baseStats = baseStats
+        self.evolutions = evolutions
+        self.evYields = evYields
+        self.gender = gender
+        self.preevolutions = preevolutions
+        self.types = types
     }
-    
+
+    init(evolutionLevel: String?,
+         key: String?,
+         num: Int,
+         species: String?,
+         sprite: String?) {
+        self.evolutionLevel = evolutionLevel
+        self.key = key
+        self.num = num
+        self.species = species
+        self.sprite = sprite
+    }
+
     init(with coreDataModel: Pokemon) {
         self.backSprite = coreDataModel.backSprite
         self.baseStatsTotal = Int(coreDataModel.baseStatsTotal)
@@ -106,13 +117,23 @@ struct PokemonModel: Identifiable {
         self.weight = coreDataModel.weight
         self.baseStats = StatsModel(with: coreDataModel.baseStats)
         self.evolutions = coreDataModel.evolutions?.allObjects
-            .map({ $0 as! Pokemon })
-            .map({ PokemonModel(with: $0) })
+            .map({ $0 as! PokemonEvolution })
+            .compactMap({ $0.evolution })
+            .map({ PokemonModel(evolutionLevel: $0.evolutionLevel,
+                                key: $0.key,
+                                num: Int($0.num),
+                                species: $0.species,
+                                sprite: $0.sprite) })
         self.evYields = EvYieldsModel(with: coreDataModel.evYields)
         self.gender = GenderModel(with: coreDataModel.gender)
         self.preevolutions = coreDataModel.preevolutions?.allObjects
-            .map({ $0 as! Pokemon })
-            .map({ PokemonModel(with: $0) })
+            .map({ $0 as! PokemonEvolution })
+            .compactMap({ $0.evolution })
+            .map({ PokemonModel(evolutionLevel: $0.evolutionLevel,
+                                key: $0.key,
+                                num: Int($0.num),
+                                species: $0.species,
+                                sprite: $0.sprite) })
         self.types = coreDataModel.types?.allObjects
             .map({ $0 as! PokemonType })
             .map({ PokemonTypeModel(with: $0) })

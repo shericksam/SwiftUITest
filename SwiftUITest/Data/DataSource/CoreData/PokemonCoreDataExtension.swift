@@ -74,14 +74,6 @@ extension Pokemon: FragmentUpdatable {
             try? viewContext.save()
         }
 
-        if let evolutionsUnwrapped = model.evolutions {
-            for pkmn in evolutionsUnwrapped {
-                let pkmnCoreObject = Pokemon(context: viewContext)
-                pkmnCoreObject.update(with: pkmn, viewContext)
-                self.addToEvolutions(pkmnCoreObject)
-            }
-        }
-
         if let evYieldsUnwrapped = model.evYields {
             self.evYields = EvYields(context: viewContext)
             evYields?.update(with: evYieldsUnwrapped)
@@ -90,14 +82,6 @@ extension Pokemon: FragmentUpdatable {
         if let genderUnwrapped = model.gender {
             self.gender = Gender(context: viewContext)
             gender?.update(with: genderUnwrapped)
-        }
-
-        if let preevolutionsUnwrapped = model.evolutions {
-            for pkmn in preevolutionsUnwrapped {
-                let pkmnCoreObject = Pokemon(context: viewContext)
-                pkmnCoreObject.update(with: pkmn, viewContext)
-                self.addToPreevolutions(pkmnCoreObject)
-            }
         }
 
         if let typesUnwrapped = model.types {

@@ -68,7 +68,15 @@ struct PokemonDetailView: View {
                         BaseStatsView(baseStatsTotal: pokemon.baseStatsTotal,
                                       baseStats: baseStats)
                     }
-
+//                    if let evYields = pokemon.evYields {
+//                        DisclosureGroup("EV Yields") {
+//                            ForEach(evYields.propertyPairs(), id: \.key) { key, value in
+//                                EVYieldRow(statName: key, yieldValue: value)
+//                            }
+//                        }
+//                        .padding(.top, 16)
+//                        .padding([.bottom, .horizontal])
+//                    }
                     if let preevolutions = pokemon.preevolutions {
                         DisclosureGroup("Pre-Evolutions (\(preevolutions.count))") {
                             ForEach(preevolutions, id: \.num) { preevolution in
@@ -76,7 +84,7 @@ struct PokemonDetailView: View {
                             }
                         }
                         .padding(.top, 16)
-                        .padding()
+                        .padding([.bottom, .horizontal])
                     }
 
                     if let evolutions = pokemon.evolutions {
@@ -86,7 +94,7 @@ struct PokemonDetailView: View {
                             }
                         }
                         .padding(.top, 16)
-                        .padding()
+                        .padding([.bottom, .horizontal])
                     }
 
                     Spacer()

@@ -17,7 +17,8 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
 
     func getAll(_ pagination: Pagination?) throws -> [PokemonModel] {
         let request = Pokemon.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Pokemon.num, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Pokemon.num, ascending: true),
+                                   NSSortDescriptor(keyPath: \Pokemon.key, ascending: true)]
         if let pagination {
             request.fetchLimit = pagination.pageSize
             request.fetchOffset = pagination.items
@@ -70,7 +71,7 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
                     try pkmnCoreDataEntity.validateForInsert()
                     try pkmnCoreDataEntity.validateForUpdate()
                 } catch {
-                    print("pkmnCoreDataEntity", error.localizedDescription)
+                    print("pkmnCoreDataEntity-->", error.localizedDescription)
                 }
             }
             do {
@@ -114,7 +115,8 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
             do{
                 try context.save()
             }catch{
-                fatalError("Error: \(error.localizedDescription)")
+                print("error", error.localizedDescription)
+//                fatalError("Error: \(error.localizedDescription)")
             }
         }
     }

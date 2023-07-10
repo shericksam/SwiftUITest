@@ -62,9 +62,11 @@ struct PokemonRepositoryImpl: PokemonRepository {
             if NetworkChecker.isConnected() {
                 let models = try await graphQLDataSource.getAll(pagination)
                 try await coreDataSource.createList(pokemon: models)
+                return .success(models)
+            } else {
+                let _todos =  try await coreDataSource.getAll(pagination)
+                return .success(_todos)
             }
-            let _todos =  try await coreDataSource.getAll(pagination)
-            return .success(_todos)
         } catch {
             return .failure(.FetchError)
         }

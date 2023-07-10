@@ -94,8 +94,8 @@
             filePath = "SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataSourceImpl.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "create(pokemon:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -442,8 +442,8 @@
             filePath = "SwiftUITest/Sources/Production/Components/PokemonDetail/PokemonDetailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -494,6 +494,148 @@
             endingLineNumber = "127"
             landmarkName = "init(with:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1477BD14-D9DA-4F59-9F58-D6534BC6206D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Sources/Production/Components/PokemonList/PokemonListViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "fetchNextPageIfNeeded(for:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1ED4AB63-19FD-45D5-8E25-4B29AE5C871D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataSourceImpl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "getAll(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1ED4AB63-19FD-45D5-8E25-4B29AE5C871D - fbe04c50835b27d6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftUITest.PokemonCoreDataSourceImpl.getAll(Swift.Optional&lt;SwiftUITest.Pagination&gt;) throws -&gt; Swift.Array&lt;SwiftUITest.PokemonModel&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataSourceImpl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "720">
+               </Location>
+               <Location
+                  uuid = "1ED4AB63-19FD-45D5-8E25-4B29AE5C871D - 613b62ac34a133a7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SwiftUITest.Pokemon) -&gt; SwiftUITest.PokemonModel in SwiftUITest.PokemonCoreDataSourceImpl.getAll(Swift.Optional&lt;SwiftUITest.Pagination&gt;) throws -&gt; Swift.Array&lt;SwiftUITest.PokemonModel&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataSourceImpl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "76878B2E-3704-4BA5-8FD9-7992D676C039"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Data/Repository/PokemonRepositoryImpl.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "getPokemon(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "76878B2E-3704-4BA5-8FD9-7992D676C039 - 9dad2d88c3db275"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for SwiftUITest.PokemonRepositoryImpl.getPokemon(Swift.Optional&lt;SwiftUITest.Pagination&gt;) async -&gt; Swift.Result&lt;Swift.Array&lt;SwiftUITest.PokemonModel&gt;, SwiftUITest.DataSourceGenericError&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Data/Repository/PokemonRepositoryImpl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "76878B2E-3704-4BA5-8FD9-7992D676C039 - 38a54cd9bad60462"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) await resume partial function for SwiftUITest.PokemonRepositoryImpl.getPokemon(Swift.Optional&lt;SwiftUITest.Pagination&gt;) async -&gt; Swift.Result&lt;Swift.Array&lt;SwiftUITest.PokemonModel&gt;, SwiftUITest.DataSourceGenericError&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Data/Repository/PokemonRepositoryImpl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "76878B2E-3704-4BA5-8FD9-7992D676C039 - 9daf3f7c6ac6fe77"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for SwiftUITest.PokemonRepositoryImpl.getPokemon(Swift.Optional&lt;SwiftUITest.Pagination&gt;) async -&gt; Swift.Result&lt;Swift.Array&lt;SwiftUITest.PokemonModel&gt;, SwiftUITest.DataSourceGenericError&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Data/Repository/PokemonRepositoryImpl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "76878B2E-3704-4BA5-8FD9-7992D676C039 - b48357b55eb14673"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(9) suspend resume partial function for SwiftUITest.PokemonRepositoryImpl.getPokemon(Swift.Optional&lt;SwiftUITest.Pagination&gt;) async -&gt; Swift.Result&lt;Swift.Array&lt;SwiftUITest.PokemonModel&gt;, SwiftUITest.DataSourceGenericError&gt;"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Data/Repository/PokemonRepositoryImpl.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -42,7 +42,7 @@ class PokemonListViewModel: ObservableObject {
         case .success(let models):
             let items = models.map({ PokemonListingItem(index: $0.num, listing: $0) })
             self.updatePaginationInput(size: pageSize,
-                                       triggerIndex: items[items.endIndex - 1].listing.num - 1,
+                                       triggerIndex: items.isEmpty ? 0 : items[items.endIndex - 1].listing.num - 1,
                                        startingIndex: items.startIndex)
             self.isPaginating = false
             DispatchQueue.main.async {

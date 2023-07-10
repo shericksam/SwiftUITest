@@ -45,7 +45,7 @@ struct PokemonItemView: View {
             }
         }
         .padding()
-        .background(Color.color(from: pokemon.color ?? "gray")?.convertToLigthColor())
+        .background(Color.color(from: pokemon.color ?? "gray").convertToLigthColor())
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
     }

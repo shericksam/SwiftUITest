@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Color {
-    static func color(from name: String) -> Color? {
+    static func color(from name: String) -> Color {
         let colorDictionary: [String: Color] = [
             "white": .white,
             "blue": .blue,
@@ -22,7 +22,7 @@ extension Color {
             "pink": .pink
         ]
 
-        return colorDictionary[name.lowercased()]
+        return colorDictionary[name.lowercased()] ?? .clear
     }
 
     func convertToLigthColor(opacity: Double = 0.5) -> Color {

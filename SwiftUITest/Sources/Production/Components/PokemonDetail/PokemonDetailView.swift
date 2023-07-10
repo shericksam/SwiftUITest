@@ -13,102 +13,123 @@ struct PokemonDetailView: View {
 
     var body: some View {
         VStack {
-            if let pokemon = viewModel.pokemonSelected {
-                VStack {
-                    if let sprite = pokemon.sprite, let url = URL(string: sprite) {
-                        GIFImageViewRep(gifURL: url)
-                            .frame(width: 100, height: 100)
-                            .aspectRatio(contentMode: .fit)
-                    }
+            ScrollView {
+                if let pokemon = viewModel.pokemonSelected {
+                    VStack {
+                        Color.color(from: pokemon.color ?? "gray").convertToLigthColor()
+                            .ignoresSafeArea(edges: .top)
+                            .frame(height: 250)
+                        if let sprite = pokemon.sprite, let url = URL(string: sprite) {
+                            GIFImageViewRep(gifURL: url)
+                                .frame(width: 150, height: 150)
+                                .padding()
+                                .background(Color.color(from: pokemon.color ?? "gray").convertToLigthColor())
+                                .clipShape(Circle())
+                                .overlay {
+                                    Circle()
+                                        .stroke(.white, lineWidth: 4)
+                                }
+                                .shadow(radius: 7)
+                                .overlay(legendaryView(), alignment: .bottom)
+                                .aspectRatio(contentMode: .fit)
+                                .offset(y: -130)
 
-                    Text("Species: \(pokemon.species?.localizedUppercase ?? "")")
-                        .font(.headline)
-                        .padding()
-
-                    HStack {
-                        if pokemon.isEggObtainable {
-                            Text("Is Egg Obtainable: Yes")
-                                .foregroundColor(.green)
-                            Image(systemName: "circle.fill")
-                                .foregroundColor(.green)
-                                .font(.largeTitle)
-                        } else {
-                            Text("Is Egg Obtainable: No")
-                                .foregroundColor(.red)
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.red)
-                                .font(.largeTitle)
                         }
-                    }
-                    Text("Height: \(pokemon.height.formatted) m")
-                        .font(.subheadline)
+                        VStack {
+                            VStack {
+                                Text("Species: \(pokemon.species?.localizedUppercase ?? "")")
+                                    .font(.headline)
+                                    .padding()
 
-                    Text("Weight: \(pokemon.weight.formatted) kg")
-                        .font(.subheadline)
+                                HStack {
+                                    if pokemon.isEggObtainable {
+                                        Text("Is Egg Obtainable: Yes")
+                                            .foregroundColor(.green)
+                                        Image("egg")
+                                            .resizable()
+                                            .frame(width: 35, height: 40)
+                                    } else {
+                                        Text("Is Egg Obtainable: No")
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                                Text("Height: \(pokemon.height.formatted) m")
+                                    .font(.subheadline)
 
-                    if let types = pokemon.types {
-                        HStack {
-                            ForEach(types) { type in
-                                if let typeName = type.name {
-                                    Text(typeName)
-                                        .font(.subheadline)
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 5)
-                                        .padding(.vertical, 2)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .fill(PokemonColors.getColor(for: typeName))
-                                        )
+                                Text("Weight: \(pokemon.weight.formatted) kg")
+                                    .font(.subheadline)
+                            }
+                            if let types = pokemon.types {
+                                HStack {
+                                    ForEach(types) { type in
+                                        if let typeName = type.name {
+                                            Text(typeName)
+                                                .font(.subheadline)
+                                                .foregroundColor(.white)
+                                                .padding(.horizontal, 5)
+                                                .padding(.vertical, 2)
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .fill(PokemonColors.getColor(for: typeName))
+                                                )
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
 
-                    if let baseStats = pokemon.baseStats {
-                        BaseStatsView(baseStatsTotal: pokemon.baseStatsTotal,
-                                      baseStats: baseStats)
-                    }
-//                    if let evYields = pokemon.evYields {
-//                        DisclosureGroup("EV Yields") {
-//                            ForEach(evYields.propertyPairs(), id: \.key) { key, value in
-//                                EVYieldRow(statName: key, yieldValue: value)
-//                            }
-//                        }
-//                        .padding(.top, 16)
-//                        .padding([.bottom, .horizontal])
-//                    }
-                    if let preevolutions = pokemon.preevolutions {
-                        DisclosureGroup("Pre-Evolutions (\(preevolutions.count))") {
-                            ForEach(preevolutions, id: \.num) { preevolution in
-                                EvolutionView(evolution: preevolution)
+                            if let baseStats = pokemon.baseStats {
+                                BaseStatsView(baseStatsTotal: pokemon.baseStatsTotal,
+                                              baseStats: baseStats)
+                            }
+                            if let preevolutions = pokemon.preevolutions, !preevolutions.isEmpty {
+                                DisclosureGroup("Pre-Evolutions (\(preevolutions.count))") {
+                                    ForEach(preevolutions, id: \.num) { preevolution in
+                                        EvolutionView(evolution: preevolution)
+                                    }
+                                }
+                                .padding(.top, 16)
+                                .padding([.bottom, .horizontal])
+                            }
+
+                            if let evolutions = pokemon.evolutions, !evolutions.isEmpty {
+                                DisclosureGroup("Evolutions (\(evolutions.count))") {
+                                    ForEach(evolutions, id: \.num) { evolution in
+                                        EvolutionView(evolution: evolution)
+                                    }
+                                }
+                                .padding(.top, 16)
+                                .padding([.bottom, .horizontal])
                             }
                         }
-                        .padding(.top, 16)
-                        .padding([.bottom, .horizontal])
-                    }
+                            .offset(y: -130)
 
-                    if let evolutions = pokemon.evolutions {
-                        DisclosureGroup("Evolutions (\(evolutions.count))") {
-                            ForEach(evolutions, id: \.num) { evolution in
-                                EvolutionView(evolution: evolution)
-                            }
+                        Spacer()
+                    }
+                    .navigationTitle(pokemon.species?.capitalized ?? "")
+                    .onAppear {
+                        Task {
+                            await viewModel.getPokemonSelected()
                         }
-                        .padding(.top, 16)
-                        .padding([.bottom, .horizontal])
-                    }
-
-                    Spacer()
-                }
-                .navigationTitle(pokemon.species?.capitalized ?? "")
-                .onAppear {
-                    Task {
-                        await viewModel.getPokemonSelected()
                     }
                 }
             }
         }
         .onAppear {
             viewModel.pokemonSelected = pokemon
+        }
+    }
+
+    @ViewBuilder
+    func legendaryView() -> some View {
+        VStack {
+            if viewModel.pokemonSelected?.legendary ?? false {
+                Image("legendary")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 50)
+            } else {
+                EmptyView()
+            }
         }
     }
 }

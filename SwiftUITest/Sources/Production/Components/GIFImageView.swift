@@ -15,6 +15,7 @@ struct GIFImageViewRep: UIViewRepresentable {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.startAnimating()
+        imageView.image = nil
         return imageView
     }
 

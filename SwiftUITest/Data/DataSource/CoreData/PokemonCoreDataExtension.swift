@@ -86,13 +86,11 @@ extension Pokemon: FragmentUpdatable {
         }
 
         if let evolutionsUnwrapped = model.evolutions {
-            let pkmnSet = NSSet()
             for pkmn in evolutionsUnwrapped {
                 let pkmnCoreObject = Pokemon(context: viewContext)
                 pkmnCoreObject.update(with: pkmn, viewContext)
-                pkmnSet.adding(pkmnCoreObject)
+                self.addToEvolutions(pkmnCoreObject)
             }
-            self.evolutions = pkmnSet
         }
 
         if let evYieldsUnwrapped = model.evYields {
@@ -106,23 +104,22 @@ extension Pokemon: FragmentUpdatable {
         }
 
         if let preevolutionsUnwrapped = model.evolutions {
-            let pkmnSet = NSSet()
             for pkmn in preevolutionsUnwrapped {
                 let pkmnCoreObject = Pokemon(context: viewContext)
                 pkmnCoreObject.update(with: pkmn, viewContext)
-                pkmnSet.adding(pkmnCoreObject)
+                self.addToPreevolutions(pkmnCoreObject)
             }
-            self.preevolutions = pkmnSet
         }
 
         if let typesUnwrapped = model.types {
-            let typesSet = NSSet()
             for type in typesUnwrapped {
                 let typeCoreObject = PokemonType(context: viewContext)
                 typeCoreObject.update(with: type, viewContext)
-                typesSet.adding(typeCoreObject)
+                do {
+                    try typeCoreObject.validateForInsert()
+                    self.addToTypes(typeCoreObject)
+                } catch  { }
             }
-            self.types = typesSet
         }
     }
 }
@@ -163,8 +160,10 @@ extension PokemonType {
     func update(with model: PokemonTypeModel?, _ viewContext: NSManagedObjectContext) {
         guard let model else { return }
         self.name = model.name
-        self.matchup = TypeMatchup(context: viewContext)
-        matchup?.update(with: model.matchup, viewContext)
+        if let matchupUnwrapped = model.matchup {
+            self.matchup = TypeMatchup(context: viewContext)
+            matchup?.update(with: matchupUnwrapped, viewContext)
+        }
     }
 }
 

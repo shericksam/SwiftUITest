@@ -67,6 +67,7 @@
 		D59F54D92A5B54B20039B364 /* Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54D82A5B54B20039B364 /* Pagination.swift */; };
 		D59F54DC2A5B567B0039B364 /* PokemonGraphQLDataSourceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54DB2A5B567B0039B364 /* PokemonGraphQLDataSourceImp.swift */; };
 		D59F54DE2A5B89210039B364 /* GIFImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F54DD2A5B89210039B364 /* GIFImageView.swift */; };
+		D59F54E12A5B911F0039B364 /* PokemonGb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D59F54E02A5B911F0039B364 /* PokemonGb.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +151,8 @@
 		D59F54D82A5B54B20039B364 /* Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pagination.swift; sourceTree = "<group>"; };
 		D59F54DB2A5B567B0039B364 /* PokemonGraphQLDataSourceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonGraphQLDataSourceImp.swift; sourceTree = "<group>"; };
 		D59F54DD2A5B89210039B364 /* GIFImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFImageView.swift; sourceTree = "<group>"; };
+		D59F54E02A5B911F0039B364 /* PokemonGb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PokemonGb.ttf; sourceTree = "<group>"; };
+		D59F54E22A5B919A0039B364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +231,7 @@
 		D57333952A57A725004FB8DA /* SwiftUITest */ = {
 			isa = PBXGroup;
 			children = (
+				D59F54E22A5B919A0039B364 /* Info.plist */,
 				D57333FF2A57DA85004FB8DA /* schema.graphqls */,
 				D57334012A57DA8D004FB8DA /* introspection_response.json */,
 				D573339F2A57A728004FB8DA /* Persistence.swift */,
@@ -301,6 +305,7 @@
 		D57333D12A57BB49004FB8DA /* Platform */ = {
 			isa = PBXGroup;
 			children = (
+				D59F54DF2A5B91110039B364 /* Fonts */,
 				D59F54D12A5A99210039B364 /* Providers */,
 				D50CA7BA2A5A49E9001E2B64 /* Localizable */,
 				D57333D92A57BBF0004FB8DA /* Dependencies.swift */,
@@ -478,6 +483,14 @@
 			path = GraphQL;
 			sourceTree = "<group>";
 		};
+		D59F54DF2A5B91110039B364 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D59F54E02A5B911F0039B364 /* PokemonGb.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -590,6 +603,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D59F54E12A5B911F0039B364 /* PokemonGb.ttf in Resources */,
 				D50CA7BD2A5A4A12001E2B64 /* Localizable.strings in Resources */,
 				D573339E2A57A728004FB8DA /* Preview Assets.xcassets in Resources */,
 				D57334002A57DA85004FB8DA /* schema.graphqls in Resources */,
@@ -865,6 +879,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUITest/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwiftUITest/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -893,6 +908,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUITest/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwiftUITest/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -36,7 +36,7 @@
         <relationship name="evYields" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EvYields"/>
         <relationship name="gender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Gender"/>
         <relationship name="preevolutions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon"/>
-        <relationship name="types" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PokemonType"/>
+        <relationship name="types" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PokemonType" inverseName="pokemons" inverseEntity="PokemonType"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="num"/>
@@ -47,6 +47,7 @@
     <entity name="PokemonType" representedClassName="PokemonType" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="matchup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TypeMatchup"/>
+        <relationship name="pokemons" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="types" inverseEntity="Pokemon"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="name"/>

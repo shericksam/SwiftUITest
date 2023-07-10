@@ -16,10 +16,13 @@ struct PokemonItemView: View {
         HStack {
             if let gifURL = URL(string: pokemon.sprite ?? "") {
                 GIFImageView(gifURL: gifURL)
-                    .frame(width: 50, height: 50)
+                    .frame(width: 30, height: 30)
+                    .scaledToFit() 
             }
+            Spacer()
             VStack {
                 Text(pokemon.key ?? "no-name")
+                    .font(Font.custom("PokemonGb", size: 18))
                 if let types = pokemon.types {
                     HStack {
                         ForEach(types) { type in

@@ -62,9 +62,12 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
         let context = container.viewContext
         return await withCheckedContinuation { continuation in
             for data in pokemon {
-                let pkmnCoreDataEntity = Pokemon(context: context)
-                pkmnCoreDataEntity.update(with: data, context)
+                do {
+                    let pkmnCoreDataEntity = Pokemon(context: context)
+                    pkmnCoreDataEntity.update(with: data, context)
 
+                    try pkmnCoreDataEntity.validateForInsert()
+                } catch { }
             }
             do {
                 try context.save()
@@ -81,7 +84,7 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
         saveContext()
     }
 
-    private func getEntityById(_ pokemonEnum: String)  throws  -> Pokemon? {
+    private func getEntityById(_ pokemonEnum: String) throws  -> Pokemon? {
         let request = Pokemon.fetchRequest()
         request.fetchLimit = 1
         request.predicate = NSPredicate(format: "key = %@", pokemonEnum)

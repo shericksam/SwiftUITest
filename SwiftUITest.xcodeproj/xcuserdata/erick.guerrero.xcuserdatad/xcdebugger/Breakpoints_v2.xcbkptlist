@@ -103,22 +103,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6CA97729-AF24-4F18-BAB9-38CA6D0089CE"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataExtension.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "update(with:_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "0084AA17-E4FF-4F41-90DE-A61501654620"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -258,6 +242,86 @@
                   offsetFromSymbolStart = "264">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "099CAFF9-C3DD-44A9-8527-3BC3E436B388"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Sources/Production/Components/PokemonList/PokemonItemView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "099CAFF9-C3DD-44A9-8527-3BC3E436B388 - 28a6994b0b942f86"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;SwiftUI.HStack&lt;SwiftUI.ForEach&lt;Swift.Array&lt;SwiftUITest.PokemonTypeModel&gt;, Foundation.UUID, SwiftUI.Text&gt;&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.scaledToFit() -&gt; some&gt;&gt;.0&gt;, SwiftUI.Spacer, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;SwiftUI.HStack&lt;SwiftUI.ForEach&lt;Swift.Array&lt;SwiftUITest.PokemonTypeModel&gt;, Foundation.UUID, SwiftUI.Text&gt;&gt;&gt;)&gt;&gt;)&gt; in SwiftUITest.PokemonItemView.body.getter : some"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Sources/Production/Components/PokemonList/PokemonItemView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "1204">
+               </Location>
+               <Location
+                  uuid = "099CAFF9-C3DD-44A9-8527-3BC3E436B388 - 6b43460cad4e783c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Array&lt;SwiftUITest.PokemonTypeModel&gt;, Foundation.UUID, SwiftUI.Text&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;SwiftUI.HStack&lt;SwiftUI.ForEach&lt;Swift.Array&lt;SwiftUITest.PokemonTypeModel&gt;, Foundation.UUID, SwiftUI.Text&gt;&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.scaledToFit() -&gt; some&gt;&gt;.0&gt;, SwiftUI.Spacer, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;SwiftUI.HStack&lt;SwiftUI.ForEach&lt;Swift.Array&lt;SwiftUITest.PokemonTypeModel&gt;, Foundation.UUID, SwiftUI.Text&gt;&gt;&gt;)&gt;&gt;)&gt; in SwiftUITest.PokemonItemView.body.getter : some"
+                  moduleName = "SwiftUITest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/erick.guerrero/Documents/SwiftUITest/SwiftUITest/Sources/Production/Components/PokemonList/PokemonItemView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "196">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C2439E79-A3E0-4193-A3CF-B95424EC5E89"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataExtension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "update(with:_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D89E6EBD-BD3A-4A97-90FD-A17B30756BEC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftUITest/Data/DataSource/CoreData/PokemonCoreDataExtension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "update(with:_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -9,23 +9,27 @@ import SwiftUI
 import CoreData
 
 struct PokemonListView: View {
-    @StateObject private var viewModel = PokemonListViewModel()
-    @ObservedObject var provider: PokemonPaginatedItemProvider
+    @ObservedObject var viewModel: PokemonListViewModel
 
     var body: some View {
         VStack {
             NavigationView {
-                List {
-                    ForEach(provider.items) { pokemonItem in
-                        NavigationLink {
-                            Text("Item at \(pokemonItem.listing.num)")
-                        } label: {
-                            PokemonItemView(pokemon: pokemonItem.listing)
-                        }
-                        .onAppear {
-                            provider.fetchNextPageIfNeeded(for: pokemonItem)
+                ScrollView {
+                    LazyVStack {
+                        ForEach(viewModel.items) { pokemonItem in
+                            NavigationLink {
+                                PokemonDetailView(pokemon: pokemonItem.listing)
+                                    .environmentObject(viewModel)
+                            } label: {
+                                PokemonItemView(pokemon: pokemonItem.listing)
+                            }
+                            .onAppear {
+                                viewModel.fetchNextPageIfNeeded(for: pokemonItem)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
+                    .padding()
                 }
                 .navigationTitle("pokedex")
                 .navigationViewStyle(StackNavigationViewStyle())
@@ -37,6 +41,6 @@ struct PokemonListView: View {
 
 struct PokemonListView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListView(provider: PokemonPaginatedItemProvider())
+        PokemonListView(viewModel: PokemonListViewModel())
     }
 }

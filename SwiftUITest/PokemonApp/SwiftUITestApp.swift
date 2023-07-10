@@ -14,9 +14,8 @@ struct SwiftUITestApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PokemonListView(provider: Dependencies.pokemonProvider)
+            PokemonListView(viewModel: Dependencies.pokemonListViewModel)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environmentObject(viewModel)
                 .onAppear {
                     viewModel.setup()
                 }

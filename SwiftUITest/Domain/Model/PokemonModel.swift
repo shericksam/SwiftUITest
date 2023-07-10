@@ -34,6 +34,57 @@ struct PokemonModel: Identifiable {
     var preevolutions: [PokemonModel]?
     var types: [PokemonTypeModel]?
 
+    init(
+        backSprite: String?,
+        baseStatsTotal: Int = 0,
+        bulbapediaPage: String?,
+        color: String?,
+        evolutionLevel: String?,
+        forme: String?,
+        formeLetter: String?,
+        height: Float = 0,
+        isEggObtainable: Bool = false,
+        key: String?,
+        legendary: Bool = false,
+        num: Int,
+        shinyBackSprite: String?,
+        shinySprite: String?,
+        species: String?,
+        sprite: String?,
+        timestamp: Date?,
+        weight: Float = 0,
+        baseStats: StatsModel?,
+        evolutions: [PokemonModel]?,
+        evYields: EvYieldsModel?,
+        gender: GenderModel?,
+        preevolutions: [PokemonModel]?,
+        types: [PokemonTypeModel]?) {
+            self.backSprite = backSprite
+            self.baseStatsTotal = baseStatsTotal
+            self.bulbapediaPage = bulbapediaPage
+            self.color = color
+            self.evolutionLevel = evolutionLevel
+            self.forme = forme
+            self.formeLetter = formeLetter
+            self.height = height
+            self.isEggObtainable = isEggObtainable
+            self.key = key
+            self.legendary = legendary
+            self.num = num
+            self.shinyBackSprite = shinyBackSprite
+            self.shinySprite = shinySprite
+            self.species = species
+            self.sprite = sprite
+            self.timestamp = timestamp
+            self.weight = weight
+            self.baseStats = baseStats
+            self.evolutions = evolutions
+            self.evYields = evYields
+            self.gender = gender
+            self.preevolutions = preevolutions
+            self.types = types
+    }
+    
     init(with coreDataModel: Pokemon) {
         self.backSprite = coreDataModel.backSprite
         self.baseStatsTotal = Int(coreDataModel.baseStatsTotal)
@@ -71,6 +122,7 @@ struct PokemonModel: Identifiable {
     init(with fragment: LightDataFragmentWithoutNested) {
         self.key = fragment.key.rawValue
         self.num = fragment.num
+        self.color = fragment.color
         self.species = fragment.species
         self.sprite = fragment.sprite
         self.types = fragment.types.map({ ligthtype in

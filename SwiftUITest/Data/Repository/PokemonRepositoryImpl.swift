@@ -14,6 +14,11 @@ struct PokemonRepositoryImpl: PokemonRepository {
 
     func getPokemon(pokemonEnum: String) async  -> Result<PokemonModel?, DataSourceGenericError> {
         do {
+            if NetworkChecker.isConnected() {
+                if let pkmnModel = try await graphQLDataSource.getById(pokemonEnum) {
+                    try await coreDataSource.create(pokemon: pkmnModel)
+                }
+            }
             let _todo =  try await coreDataSource.getById(pokemonEnum)
             return .success(_todo)
         } catch {

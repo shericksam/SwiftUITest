@@ -9,6 +9,7 @@ fragment LightDataFragmentWithoutNested on Pokemon {
     num
     species
     sprite
+    color
     types {
         ...PokemonLightTypeFragment
     }

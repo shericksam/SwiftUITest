@@ -14,7 +14,7 @@ public class Dependencies {
     private(set) static var pokemonCoreDataSource = PokemonCoreDataSourceImpl(container: PersistenceController.shared.container)
     private(set) static var pokemonGraphQLDataSource = PokemonGraphQLDataSourceImp(network: serviceClient)
     private(set) static var pokemonRepository = PokemonRepositoryImpl(graphQLDataSource: pokemonGraphQLDataSource, coreDataSource: pokemonCoreDataSource)
-    private(set) static var pokemonProvider = PokemonPaginatedItemProvider()
+    private(set) static var pokemonListViewModel = PokemonListViewModel()
 
     public static func install(serverUrlProvider: ServerURLProvider,
                                serviceClient: ApolloServiceClientProvider) {

@@ -21,8 +21,10 @@ struct PokemonItemView: View {
             }
             Spacer()
             VStack {
-                Text(pokemon.key ?? "no-name")
-                    .font(Font.custom("PokemonGb", size: 18))
+                if let pokemonKey = pokemon.key {
+                    Text(pokemonKey.localizedCapitalized)
+                        .font(Font.custom("PokemonGb", size: 18))
+                }
                 if let types = pokemon.types {
                     HStack {
                         ForEach(types) { type in
@@ -43,12 +45,15 @@ struct PokemonItemView: View {
             }
         }
         .padding()
+        .background(Color.color(from: pokemon.color ?? "gray")?.convertToLigthColor())
+        .cornerRadius(10)
+        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
     }
 }
 
  
 struct PokemonItemView_Previews: PreviewProvider {
-    static var previewData = LightDataFragmentWithoutNested(key: .bulbasaur, num: 1, species: "bulbasaur", sprite: "https://play.pokemonshowdown.com/sprites/ani/bulbasaur.gif", types: [.init(name: "Grass")])
+    static var previewData = LightDataFragmentWithoutNested(key: .bulbasaur, num: 1, species: "bulbasaur", sprite: "https://play.pokemonshowdown.com/sprites/ani/bulbasaur.gif", color: "blue", types: [.init(name: "Grass")])
     static var previews: some View {
         PokemonItemView(pokemon: PokemonModel(with: previewData))
     }

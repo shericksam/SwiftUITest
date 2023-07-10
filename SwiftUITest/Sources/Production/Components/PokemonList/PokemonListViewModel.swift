@@ -2,142 +2,103 @@
 //  PokemonListViewModel.swift
 //  SwiftUITest
 //
-//  Created by Erick Samuel Guerrero Arreola on 08/07/23.
+//  Created by Erick Samuel Guerrero Arreola on 07/07/23.
 //
 
-import Foundation
+import SwiftUI
 import CoreData
 
 class PokemonListViewModel: ObservableObject {
-    @Published var loadingState: LoadingState = .loading
+    @Published var showLoadingView: Bool = true
     @Published var errorMessage: String?
-    @Published private var provider: PokemonPaginatedItemProvider
-    private var viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
-    private var network: ApolloServiceClientProvider
-//    let repository: PokemonRepositoryImpl
-
-    init(network: ApolloServiceClientProvider = Dependencies.serviceClient) {
-        self.network = network
-//        self.repository = PokemonRepositoryImpl(dataSource: PokemonCoreDataSourceImpl(container: PersistenceController.shared.container))
-        self.provider = .init()
+    @Published var items: [PokemonListingItem] = []
+    @Published var pokemonSelected: PokemonModel?
+    private(set) var pageSize: Int = 20
+    private(set) var startingIndex: Int = 0
+    private(set) var triggerIndex: Int?
+    private let constantSkipCAP: Int = 89
+    let repository: PokemonRepository
+    private(set) var isPaginating = false {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.showLoadingView = self.isPaginating
+            }
+        }
     }
+    private(set) var hasPaginated = false
+    private var paginationQueue = DispatchQueue(label: "PokemonPaginatedItemProvider-\(UUID().uuidString)", qos: .userInitiated)
 
-    func executeQuery(_ query: AllPokemonQuery) {
-        loadingState = .loading
-//        saveDataFromAPI(query)
-//        query
-//            .execute(serviceClient: network) { [weak self] response in
-//                switch response {
-//                case .success(let result):
-//                    self?.loadingState = .loaded
-////                    self?.saveItems(items: result.convertToModel())
-//                    Task { [weak self] in
-//                        guard let self = self else { return }
-//                        await self.saveItems(result.data.convertToModel())
-//                    }
-//                case .failure(let error):
-//                    self?.loadingState = .error
-//                    self?.errorMessage = error.errorDescription
-//                }
-//            }
-    }
-
-    func retry(_ query: AllPokemonQuery) {
-        executeQuery(query)
-    }
-
-    private func fetchDataFromAPI(_ query: AllPokemonQuery) async -> [PokemonModel] {
-        // Realiza la solicitud a la API y obtén los datos
-
-        // Simulación de datos de ejemplo
-        return await withCheckedContinuation { continuation in
-            query
-                .execute(serviceClient: network) { [weak self] response in
-                    switch response {
-                    case .success(let result):
-                        self?.loadingState = .loaded
-                        //                    self?.saveItems(items: result.convertToModel())
-//                        Task { [weak self] in
-//                            guard let self = self else { return }
-//                            await self.saveItems(result.data.convertToModel())
-//                        }
-                        continuation.resume(returning: result.data.convertToModel())
-                    case .failure(let error):
-                        self?.loadingState = .error
-                        self?.errorMessage = error.errorDescription
-                    }
-                }
+    init(repository: PokemonRepository = Dependencies.pokemonRepository) {
+        self.repository = repository
+        Task {
+            await getPokemon()
         }
     }
 
-    private func saveDataFromAPI(_ query: AllPokemonQuery) {
-        Task {
-            let apiData = await fetchDataFromAPI(query)
+    func getPokemon(pagination: Pagination = PaginationImp(items: 0, pageSize: 20)) async {
+        let pokemonResult = await self.repository.getPokemon(pagination)
+        switch pokemonResult {
+        case .success(let models):
+            let items = models.map({ PokemonListingItem(index: $0.num, listing: $0) })
+            self.updatePaginationInput(size: pageSize,
+                                       triggerIndex: items[items.endIndex - 1].listing.num - 1,
+                                       startingIndex: items.startIndex)
+            self.isPaginating = false
+            DispatchQueue.main.async {
+                self.items.append(contentsOf: items)
+            }
+        case .failure(let error):
+            self.errorMessage = error.localizedDescription
+        }
+    }
 
-            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            privateContext.parent = viewContext
-            await privateContext.perform {
+    func fetchNextPageIfNeeded(for item: PokemonListingItem) {
+        paginationQueue.async { [weak self] in
+            guard let self else { return }
+            if let triggerIndex = self.triggerIndex, !self.isPaginating, item.index > triggerIndex {
+                self.isPaginating.toggle()
+                self.hasPaginated = true
                 Task {
-                    for data in apiData {
-//                        let result = await self.repository.createPokemon(data)
-                        // Asigna los demás atributos según corresponda
-                    }
-
-                    do {
-                        try await privateContext.save()
-
-                        self.viewContext.performAndWait {
-                            do {
-                                try self.viewContext.save()
-                            } catch {
-                                print("Error al guardar en el contexto principal: \(error)")
-                            }
-                        }
-                    } catch {
-                        print("Error al guardar en el contexto privado: \(error)")
-                    }
+                    let pagination = PaginationImp(items: self.items.count, pageSize: 20, startingIndex: self.startingIndex, triggerIndex: self.triggerIndex)
+                    await self.getPokemon(pagination: pagination)
                 }
             }
         }
     }
 
-    private func saveItems(_ items: [PokemonModel]) {
-//        await withTaskGroup(of: Void.self) { group in
-//            for item in items {
-//                group.addTask { [weak self] in
-//                    guard let self = self else { return }
-////                    let newItem = Pokemon(context: self.viewContext)
-////                    newItem.update(with: item, self.viewContext)
-//
-//                    print("result before --->\(item.key ?? "")")
-//                    let result = await self.repository.createPokemon(item)
-//                    print("result--->\(item.key ?? "")", result)
-//
-//                    do {
-//                        try self.viewContext.save()
-//                    } catch {
-//                        print("Error CoreData: \(error)")
-//                    }
-//                }
-//                await group.waitForAll()
-//            }
-//        }
+    private func updatePaginationInput(size: Int,
+                                       triggerIndex: Int? = nil,
+                                       startingIndex: Int? = nil) {
+        self.pageSize = size
+        self.triggerIndex = triggerIndex
+        self.startingIndex = startingIndex ?? items.count
     }
 
+    func getPokemonSelected() async {
+        guard let pkmnKey = pokemonSelected?.key else { return }
+        let pokemonResult = await self.repository.getPokemon(pokemonEnum: pkmnKey)
+        switch pokemonResult {
+        case .success(let pokemonModel):
+            DispatchQueue.main.async {
+                self.pokemonSelected = pokemonModel
+            }
+        case .failure(let error):
+            self.errorMessage = error.localizedDescription
+        }
+    }
+}
 
-    //    private func addItem() {
-    //        withAnimation {
-    //            let newItem = Item(context: viewContext)
-    //            newItem.timestamp = Date()
-    //
-    //            do {
-    //                try viewContext.save()
-    //            } catch {
-    //                // Replace this implementation with code to handle the error appropriately.
-    //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-    //                let nsError = error as NSError
-    //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-    //            }
-    //        }
-    //    }
+struct PokemonListingItem: Identifiable, Hashable {
+    let id = UUID().uuidString
+    let index: Int
+    let listing: PokemonModel
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: PokemonListingItem, rhs: PokemonListingItem) -> Bool {
+        lhs.id == rhs.id
+    }
 }

@@ -37,12 +37,6 @@ extension Pokemon: FragmentUpdatable {
         self.timestamp = Date()
         self.weight = Float(fragment.weight)
         updateBaseStats(with: fragment.baseStats)
-//        self.evolutions = fragment.evolutions
-//        self.evYields = fragment.evYields
-//        self.gender = fragment.gender
-//        self.preevolutions = fragment.preevolutions
-//        self.types = fragment.types
-//        fragment.evolutions
     }
 
     func updateBaseStats(with fragment: Fragment.BaseStat) {
@@ -54,11 +48,6 @@ extension Pokemon: FragmentUpdatable {
         self.baseStats?.speed = Int16(fragment.speed)
     }
 
-//    func updateEvolutions(with fragment: [Fragment.Evolution]) {
-//        self.evolutions = fragment.map({ evolution in
-//            evolution.
-//        })
-//    }
     func update(with model: PokemonModel, _ viewContext: NSManagedObjectContext) {
         self.backSprite = model.backSprite
         self.baseStatsTotal = Int16(model.baseStatsTotal)

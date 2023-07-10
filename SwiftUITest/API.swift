@@ -7009,7 +7009,7 @@ public final class AllPokemonQuery: GraphQLQuery {
 
   public let operationName: String = "AllPokemon"
 
-  public let operationIdentifier: String? = "c7f2e034f40f8127ccaa8faabb58ab0948411667e07d0ec6311cf33ff5b2b847"
+  public let operationIdentifier: String? = "2fa7a70e8988872d5ca975577467cc2612b4f3e1d53cd89d7ab02317dbac9cc9"
 
   public var queryDocument: String {
     var document: String = operationDefinition
@@ -7082,6 +7082,7 @@ public final class AllPokemonQuery: GraphQLQuery {
           GraphQLField("num", type: .nonNull(.scalar(Int.self))),
           GraphQLField("species", type: .nonNull(.scalar(String.self))),
           GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+          GraphQLField("color", type: .nonNull(.scalar(String.self))),
           GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
         ]
       }
@@ -7092,8 +7093,8 @@ public final class AllPokemonQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(key: PokemonEnum, num: Int, species: String, sprite: String, types: [`Type`]) {
-        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "num": num, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }])
+      public init(key: PokemonEnum, num: Int, species: String, sprite: String, color: String, types: [`Type`]) {
+        self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "num": num, "species": species, "sprite": sprite, "color": color, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }])
       }
 
       public var __typename: String {
@@ -7142,6 +7143,16 @@ public final class AllPokemonQuery: GraphQLQuery {
         }
         set {
           resultMap.updateValue(newValue, forKey: "sprite")
+        }
+      }
+
+      /// The colour of a Pokémon as listed in the Pokedex
+      public var color: String {
+        get {
+          return resultMap["color"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "color")
         }
       }
 
@@ -14556,6 +14567,7 @@ public struct LightDataFragmentWithoutNested: GraphQLFragment {
       num
       species
       sprite
+      color
       types {
         __typename
         ...PokemonLightTypeFragment
@@ -14572,6 +14584,7 @@ public struct LightDataFragmentWithoutNested: GraphQLFragment {
       GraphQLField("num", type: .nonNull(.scalar(Int.self))),
       GraphQLField("species", type: .nonNull(.scalar(String.self))),
       GraphQLField("sprite", type: .nonNull(.scalar(String.self))),
+      GraphQLField("color", type: .nonNull(.scalar(String.self))),
       GraphQLField("types", type: .nonNull(.list(.nonNull(.object(`Type`.selections))))),
     ]
   }
@@ -14582,8 +14595,8 @@ public struct LightDataFragmentWithoutNested: GraphQLFragment {
     self.resultMap = unsafeResultMap
   }
 
-  public init(key: PokemonEnum, num: Int, species: String, sprite: String, types: [`Type`]) {
-    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "num": num, "species": species, "sprite": sprite, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }])
+  public init(key: PokemonEnum, num: Int, species: String, sprite: String, color: String, types: [`Type`]) {
+    self.init(unsafeResultMap: ["__typename": "Pokemon", "key": key, "num": num, "species": species, "sprite": sprite, "color": color, "types": types.map { (value: `Type`) -> ResultMap in value.resultMap }])
   }
 
   public var __typename: String {
@@ -14632,6 +14645,16 @@ public struct LightDataFragmentWithoutNested: GraphQLFragment {
     }
     set {
       resultMap.updateValue(newValue, forKey: "sprite")
+    }
+  }
+
+  /// The colour of a Pokémon as listed in the Pokedex
+  public var color: String {
+    get {
+      return resultMap["color"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "color")
     }
   }
 

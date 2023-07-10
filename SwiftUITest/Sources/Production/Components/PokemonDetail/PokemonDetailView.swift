@@ -16,14 +16,14 @@ struct PokemonDetailView: View {
             ScrollView {
                 if let pokemon = viewModel.pokemonSelected {
                     VStack {
-                        Color.color(from: pokemon.color ?? "gray").convertToLigthColor()
+                        colorPkmn
                             .ignoresSafeArea(edges: .top)
                             .frame(height: 250)
                         if let sprite = pokemon.sprite, let url = URL(string: sprite) {
                             GIFImageViewRep(gifURL: url)
                                 .frame(width: 150, height: 150)
                                 .padding()
-                                .background(Color.color(from: pokemon.color ?? "gray").convertToLigthColor())
+                                .background(colorPkmn)
                                 .clipShape(Circle())
                                 .overlay {
                                     Circle()
@@ -81,12 +81,18 @@ struct PokemonDetailView: View {
                                 BaseStatsView(baseStatsTotal: pokemon.baseStatsTotal,
                                               baseStats: baseStats)
                             }
+                            if let bulbapediaPage = pokemon.bulbapediaPage, let url = URL(string: bulbapediaPage) {
+                                Link("Bulbagarden link", destination: url)
+                                    .font(.title)
+                                    .foregroundStyle(Color.color(from:viewModel.pokemonSelected?.color ?? "gray"))
+                            }
                             if let preevolutions = pokemon.preevolutions, !preevolutions.isEmpty {
                                 DisclosureGroup("Pre-Evolutions (\(preevolutions.count))") {
                                     ForEach(preevolutions, id: \.num) { preevolution in
                                         EvolutionView(evolution: preevolution)
                                     }
                                 }
+                                .foregroundStyle(Color.color(from:viewModel.pokemonSelected?.color ?? "gray"))
                                 .padding(.top, 16)
                                 .padding([.bottom, .horizontal])
                             }
@@ -97,6 +103,7 @@ struct PokemonDetailView: View {
                                         EvolutionView(evolution: evolution)
                                     }
                                 }
+                                .foregroundStyle(Color.color(from:viewModel.pokemonSelected?.color ?? "gray"))
                                 .padding(.top, 16)
                                 .padding([.bottom, .horizontal])
                             }
@@ -131,6 +138,10 @@ struct PokemonDetailView: View {
                 EmptyView()
             }
         }
+    }
+
+    var colorPkmn: Color {
+        Color.color(from:viewModel.pokemonSelected?.color ?? "gray").convertToLigthColor()
     }
 }
 

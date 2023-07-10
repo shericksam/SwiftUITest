@@ -20,11 +20,7 @@ struct PokemonListView: View {
                         NavigationLink {
                             Text("Item at \(pokemonItem.listing.num)")
                         } label: {
-                            VStack {
-                                Text("Num at \(pokemonItem.listing.num)")
-                                Text("Key at \(pokemonItem.listing.key ?? "")")
-                                Text("Species at \(pokemonItem.listing.species ?? "")")
-                            }
+                            PokemonItemView(pokemon: pokemonItem.listing)
                         }
                         .onAppear {
                             provider.fetchNextPageIfNeeded(for: pokemonItem)
@@ -41,6 +37,6 @@ struct PokemonListView: View {
 
 struct PokemonListView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListView(provider: PokemonPaginatedItemProvider(items: [], size: 20))
+        PokemonListView(provider: PokemonPaginatedItemProvider())
     }
 }

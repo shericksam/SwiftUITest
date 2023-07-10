@@ -8,8 +8,7 @@
 import Foundation
 
 protocol Pagination {
-    associatedtype Element
-    var items: [Element] { get set }
+    var items: Int { get set }
     var pageSize: Int { get set }
     var startingIndex: Int? { get set }
     var triggerIndex: Int? { get set }
@@ -17,8 +16,7 @@ protocol Pagination {
 
 
 struct PaginationImp: Pagination {
-    typealias Element = PokemonListingItem
-    var items: [Element]
+    var items: Int
     var pageSize: Int
     var startingIndex: Int?
     var triggerIndex: Int?

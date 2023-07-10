@@ -12,10 +12,9 @@ public class Dependencies {
     public private(set) static var serviceClient: ApolloServiceClientProvider = BaseApolloServiceClientProvider.shared
     public private(set) static var serverUrlProvider: ServerURLProvider = DefaultServerURL()
     private(set) static var pokemonCoreDataSource = PokemonCoreDataSourceImpl(container: PersistenceController.shared.container)
-    private(set) static var pokemonRepository = PokemonRepositoryImpl(dataSource: pokemonCoreDataSource)
-    private(set) static var pokemonProvider = PokemonPaginatedItemProvider(items: [], size: 20)
-
-    
+    private(set) static var pokemonGraphQLDataSource = PokemonGraphQLDataSourceImp(network: serviceClient)
+    private(set) static var pokemonRepository = PokemonRepositoryImpl(graphQLDataSource: pokemonGraphQLDataSource, coreDataSource: pokemonCoreDataSource)
+    private(set) static var pokemonProvider = PokemonPaginatedItemProvider()
 
     public static func install(serverUrlProvider: ServerURLProvider,
                                serviceClient: ApolloServiceClientProvider) {

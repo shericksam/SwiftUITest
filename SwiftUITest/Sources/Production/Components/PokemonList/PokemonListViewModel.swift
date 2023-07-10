@@ -14,12 +14,12 @@ class PokemonListViewModel: ObservableObject {
     @Published private var provider: PokemonPaginatedItemProvider
     private var viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
     private var network: ApolloServiceClientProvider
-    let repository: PokemonRepositoryImpl
+//    let repository: PokemonRepositoryImpl
 
     init(network: ApolloServiceClientProvider = Dependencies.serviceClient) {
         self.network = network
-        self.repository = PokemonRepositoryImpl(dataSource: PokemonCoreDataSourceImpl(container: PersistenceController.shared.container))
-        self.provider = .init(items: [], size: 20)
+//        self.repository = PokemonRepositoryImpl(dataSource: PokemonCoreDataSourceImpl(container: PersistenceController.shared.container))
+        self.provider = .init()
     }
 
     func executeQuery(_ query: AllPokemonQuery) {
@@ -79,7 +79,7 @@ class PokemonListViewModel: ObservableObject {
             await privateContext.perform {
                 Task {
                     for data in apiData {
-                        let result = await self.repository.createPokemon(data)
+//                        let result = await self.repository.createPokemon(data)
                         // Asigna los demás atributos según corresponda
                     }
 

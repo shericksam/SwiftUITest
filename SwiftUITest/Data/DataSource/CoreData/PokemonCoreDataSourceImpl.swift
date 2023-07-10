@@ -15,12 +15,16 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
         self.container = container
     }
 
-    func getAll(_ pagination: (any Pagination)?) throws -> [PokemonModel] {
+    func getAll(_ pagination: Pagination?) throws -> [PokemonModel] {
         let request = Pokemon.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Pokemon.num, ascending: true)]
+        if let pagination {
+            request.fetchLimit = pagination.pageSize
+            request.fetchOffset = pagination.items
+        }
         return try container.viewContext.fetch(request).map({ pokemonCoreDataEntity in
             PokemonModel(with: pokemonCoreDataEntity)
         })
-
     }
 
     func getById(_ pokemonEnum: String)  throws  -> PokemonModel? {
@@ -51,6 +55,23 @@ struct PokemonCoreDataSourceImpl: PokemonDataSource {
             }
         } catch  {
             print(error)
+        }
+    }
+
+    func createList(pokemon: [PokemonModel]) async throws {
+        let context = container.viewContext
+        return await withCheckedContinuation { continuation in
+            for data in pokemon {
+                let pkmnCoreDataEntity = Pokemon(context: context)
+                pkmnCoreDataEntity.update(with: data, context)
+
+            }
+            do {
+                try context.save()
+                continuation.resume()
+            } catch {
+                continuation.resume(returning: ())
+            }
         }
     }
 
